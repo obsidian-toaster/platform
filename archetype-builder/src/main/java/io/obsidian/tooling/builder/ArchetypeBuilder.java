@@ -206,9 +206,7 @@ public class ArchetypeBuilder {
                 File gitFolder = new File(cloneDir, ".git");
                 Files.recursiveDelete(gitFolder);
                 String description = repoName.replace('-', ' ');
-                // TODO - Check if needed
-                // File archetypePom = generatePomIfRequired(projectDir, repoName, description);
-                File archetypePom = null;
+                File archetypePom = generatePomIfRequired(projectDir, repoName, description);
                 if (archetypePom != null && archetypePom.exists()) {
                     addArchetypeMetaData(archetypePom, archetypeFolderName);
                 }
@@ -718,7 +716,7 @@ public class ArchetypeBuilder {
         Document doc = archetypeUtils.parseXml(new InputSource(new FileReader(pom)));
         Element root = doc.getDocumentElement();
 
-        String groupId = "io.fabric8.archetypes";
+        String groupId = "io.obsidian.archetypes";
         String artifactId = archetypeUtils.firstElementText(root, "artifactId", outputName);
         String description = archetypeUtils.firstElementText(root, "description", "");
         String version = "";
