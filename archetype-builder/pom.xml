@@ -7,6 +7,7 @@
   <groupId>io.obsidian</groupId>
   <artifactId>archetype-builder</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+  <name>Obsidian :: Platform :: Archetype Builder</name>
 
   <properties>
     <fabric8.version>2.2.96</fabric8.version>
