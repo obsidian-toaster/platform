@@ -4,7 +4,7 @@ Tools used to build Obsidian (quickstart -> archetype, ...)
 
 ## Generate the archetypes
 
-Run this command within the project `archetype-builder` and the archetypes from the quickstarts will be generated udner the archetypes folder
+Run this command within the project `archetype-builder` and the Apache Maven archetypes projects will be generated under the `archetypes` folder
 
 ```
 mvn exec:java
