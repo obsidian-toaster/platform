@@ -10,9 +10,30 @@
   <packaging>pom</packaging>
   <name>Obsidian :: Platform project</name>
 
+  <properties>
+    <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+  </properties>
+
   <modules>
     <module>archetype-builder</module>
-<!--    <module>archetypes</module>-->
+    <module>archetypes</module>
     <module>archetypes-catalog</module>
   </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+        <configuration>
+          <nonFilteredFileExtensions>
+            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+            <nonFilteredFileExtension>gz</nonFilteredFileExtension>
+            <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+          </nonFilteredFileExtensions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
