@@ -6,8 +6,12 @@ Fabric8 Project : https://github.com/fabric8io/ipaas-quickstarts/blob/master/Rea
 
 ## Generate the archetypes
 
-Run this command within the project `archetype-builder` and the Apache Maven archetypes projects will be generated under the `archetypes` folder
+* To build the archetypes, run this command within the project `archetype-builder` and the corresponding archetypes will be generated under the `archetypes` folder from the quickstarts
 
 ```
 mvn clean compile exec:java
 ```
+
+* To publish the catalog, move to the root of the project and execute this command `mvn clean install`, the catalog will be published and is generated under the project `archetypes-catalog/target/classes/archetype-catalog.xml`
+
+
