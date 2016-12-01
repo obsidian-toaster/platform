@@ -19,60 +19,34 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.fabric8.utils.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.fabric8.utils.Objects;
+
 public class Main {
 
-    public static Logger LOG = LoggerFactory.getLogger(Main.class);
+	public static Logger LOG = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) throws Exception {
-        try {
-            String basedir = System.getProperty("basedir");
-            if (Strings.isNullOrBlank(basedir)) {
-                basedir = ".";
-            }
+	public static void main(String[] args) throws Exception {
+		String outputPath = System.getProperty("outputdir");
+		Objects.notNull(outputPath, "System property 'outputdir' was not set");
+		File outputDir = new File(outputPath);
 
-            String sourcedir = System.getProperty("sourcedir");
-            if (Strings.isNullOrBlank(sourcedir)) {
-                throw new IllegalArgumentException("No sourcedir system property");
-            }
+		ObsidianArchetypeBuilder builder = new ObsidianArchetypeBuilder();
 
-            File bomFile = new File(basedir, System.getProperty("rootPomFile", "../pom.xml"));
-            File catalogFile = new File(basedir, "target/classes/archetype-catalog.xml").getCanonicalFile();
-            catalogFile.getParentFile().mkdirs();
+		List<String> dirs = new ArrayList<>();
+		try {
+			builder.generateArchetypesFromGithubOrganisation("obsidian-toaster-quickstarts", outputDir, dirs);
 
+		} finally {
+			LOG.debug("Completed the generation. Closing!");
+		}
 
-            String outputPath = System.getProperty("outputdir");
-            File outputDir = Strings.isNotBlank(outputPath) ? new File(outputPath) : new File(basedir);
-
-            ArchetypeBuilder builder = new ArchetypeBuilder(catalogFile);
-            builder.setBomFile(bomFile);
-            builder.configure();
-
-            List<String> dirs = new ArrayList<>();
-            try {
-                File sourceDirectory = new File(sourcedir);
-                if (!sourceDirectory.exists() || !sourceDirectory.isDirectory()) {
-                    throw new IllegalArgumentException("Source directory: " + sourcedir + " is not a valid directory");
-                }
-                builder.generateArchetypesFromGithubOrganisation("obsidian-toaster", outputDir, dirs);
-                //builder.generateArchetypes("", sourceDirectory, outputDir, false, dirs);
-            } finally {
-                LOG.debug("Completed the generation. Closing!");
-                builder.close();
-            }
-
-            StringBuffer sb = new StringBuffer();
-            for (String dir : dirs) {
-                sb.append("\n\t<module>" + dir + "</module>");
-            }
-            System.out.println("Done creating archetypes:\n" + sb + "\n");
-
-        } catch (Exception e) {
-            System.out.println("Caught: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+		StringBuffer sb = new StringBuffer();
+		for (String dir : dirs) {
+			sb.append("\n\t<module>").append(dir).append("</module>");
+		}
+		System.out.println("Done creating archetypes:\n" + sb + "\n");
+	}
 }

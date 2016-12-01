@@ -50,7 +50,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>io.obsidian.tooling.builder.GenerateCatalog</mainClass>
+          <mainClass>io.fabric8.tooling.archetype.builder.GenerateCatalog</mainClass>
           <classpathScope>test</classpathScope>
           <includePluginDependencies>true</includePluginDependencies>
           <systemProperties>
