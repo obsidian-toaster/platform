@@ -33,7 +33,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>1.4.0</version>
         <dependencies>
           <dependency>
             <groupId>io.obsidian</groupId>
@@ -68,7 +67,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.12</version>
+        <version>1.12</version><!--$NO-MVN-MAN-VER$-->
         <executions>
           <execution>
             <id>attach-artifacts</id>
