@@ -1,4 +1,5 @@
 # Platform
+[![Build Status](https://travis-ci.org/obsidian-toaster/platform.svg?branch=master)](https://travis-ci.org/obsidian-toaster/platform)
 
 Tools used to build Obsidian (quickstart -> archetype, ...)
 
