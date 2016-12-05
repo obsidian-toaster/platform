@@ -25,3 +25,7 @@ mvn clean compile exec:java
   </server>
 </servers>
 ````
+
+## Tooling
+
+The purpose of the Tooling project is to host reusable bash scripts that we need/use when working top of OpenShift
