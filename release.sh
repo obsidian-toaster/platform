@@ -1,40 +1,33 @@
 #!/bin/bash
 
-if [ -z ${1+x} ];
-    then echo "version is not set usage $0 <version e.g. 1.0.0>"; exit 0;
-fi
+: ${1:?"Must specify release version. Ex: 2.0.1.Final"}
+: ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
 
-VERSION="$1"
+VERSION=$1
+DEV=$2
+
+WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
+echo "Working in temp directory $WORK_DIR"
+cd $WORK_DIR
 
 function mvnRelease {
-  mvn release:prepare -B -DreleaseVersion=$VERSION
+  mvn release:prepare -B -DreleaseVersion=$VERSION -DdevelopmentVersion=$DEV
   mvn release:perform
 }
 
-git clone https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git
-cd quick_rest_vertx
-mvnRelease
-cd -
+function release {
+  REPO=$1
+  REPODIR=$2
+  git clone $REPO
+  cd $REPODIR
+  mvnRelease
+  cd -
+}
 
-git clone https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git
-cd quick_rest_springboot-tomcat
-mvnRelease
-cd -
-
-git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git
-cd quick_secured_rest-springboot
-mvnRelease
-cd -
-
-git clone https://github.com/obsidian-toaster/obsidian-addon.git
-cd obsidian-addon
-mvnRelease
-cd -
-
-git clone https://github.com/obsidian-toaster/generator-backend.git
-cd generator-backend
-mvnRelease
-cd -
+release https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
+release https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
+release https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
+release https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
 git clone https://github.com/obsidian-toaster/generator-frontend.git
 cd generator-frontend
@@ -47,4 +40,5 @@ git push origin --tags
 npm publish .
 
 # clean up
-rm -rf obsidian-addon quick_rest_springboot-tomcat quick_rest_vertx generator-backend generator-frontend
+echo "Cleaning up temp directory $WORK_DIR"
+rm -rf $WORK_DIR
