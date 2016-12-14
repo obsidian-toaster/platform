@@ -13,7 +13,7 @@
  * implied.  See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package io.obsidian.tooling.builder;
+package org.obsidiantoaster.tooling.builder;
 
 /**
  * Just for debugging purposes. Do not use it
