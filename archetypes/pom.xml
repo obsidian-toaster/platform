@@ -35,5 +35,6 @@
   <modules>
     <module>quick_rest_springboot-tomcat-archetype</module>
     <module>quick_rest_vertx-archetype</module>
+    <module>quick_secured_rest_springboot-archetype</module>
   </modules>
 </project>
