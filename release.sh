@@ -21,6 +21,11 @@ cd quick_rest_springboot-tomcat
 mvnRelease
 cd -
 
+git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git
+cd quick_secured_rest-springboot
+mvnRelease
+cd -
+
 git clone https://github.com/obsidian-toaster/obsidian-addon.git
 cd obsidian-addon
 mvnRelease
