@@ -26,6 +26,7 @@ function release {
 
 release https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
 release https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
+release https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git quick_secured_rest-springboot
 release https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 release https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
