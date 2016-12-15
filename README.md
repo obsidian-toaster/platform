@@ -13,10 +13,14 @@ Fabric8 Project : https://github.com/fabric8io/ipaas-quickstarts/blob/master/Rea
 mvn clean compile exec:java
 ```
 
-* To publish the catalog, move to the root of the project and execute this command `mvn clean install`, the catalog will be published and is generated under the project `archetypes-catalog/target/classes/archetype-catalog.xml`
+## Publish the Catalog of the Maven Archetypes
 
-* To deploy the quickstarts to the JBoss Nexus Repository, after performing the steps beforementioned, `cd archetypes/` and execute `mvn deploy` (you must have deploy privileges to Nexus, so make sure your settings.xml is properly configured as below)
-````xml 
+To publish the catalog, move to the root of the project and execute this command `mvn clean install`, the catalog will be published and is generated under the project `archetypes-catalog/target/classes/archetype-catalog.xml`
+
+## Deploy the Quickstarts in a Maven Repo
+
+To deploy the quickstarts to the JBoss Nexus Repository, after performing the steps beforementioned, `cd archetypes/` and execute `mvn deploy` (you must have deploy privileges to Nexus, so make sure your settings.xml is properly configured as below)
+```xml 
 <servers>
   <server>
     <id>jboss-snapshots-repository</id>
@@ -24,7 +28,7 @@ mvn clean compile exec:java
     <password>my-nexus-password</password>
   </server>
 </servers>
-````
+```
 
 ## Tooling
 
