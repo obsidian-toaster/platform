@@ -27,6 +27,7 @@ public class Runner {
 		System.setProperty("outputdir", "/home/ggastald/workspace/obsidian/platform/archetype-builder/../archetypes");
 		System.setProperty("sourcedir", "/home/ggastald/workspace/obsidian/platform/archetype-builder/../quickstart");
 		System.setProperty("project.version", "1.0.0-SNAPSHOT");
-		Main.main(args);
+		// Main.main(args);
+		GenerateCatalog.main(args);
 	}
 }

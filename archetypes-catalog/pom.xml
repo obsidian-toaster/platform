@@ -49,7 +49,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>io.fabric8.tooling.archetype.builder.GenerateCatalog</mainClass>
+          <mainClass>org.obsidiantoaster.tooling.builder.GenerateCatalog</mainClass>
           <classpathScope>test</classpathScope>
           <includePluginDependencies>true</includePluginDependencies>
           <systemProperties>
