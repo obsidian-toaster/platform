@@ -8,7 +8,7 @@
    </parent>
    <groupId>org.obsidiantoaster</groupId>
    <artifactId>platform</artifactId>
-   <version>1.0.0-SNAPSHOT</version>
+   <version>1.0.0.Alpha1</version>
    <packaging>pom</packaging>
    <name>Obsidian :: Platform project</name>
 
@@ -38,6 +38,6 @@
       <connection>scm:git:git://github.com/obsidian-toaster/platform.git</connection>
       <developerConnection>scm:git:git@github.com:obsidian-toaster/platform.git</developerConnection>
       <url>http://github.com/obsidian-toaster/platform</url>
-      <tag>HEAD</tag>
+      <tag>1.0.0.Alpha1</tag>
    </scm>
 </project>
