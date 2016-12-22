@@ -17,28 +17,37 @@ function mvnRelease {
   REPODIR=$2
   git clone $REPO
   cd $REPODIR
-  mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL -Dobsidian.forge.version=$REL
+  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL -Dobsidian.forge.version=$REL
+  mvn release:perform
   cd -
 }
-
+echo Press any key to release the Quickstarts...
+read junk
 # Release Quickstarts - TODO: no need to release:perform it
 mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
 mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
 mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git quick_secured_rest-springboot
 
-# Release Platform
-git clone https://github.com/obsidian-toaster/platform
-cd platform/archetype-builder
-mvn clean compile exec:java
-cd ..
-mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
-cd $WORK_DIR
+echo Press any key to release the Platform...
+read junk
+
+# Release Platform. Archetypes should be previously generated and pushed
+mvnRelease https://github.com/obsidian-toaster/platform platform
+
+echo Press any key to release the Obsidian addon...
+read junk
 
 # Release Obsidian addon
 mvnRelease https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
+echo Press any key to release the Backend...
+read junk
+
 # Release Backend
 mvnRelease https://github.com/obsidian-toaster/generator-backend.git generator-backend
+
+echo Press any key to release the Frontend...
+read junk
 
 # Release Frontend
 git clone https://github.com/obsidian-toaster/generator-frontend.git
@@ -59,7 +68,6 @@ cd build
 git commit -a -m "Released $REL of generator-frontend"
 git push origin "$REL"
 cd -
-
 git tag "$REL"
 git push origin --tags
 npm publish .
