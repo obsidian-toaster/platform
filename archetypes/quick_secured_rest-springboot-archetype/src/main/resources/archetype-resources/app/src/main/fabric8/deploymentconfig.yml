@@ -1,0 +1,68 @@
+#set( $D = '$' )
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: secured-springboot-rest
+spec:
+  replicas: 1
+  strategy:
+    rollingParams:
+      timeoutSeconds: 10800
+    type: Rolling
+  template:
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: JAVA_APP_DIR
+          value: /deployments
+        - name: SSO_URL
+          value: ${D}{SSO_URL}/auth
+        - name: REALM
+          value: ${D}{REALM}
+        - name: REALM_PUBLIC_KEY
+          value: ${D}{REALM_PUBLIC_KEY}
+        - name: CLIENT_ID
+          value: ${D}{CLIENT_ID}
+        - name: SECRET
+          value: ${D}{SECRET}
+        image: secured-springboot-rest:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 180
+        name: secured-springboot-rest
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+        securityContext:
+          privileged: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - secured-springboot-rest
+      from:
+        kind: ImageStreamTag
+        name: secured-springboot-rest:latest
+    type: ImageChange

@@ -1,0 +1,18 @@
+#set( $D = '$' )
+---
+kind: Route
+apiVersion: v1
+id: sso-https
+metadata:
+  name: secure-sso
+  labels:
+    application: sso
+    component: server
+  annotations:
+    description: Route for application's https service.
+spec:
+  host: "${D}{SSO_HOSTNAME_HTTPS}"
+  to:
+    name: secure-sso
+  tls:
+    termination: passthrough
