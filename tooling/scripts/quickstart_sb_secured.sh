@@ -19,4 +19,9 @@ oc env dc/secured-springboot-rest SSO_URL=$sso
 cd ../
 sleep 5
 echo "Endpoint : $app & SSO : $sso"
-./scripts/httpie/token_req.sh $sso $app
+while [ $(curl --write-out %{http_code} --silent --output /dev/null $app) != 200 ]
+do
+  echo "Wait till we get http response 200 ...."
+  sleep 3
+done
+echo "Service $app replied : $(curl -s $app)"

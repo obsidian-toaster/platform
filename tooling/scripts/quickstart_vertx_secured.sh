@@ -20,7 +20,11 @@ oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMI
 oc env dc/secured-vertx-rest CLIENT_ID=demoapp
 oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 cd ../
-sleep 3
 echo "Endpoint : $app & SSO : $sso"
-./scripts/httpie/token_req.sh $sso $app
+while [ $(curl --write-out %{http_code} --silent --output /dev/null $app) != 200 ]
+do
+  echo "Wait till we get http response 200 ...."
+  sleep 3
+done
+echo "Service $app replied : $(curl -s $app)"
 

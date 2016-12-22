@@ -12,6 +12,10 @@ sleep 3
 oc new-project quicksb
 cd /Users/chmoulli/Code/jboss/obsidian-toaster/quickstarts/quick_rest_springboot-tomcat
 mvn clean package fabric8:deploy -Popenshift -DskipTests
-sleep 5
 echo "Endpoint : $app"
-http $app
+while [ $(curl --write-out %{http_code} --silent --output /dev/null $app) != 200 ]
+do
+  echo "Wait till we get http response 200 ...."
+  sleep 3
+done
+echo "Service $app replied : $(curl -s $app)"
