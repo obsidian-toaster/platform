@@ -2,6 +2,7 @@
 
 REL="1.0.0.Alpha1"
 REL_NODE="1.0.0-Alpha1"
+FORGE_URL="http://generator-backend-obsidian-alpha1.e8ca.engint.openshiftapps.com/forge"
 
 cd $TMPDIR
 rm -rf generator-frontend
