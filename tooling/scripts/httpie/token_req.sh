@@ -11,10 +11,10 @@ auth_result=$(http --verify=no -f $SSO_HOST/auth/realms/$REALM/protocol/openid-c
 access_token=$(echo -e "$auth_result" | awk -F"," '{print $1}' | awk -F":" '{print $2}' | sed s/\"//g | tr -d ' ')
 
 #echo ">>> TOKEN Received"
-#echo -e "$auth_result"
-echo -e "$access_token"
+#echo -e "$access_token"
 
 echo ">>> Greeting"
+echo "http --verify=no GET $APP/greeting 'Authorization: Bearer $access_token'"
 http --verify=no GET $APP/greeting "Authorization: Bearer $access_token"
 
 echo ">>> Greeting Customized Message"
