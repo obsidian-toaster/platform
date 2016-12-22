@@ -19,19 +19,18 @@ function mvnRelease {
   cd -
 }
 
-function mvnReleasePrepare {
-  REPO=$1
-  REPODIR=$2
-  git clone $REPO
-  cd $REPODIR
-  mvn release:prepare release:clean -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV
-  cd -
-}
+# Release Quickstarts - TODO: no need to release:perform it
+mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
+mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
+mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git quick_secured_rest-springboot
 
-# Release Quickstarts - no need to release:perform it
-mvnReleasePrepare https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
-mvnReleasePrepare https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
-mvnReleasePrepare https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git quick_secured_rest-springboot
+# Release Platform
+git clone https://github.com/obsidian-toaster/platform
+cd platform/archetype-builder
+mvn clean compile exec:java
+cd ..
+mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV
+cd $WORK_DIR
 
 # Release Obsidian addon
 mvnRelease https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
