@@ -7,10 +7,10 @@ app=${4:-http://secured-vertx-rest-vertx.e8ca.engint.openshiftapps.com}
 
 echo "Quickstart - Secured Vertx with Red Hat SSO"
 oc login $api --token=$token
-oc delete project/quickvertx
 oc project obsidian
-sleep 2
-oc new-project quickvertx
+oc delete project/ssovertx --now=true
+sleep 3
+oc new-project ssovertx
 mvn clean install
 cd sso
 mvn fabric8:deploy
