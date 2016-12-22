@@ -20,7 +20,7 @@ objects:
     source:
       git:
         uri: https://github.com/obsidian-toaster/obsidian-toaster.github.io.git
-        ref: 1.0.0.alpha1
+        ref: VERSION
       type: Git
     strategy:
       type: Source

@@ -10,7 +10,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend
   spec:
     tags:
@@ -27,7 +27,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend-s2i
   spec:
     output:
@@ -40,7 +40,7 @@ objects:
     source:
       git:
         uri: https://github.com/obsidian-toaster/generator-backend.git
-        ref: 1.0.0.alpha1
+        ref: VERSION
       type: Git
     strategy:
       type: Source
@@ -65,7 +65,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend
   spec:
     replicas: 1
@@ -88,7 +88,7 @@ objects:
           group: org.obsidiantoaster
           project: generator-backend
           provider: obsidian
-          version: 1.0.0.alpha1
+          version: VERSION
       spec:
         containers:
         - env:
@@ -106,7 +106,7 @@ objects:
           - name: JAVA_APP_JAR
             value: generator-swarm.jar
           - name: ARCHETYPE_CATALOG
-            value: https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots&g=org.obsidiantoaster&a=archetypes-catalog&v=1.0.0.alpha1&e=xml&c=archetype-catalog
+            value: https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=releases&g=org.obsidiantoaster&a=archetypes-catalog&v=VERSION&e=xml&c=archetype-catalog
           image: 172.30.92.36:5000/obsidian/generator-backend:latest
           imagePullPolicy: IfNotPresent
           name: wildfly-swarm
@@ -147,7 +147,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend-tls
   spec:
     ports:
@@ -169,7 +169,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend
   spec:
     ports:
@@ -191,7 +191,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend-tls
   spec:
     tls:
@@ -208,7 +208,7 @@ objects:
       group: org.obsidiantoaster
       project: generator-backend
       provider: obsidian
-      version: 1.0.0.alpha1
+      version: VERSION
     name: generator-backend
   spec:
     to:
