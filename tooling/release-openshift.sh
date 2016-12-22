@@ -8,6 +8,7 @@ REL=$1
 echo "Version : $REL"
 
 # Change version
-#sed -i -e 's/VERSION/${REL}/g' ./templates/backend.yml
+sed -i -e "s/VERSION/$REL/g" ./templates/backend.yml > ./templates/backend-$REL.yml
+sed -i -e "s/VERSION/$REL/g" ./templates/front.yml > ./templates/front-$REL.yml
 
 #oc login $api --token=$token
