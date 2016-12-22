@@ -21,6 +21,7 @@ npm install
 npm run build:prod
 cp -r dist/* build
 cd build
+git add .
 git commit -a -m "Released $REL of generator-frontend"
 git push origin "$REL"
 
