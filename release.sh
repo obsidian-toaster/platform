@@ -45,22 +45,22 @@ git clone https://github.com/obsidian-toaster/generator-frontend.git
 cd generator-frontend
 npm install package-json-io
 node -e "var pkg = require('package-json-io'); pkg.read(function(err, data) { data.version = '$REL'; pkg.update(data, function(){}); })"
-git commit -a -m "released $REL of generator-frontend"
+git commit -a -m "Released $REL of generator-frontend"
 git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
 cd build
-git branch "release-$REL"
-git checkout "release-$REL"
+git branch "$REL"
+git checkout "$REL"
 rm -rf *
 cd -
 npm install
 npm run build:prod
 cp -r dist/* build
 cd build
-git commit -a -m "released $REL of generator-frontend"
-git push origin "release-$REL"
+git commit -a -m "Released $REL of generator-frontend"
+git push origin "$REL"
 cd -
 
-git tag "release-$REL"
+git tag "$REL"
 git push origin --tags
 npm publish .
 
