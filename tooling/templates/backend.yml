@@ -1,0 +1,217 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: backend-generator-s2i
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend
+  spec:
+    tags:
+    - annotations: {}
+      from:
+        kind: DockerImage
+        name: 172.30.92.36:5000/obsidian/generator-backend:latest
+      importPolicy: {}
+      name: latest
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend-s2i
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: generator-backend:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: https://github.com/obsidian-toaster/generator-backend.git
+        ref: VERSION
+      type: Git
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: DockerImage
+          name: fabric8/s2i-java:1.3
+        incremental: true
+    triggers:
+    - github:
+        secret: BCedrGCnc2IWefYxQ9sr
+      type: GitHub
+    - generic:
+        secret: 0nqmEYlp7o6Sx_rUNIpq
+      type: Generic
+    - type: ConfigChange
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend
+  spec:
+    replicas: 1
+    selector:
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 10800
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          group: org.obsidiantoaster
+          project: generator-backend
+          provider: obsidian
+          version: VERSION
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: AB_JOLOKIA_OFF
+            value: "true"
+          - name: JAVA_APP_DIR
+            value: /deployments
+          - name: AB_OFF
+            value: "true"
+          - name: JAVA_APP_JAR
+            value: generator-swarm.jar
+          - name: ARCHETYPE_CATALOG
+            value: https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots&g=org.obsidiantoaster&a=archetypes-catalog&v=VERSION&e=xml&c=archetype-catalog
+          image: 172.30.92.36:5000/obsidian/generator-backend:latest
+          imagePullPolicy: IfNotPresent
+          name: wildfly-swarm
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9779
+            name: prometheus
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          resources: {}
+          securityContext:
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - wildfly-swarm
+        from:
+          kind: ImageStreamTag
+          name: generator-backend:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      expose: "true"
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend-tls
+  spec:
+    ports:
+    - name: http
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+    sessionAffinity: None
+    type: LoadBalancer
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      expose: "true"
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+    sessionAffinity: None
+    type: LoadBalancer
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      app: generator-backend
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend-tls
+  spec:
+    tls:
+      termination: passthrough
+    to:
+      kind: Service
+      name: generator-backend-tls
+      weight: 100
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      app: generator-backend
+      group: org.obsidiantoaster
+      project: generator-backend
+      provider: obsidian
+      version: VERSION
+    name: generator-backend
+  spec:
+    to:
+      kind: Service
+      name: generator-backend
+      weight: 100
