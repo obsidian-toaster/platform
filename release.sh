@@ -57,8 +57,7 @@ node -e "var pkg = require('package-json-io'); pkg.read(function(err, data) { da
 git commit -a -m "Released $REL of generator-frontend"
 git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
 cd build
-git branch "$REL"
-git checkout "$REL"
+git checkout -b "$REL"
 rm -rf *
 cd -
 npm install
