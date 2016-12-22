@@ -13,4 +13,5 @@ oc new-project quickvertx
 cd /Users/chmoulli/Code/jboss/obsidian-toaster/quickstarts/quick_rest_vertx
 mvn clean package fabric8:deploy -Popenshift -DskipTests
 sleep 3
+echo "Endpoint : $app"
 http $app

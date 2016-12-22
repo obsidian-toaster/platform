@@ -21,5 +21,6 @@ oc env dc/secured-vertx-rest CLIENT_ID=demoapp
 oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 cd ../
 sleep 3
+echo "Endpoint : $app & SSO : $sso"
 ./scripts/httpie/token_req.sh $sso $app
 

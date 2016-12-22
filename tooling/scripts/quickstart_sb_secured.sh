@@ -18,4 +18,5 @@ mvn fabric8:deploy -Popenshift
 oc env dc/secured-springboot-rest SSO_URL=$sso
 cd ../
 sleep 5
+echo "Endpoint : $app & SSO : $sso"
 ./scripts/httpie/token_req.sh $sso $app
