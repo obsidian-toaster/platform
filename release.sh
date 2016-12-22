@@ -24,7 +24,7 @@ function mvnReleasePrepare {
   REPODIR=$2
   git clone $REPO
   cd $REPODIR
-  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dobsidian.forge.version=$REL
+  mvn release:prepare release:clean -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV
   cd -
 }
 
