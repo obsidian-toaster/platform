@@ -8,7 +8,9 @@ echo "Quickstart - SpringBoot"
 oc login $api --token=$token
 oc delete project/quicksb
 oc project obsidian
+sleep 3
 oc new-project quicksb
 mvn clean package fabric8:deploy -Popenshift -DskipTests
+sleep 3
 oc get route/springboot-rest
 http $app
