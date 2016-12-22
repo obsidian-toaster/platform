@@ -15,7 +15,7 @@ function mvnRelease {
   REPODIR=$2
   git clone $REPO
   cd $REPODIR
-  mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dobsidian.forge.version=$REL
+  mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL -Dobsidian.forge.version=$REL
   cd -
 }
 
@@ -29,7 +29,7 @@ git clone https://github.com/obsidian-toaster/platform
 cd platform/archetype-builder
 mvn clean compile exec:java
 cd ..
-mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV
+mvn release:prepare release:perform -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
 cd $WORK_DIR
 
 # Release Obsidian addon
