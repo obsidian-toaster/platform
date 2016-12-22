@@ -34,4 +34,11 @@
          </plugin>
       </plugins>
    </build>
+
+   <scm>
+      <connection>scm:git:git://github.com/obsidian-toaster/platform.git</connection>
+      <developerConnection>scm:git:git@github.com:obsidian-toaster/platform.git</developerConnection>
+      <url>http://github.com/obsidian-toaster/platform</url>
+      <tag>HEAD</tag>
+   </scm>
 </project>
