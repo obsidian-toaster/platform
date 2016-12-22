@@ -6,7 +6,6 @@ FORGE_URL="http://generator-backend-obsidian-alpha1.e8ca.engint.openshiftapps.co
 
 cd $TMPDIR
 rm -rf generator-frontend
-nvm use 6
 git clone https://github.com/obsidian-toaster/generator-frontend.git
 cd generator-frontend
 npm install package-json-io
@@ -14,14 +13,14 @@ node -e "var pkg = require('package-json-io'); pkg.read(function(err, data) { da
 git commit -a -m "Released $REL of generator-frontend"
 git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
 cd build
-git branch "$REL"
-git checkout "$REL"
+git checkout -b "$REL"
 rm -rf *
 cd -
 npm install
 npm run build:prod
 cp -r dist/* build
 cd build
+ls -la
 git add .
 git commit -a -m "Released $REL of generator-frontend"
 git push origin "$REL"
