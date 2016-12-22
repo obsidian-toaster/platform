@@ -4,13 +4,20 @@ api=${1:-https://api.engint.openshift.com}
 token=${2:-b0y_AgzqOJyemigpyDS6MXOH16XTRWNPAgwXsXA7aTg}
 sso=${3:-https://secure-sso-vertx.e8ca.engint.openshiftapps.com}
 app=${4:-http://secured-vertx-rest-vertx.e8ca.engint.openshiftapps.com}
+http_code=200
+current=$PWD
 
 echo "Quickstart - Secured Vertx with Red Hat SSO"
 oc login $api --token=$token
 oc project obsidian
-oc delete project/ssovertx --now=true
+oc delete project ssovertx --now=true
 sleep 3
 oc new-project ssovertx
+
+cd $TMPDIR
+git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-vertx.git
+cd quick_secured_rest-vertx
+
 mvn clean install
 cd sso
 mvn fabric8:deploy
@@ -27,4 +34,7 @@ do
   sleep 3
 done
 echo "Service $app replied : $(curl -s $app)"
+
+cd $current
+oc project obsidian
 
