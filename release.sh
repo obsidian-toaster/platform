@@ -2,11 +2,11 @@
 
 : ${1:?"Must specify release version. Ex: 2.0.1.Final"}
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
-: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io"}
+: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
 
 REL=$1
 DEV=$2
-FORGE_URL=$3
+export FORGE_URL=$3
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
