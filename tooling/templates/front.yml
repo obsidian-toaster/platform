@@ -8,7 +8,7 @@ objects:
   metadata:
     labels:
       app: front-generator
-    name: front-generator
+    name: front-generator-s2i
   spec:
     output:
       to:
