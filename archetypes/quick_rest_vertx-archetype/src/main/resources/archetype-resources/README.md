@@ -24,9 +24,9 @@ To get started with these quickstarts you'll need the following prerequisites:
 Name | Description | Version
 --- | --- | ---
 [java][1] | Java JDK | 8
-[maven][2] | Apache Maven | 3.2.x 
+[maven][2] | Apache Maven | 3.2.x
 [oc][3] | OpenShift Client | v3.3.x
-[git][4] | Git version management | 2.x 
+[git][4] | Git version management | 2.x
 
 [1]: http://www.oracle.com/technetwork/java/javase/downloads/
 [2]: https://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache/
@@ -45,7 +45,8 @@ mvn clean package
 
 # Launch and Test
 
-1. Execute the following apache maven command:
+1. Execute the following apache maven command (the name may actually be different depending on the
+project name you provided when running the generator):
 
     ```
     java -jar target/vertx-rest-1.0.0-SNAPSHOT.jar
@@ -91,11 +92,11 @@ mvn clean vertx:run
     ```
     http http://<HOST_PORT_ADDRESS>/greeting
     http http://<HOST_PORT_ADDRESS>/greeting name==Bruno
-    
-    or 
-    
+
+    or
+
     curl http://<HOST_PORT_ADDRESS>/greeting
-    curl http://<HOST_PORT_ADDRESS>/greeting name==Bruno
+    curl http://<HOST_PORT_ADDRESS>/greeting?name==Bruno
     ```
 
 
