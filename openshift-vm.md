@@ -1,9 +1,9 @@
 # Install Openshift oc client
 
-curl -OL https://github.com/openshift/origin/releases/download/v1.3.2/openshift-origin-client-tools-v1.3.2-ac1d579-linux-64bit.tar.gz
-tar -vxf openshift-origin-client-tools-v1.3.2-ac1d579-linux-64bit.tar.gz
-cd openshift-origin-client-tools-v1.3.2-ac1d579-linux-64bit
-cp oc /usr/local/bin
+  curl -OL https://github.com/openshift/origin/releases/download/v1.3.2/openshift-origin-client-tools-v1.3.2-ac1d579-linux-64bit.tar.gz
+  tar -vxf openshift-origin-client-tools-v1.3.2-ac1d579-linux-64bit.tar.gz
+  cd openshift-origin-client-tools-v1.3.2-ac1d579-linux-64bit
+  cp oc /usr/local/bin
 
 # Install Yum packages
 yum install wget git net-tools bind-utils iptables-services bridge-utils bash-completion
