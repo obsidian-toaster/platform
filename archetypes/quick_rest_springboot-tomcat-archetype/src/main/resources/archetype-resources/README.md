@@ -10,7 +10,7 @@ This project exposes a simple REST endpoint where the service `greeting` is avai
 
 ```
 
-The id of the message is incremented for each request. 
+The id of the message is incremented for each request.
 To customize the message, you can pass as parameter the name of the person that you want to send your greeting.
 
 You can perform this task in three different ways:
@@ -26,9 +26,9 @@ To get started with these quickstarts you'll need the following prerequisites:
 Name | Description | Version
 --- | --- | ---
 [java][1] | Java JDK | 8
-[maven][2] | Apache Maven | 3.2.x 
+[maven][2] | Apache Maven | 3.2.x
 [oc][3] | OpenShift Client | v3.3.x
-[git][4] | Git version management | 2.x 
+[git][4] | Git version management | 2.x
 
 [1]: http://www.oracle.com/technetwork/java/javase/downloads/
 [2]: https://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache/
@@ -71,7 +71,7 @@ mvn clean install
 
 # OpenShift Online
 
-1. Go to [OpenShift Online](https://console.dev-preview-int.openshift.com/console/command-line) to get the token used by the oc client for authentication and project access. 
+1. Go to [OpenShift Online](https://console.dev-preview-int.openshift.com/console/command-line) to get the token used by the oc client for authentication and project access.
 
 1. On the oc client, execute the following command to replace MYTOKEN with the one from the Web Console:
 
@@ -83,7 +83,7 @@ mvn clean install
     ```
     mvn clean fabric8:deploy -Popenshift  -DskipTests
     ```
-    
+
 1. Get the route url.
 
     ```
@@ -97,7 +97,7 @@ mvn clean install
     http http://<HOST_PORT_ADDRESS>/greeting
     http http://<HOST_PORT_ADDRESS>/greeting name==Bruno
 
-    or 
+    or
 
     curl http://<HOST_PORT_ADDRESS>/greeting
     curl http://<HOST_PORT_ADDRESS>/greeting name==Bruno
