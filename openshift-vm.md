@@ -53,3 +53,32 @@ sudo firewall-cmd --zone=public --add-port=8443/tcp --permanent
 sudo firewall-cmd --reload
 firewall-cmd --list-all
 ```
+
+# Enable Openshift Service
+
+- Add a new service
+```
+cat > /etc/systemd/system/openshift-origin.service << '__EOF__'
+[Unit]
+Description=Origin Master Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+RestartSec=10s
+ExecStart=/usr/bin/openshift start --master-config=openshift.local.config/master/master-config.yaml --node-config=openshift.local.config/node-172.16.50.40/node-config.yaml
+WorkingDirectory=/var/lib/origin/
+
+[Install]
+WantedBy=multi-user.target
+__EOF__
+```
+
+- Enable and start service
+
+```
+systemctl daemon-reload
+systemctl enable openshift-origin
+systemctl start openshift-origin
+```
