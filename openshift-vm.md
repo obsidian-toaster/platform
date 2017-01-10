@@ -90,7 +90,8 @@ docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 echo "===================================================="
 echo "Generate OpenShift V3 configuration files"
 echo "===================================================="
-./openshift start --master=172.28.128.4 --cors-allowed-origins=.* --hostname=172.28.128.4 --write-config=openshift.local.config
+#./openshift start --master=172.28.128.4 --cors-allowed-origins=.* --hostname=172.28.128.4 --write-config=openshift.local.config
+./openshift start --master=172.16.50.40 --cors-allowed-origins=.* --hostname=172.16.50.40 --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
@@ -98,7 +99,8 @@ chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
 echo "===================================================="
 echo "Change default domain"
 echo "===================================================="
-sed -i 's/router.default.svc.cluster.local/vagrant.ocp' $OPENSHIFT/openshift.local.config/master/master-config.yaml
+# sed -i 's|router.default.svc.cluster.local|vagrant.ocp' $OPENSHIFT/openshift.local.config/master/master-config.yaml
+sed -i 's|router.default.svc.cluster.local|172.16.50.40.xip.io|' $OPENSHIFT/openshift.local.config/master/master-config.yaml
 
 echo "===================================================="
 echo "Configure Openshift service & launch it"
@@ -112,7 +114,8 @@ Requires=docker.service
 [Service]
 Restart=always
 RestartSec=10s
-ExecStart=/opt/openshift-origin-v1.4/openshift start
+# ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://172.28.128.4:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-172.28.128.4/node-config.yaml
+ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://172.16.50.40:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-172.16.50.40/node-config.yaml
 WorkingDirectory=/opt/openshift-origin-v1.4
  
 [Install]
@@ -129,6 +132,20 @@ echo "===================================================="
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
+
+echo "===================================================="
+echo "Create Registry" 
+echo "===================================================="
+oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
+oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig
+
+echo "===================================================="
+echo "Create Router" 
+echo "===================================================="
+oc adm policy add-scc-to-user hostnetwork -z router
+oc adm policy add-scc-to-user hostnetwork system:serviceaccount:default:router
+oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:default:router
+oc adm router router --replicas=1 --service-account=router
 
 SCRIPT
 
@@ -287,6 +304,14 @@ oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
 ```
 
+# Create Router
+```
+oc adm policy add-scc-to-user hostnetwork -z router
+oc adm policy add-scc-to-user hostnetwork system:serviceaccount:default:router
+oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:default:router
+oc adm router router --replicas=1 --service-account=router
+```
+
 # Update Firewall to accept port 8443
 
 ```
@@ -297,4 +322,18 @@ firewall-cmd --list-all
 OR disable it
 
 systemctl stop firewalld
+```
+
+# Temp
+
+```
+oc delete serviceaccount/registry
+oc delete clusterrolebinding/registry-registry-role
+oc delete dc/docker-registry
+oc delete svc/docker-registry
+
+oc delete serviceaccount/router
+oc delete clusterrolebinding/router-router-role
+oc delete dc/router
+oc delete svc/router
 ```
