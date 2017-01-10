@@ -53,7 +53,26 @@ echo Press any key to release the Frontend...
 read junk
 
 # Release Frontend
-// TODO - use the release_front.sh script
+git clone https://github.com/obsidian-toaster/generator-frontend.git
+cd generator-frontend
+npm install package-json-io
+node -e "var pkg = require('package-json-io'); pkg.read(function(err, data) { data.version = '$REL'.replace(/(?:[^\.]*\.){3}/, function(x){return x.substring(0, x.length - 1) + '-'}); pkg.update(data, function(){}); })"
+git commit -a -m "Released $REL of generator-frontend"
+git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
+cd build
+git checkout -b "$REL"
+rm -rf *
+cd -
+npm install
+npm run build:prod
+cp -r dist/* build
+cd build
+git add .
+git commit -a -m "Released $REL of generator-frontend"
+git push origin "$REL"
+cd -
+git tag "$REL"
+git push origin --tags
 
 # clean up
 echo "Cleaning up temp directory $WORK_DIR"
