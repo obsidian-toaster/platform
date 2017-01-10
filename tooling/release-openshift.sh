@@ -12,9 +12,10 @@ sed -e "s/VERSION/$REL/g" ./templates/backend.yml > ./templates/backend-$REL.yml
 sed -e "s/VERSION/$REL/g" ./templates/front.yml > ./templates/front-$REL.yml
 
 # Log on to OpenShift
-oc login $api --token=$token
+#oc login $api --token=$token
+oc login --username=admin --password=admin
 oc new-project obsidian-alpha1
-sleep 5
+#sleep 5
 
 # Deploy the backend
 echo "Deploy the backend"
