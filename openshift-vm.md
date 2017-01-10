@@ -160,6 +160,14 @@ for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n open
 for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
 for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
 
+echo "===================================================="
+echo "Add external nameserver"
+echo "===================================================="
+cat >> /etc/resolv.conf << '__EOF__'
+nameserver 8.8.8.8
+__EOF__
+service docker restart
+
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -341,6 +349,14 @@ cd openshift-ansible/roles/openshift_examples/files/examples/latest/
 for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n openshift -f -; done
 for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
 for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
+```
+
+# Add external nameserver
+```
+cat >> /etc/resolv.conf << '__EOF__'
+nameserver 8.8.8.8
+__EOF__
+service docker restart
 ```
 
 # Update Firewall to accept port 8443
