@@ -208,7 +208,6 @@ yum -y update
 
 # Install OpenShift oc client
 ```
-HOME=/home/vagrant
 URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
 cd $HOME && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE 
@@ -272,7 +271,7 @@ docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 # Generate OpenShift V3 configuration files
 
 ```
-./openshift start --master=172.28.128.4 --cors-allowed-origins=.* --hostname=172.28.128.4 --write-config=openshift.local.config
+./openshift start --master=172.16.50.40 --cors-allowed-origins=.* --hostname=172.16.50.40 --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
@@ -281,8 +280,7 @@ chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
 # Change the default router subdomain in master-config.yaml
 
 ```
-sed -i 's/router.default.svc.cluster.local/172.28.128.4.xip.io/' \
-  $OPENSHIFT/openshift.local.config/master/master-config.yaml
+sed -i 's|router.default.svc.cluster.local|172.16.50.40.xip.io|' $OPENSHIFT/openshift.local.config/master/master-config.yaml
 ```
 
 # Define OpenShift Service & launch it
@@ -297,12 +295,11 @@ Requires=docker.service
 [Service]
 Restart=always
 RestartSec=10s
-ExecStart=/opt/openshift-origin-v1.4/openshift start
+ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://172.16.50.40:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-172.16.50.40/node-config.yaml
 WorkingDirectory=/opt/openshift-origin-v1.4
  
 [Install]
 WantedBy=multi-user.target
-__EOF__
  
 systemctl daemon-reload
 systemctl enable openshift-origin
@@ -349,13 +346,26 @@ for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; d
 # Update Firewall to accept port 8443
 
 ```
-sudo firewall-cmd --zone=public --add-port=8443/tcp --permanent
-sudo firewall-cmd --reload
+firewall-cmd --permanent --zone=public --add-port=80/tcp
+firewall-cmd --permanent --zone=public --add-port=443/tcp
+firewall-cmd --permanent --zone=public --add-port=8443/tcp
+firewall-cmd --reload
 firewall-cmd --list-all
 
 OR disable it
 
 systemctl stop firewalld
+
+AND
+
+iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 8443 -j ACCEPT
+iptables-save | sudo tee /etc/sysconfig/iptables
+service iptables restart
+
+systemctl status iptables.service
+chkconfig iptables off
 ```
 
 # Temp
