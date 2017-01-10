@@ -136,8 +136,11 @@ oc login -u admin -p admin
 echo "===================================================="
 echo "Create Registry" 
 echo "===================================================="
+mkdir /opt/openshift-registry
+chcon -Rt svirt_sandbox_file_t /opt/openshift-registry
+chown 1001.root /opt/openshift-registry
 oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
-oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig
+oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig --mount-host=/opt/openshift-registry
 
 echo "===================================================="
 echo "Create Router" 
@@ -146,6 +149,16 @@ oc adm policy add-scc-to-user hostnetwork -z router
 oc adm policy add-scc-to-user hostnetwork system:serviceaccount:default:router
 oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:default:router
 oc adm router router --replicas=1 --service-account=router
+
+echo "===================================================="
+echo "Install Default images" 
+echo "===================================================="
+cd ~
+git clone https://github.com/openshift/openshift-ansible.git
+cd openshift-ansible/roles/openshift_examples/files/examples/latest/
+for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n openshift -f -; done
+for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
+for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
 
 SCRIPT
 
@@ -304,12 +317,33 @@ oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
 ```
 
+# Create Registry
+
+```
+mkdir /opt/openshift-registry
+chcon -Rt svirt_sandbox_file_t /opt/openshift-registry
+chown 1001.root /opt/openshift-registry
+oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
+oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig --mount-host=/opt/openshift-registry
+```
+
 # Create Router
 ```
 oc adm policy add-scc-to-user hostnetwork -z router
 oc adm policy add-scc-to-user hostnetwork system:serviceaccount:default:router
 oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:default:router
 oc adm router router --replicas=1 --service-account=router
+```
+
+# Install Default images
+
+```
+cd ~
+git clone https://github.com/openshift/openshift-ansible.git
+cd openshift-ansible/roles/openshift_examples/files/examples/latest/
+for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n openshift -f -; done
+for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
+for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
 ```
 
 # Update Firewall to accept port 8443
