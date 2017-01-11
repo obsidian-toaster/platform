@@ -13,4 +13,4 @@ before_install:
 - mvn clean compile exec:java
 - cd -
 script:
-- mvn clean deploy --settings settings.xml
+- mvn clean deploy --settings .travis/settings.xml
