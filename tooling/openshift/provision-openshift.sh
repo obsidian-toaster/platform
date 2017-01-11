@@ -54,7 +54,9 @@ cd $TEMP_DIR && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE
 wget -q $URL
 tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/local/bin
 
+echo "===================================================="
 echo "Add Docker service and launch it"
+echo "===================================================="
 mkdir -p /etc/systemd/system/docker.service.d
 
 cat > /etc/systemd/system/docker.service.d/override.conf << __EOF__
@@ -65,7 +67,6 @@ __EOF__
 
 systemctl daemon-reload
 systemctl enable docker
-
 systemctl restart docker
 
 echo "===================================================="
