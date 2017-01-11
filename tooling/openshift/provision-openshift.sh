@@ -16,12 +16,6 @@ echo "Deployed on : $host"
 echo "===================================================="
 
 echo "===================================================="
-echo "Stop Docker / OpenShift services if they are running"
-echo "===================================================="
-service openshift-origin stop
-service docker stop
-
-echo "===================================================="
 echo "Clean directories & create them"
 echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
@@ -115,9 +109,22 @@ chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
 
 echo "===================================================="
-echo "Change default domain"
+echo "Change default domain and replace 0.0.0.0 with the IP address"
 echo "===================================================="
 sed -i "s/router.default.svc.cluster.local/$HOST_IP.xip.io/" $OPENSHIFT/openshift.local.config/master/master-config.yaml
+
+#echo "===================================================="
+#echo "Replace 0.0.0.0 with the IP address"
+#echo "===================================================="
+#sed -i "s/0.0.0.0:/$HOST_IP:/" $OPENSHIFT/openshift.local.config/master/master-config.yaml
+#sed -i "s/0.0.0.0:/$HOST_IP:/" $OPENSHIFT/openshift.local.config/node-$HOST_IP/node-config.yaml
+
+echo "===================================================="
+echo "Stop/Disable Firewall"
+echo "===================================================="
+chkconfig iptables off
+systemctl disable firewalld
+systemctl stop firewalld
 
 echo "===================================================="
 echo "Configure Openshift service & launch it"
