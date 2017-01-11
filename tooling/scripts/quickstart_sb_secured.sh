@@ -1,15 +1,34 @@
 #!/usr/bin/env bash
 
-api=${1:-https://api.engint.openshift.com}
-token=${2:-b0y_AgzqOJyemigpyDS6MXOH16XTRWNPAgwXsXA7aTg}
-sso=${3:-https://secure-sso-sso.e8ca.engint.openshiftapps.com/auth}
-app=${4:-http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com}
+# Example :
+# Token         --> quickstart_sb_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com/greeting -s https://secure-sso-sso.e8ca.engint.openshiftapps.com/aut
+# User/password --> quickstart_sb_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.16.50.40.xip.io/greeting -s https://secure-sso-sso.e8ca.engint.openshiftapps.com/aut
+
+while getopts a:t:u:p:c: option
+do
+        case "${option}"
+        in
+                a) api=${OPTARG};;
+                t) token=${OPTARG};;
+                u) user=${OPTARG};;
+                p) password=${OPTARG};;
+                c) app=${OPTARG};;
+                s) sso=${OPTARG};;
+        esac
+done
+
 current=$PWD
 http_code=200
 
 echo "# Quickstart - Secured Spring Boot with Red Hat SSO"
-oc login $api --token=$token
-oc project obsidian
+if [ "$token" != "" ]; then
+   oc login $api --token=$token
+else
+   echo "oc login $api -u $user -p $password"
+   oc login $api -u $user -p $password
+fi
+
+oc project default
 oc delete project sso --now=true
 sleep 5
 oc new-project sso
@@ -34,4 +53,4 @@ done
 echo "Service $app replied"
 
 cd $current
-oc project obsidian
+oc project default

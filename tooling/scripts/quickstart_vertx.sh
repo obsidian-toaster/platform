@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token         --> quickstart_sb.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://vertx-rest-quickvertx.e8ca.engint.openshiftapps.com/greeting
-# User/password --> quickstart_sb.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.16.50.40.xip.io/greeting
+# Token         --> quickstart_vertx.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://vertx-rest-quickvertx.e8ca.engint.openshiftapps.com/greeting
+# User/password --> quickstart_vertx.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.16.50.40.xip.io/greeting
 
 while getopts a:t:u:p:c: option
 do
