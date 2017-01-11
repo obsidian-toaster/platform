@@ -2,14 +2,27 @@
 
 set -e
 
-# HOST_IP="172.16.50.40" # CI Widlfy Swarm
-HOST_IP="172.28.128.4" # Local Vagrant
+host=${1:-local} # Host could be local or remote
 
+if [ $host = "local" ]; then
+  HOST_IP="172.28.128.4" # Local Vagrant
+else
+  HOST_IP="172.16.50.40" # CI Widlfy Swarm
+fi
+
+echo "===================================================="
+echo "Stop Docker / OpenShift services if they are running"
+echo "===================================================="
+service openshift-origin stop
+service docker stop
+
+echo "===================================================="
+echo "Clean directories"
+echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 TEMP_DIR=/home/tmp
-rm -rf $TEMP_DIR && mkdir -p $TEMP_DIR
-rm -rf $OPENSHIFT_DIR && mkdir -p $OPENSHIFT_DIR
-ifup eth0
+REGISTRY_DIR=/opt/openshift-registry
+rm -rf {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR}
 
 echo "===================================================="
 echo "Install Yum packages"
@@ -52,6 +65,7 @@ systemctl restart docker
 echo "===================================================="
 echo "Get OpenShift Binaries"
 echo "===================================================="
+OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 mkdir $OPENSHIFT_DIR && chmod 755 /opt $OPENSHIFT_DIR && cd $OPENSHIFT_DIR
 wget -q $OPENSHIFT_URL
@@ -84,6 +98,12 @@ docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 echo "===================================================="
 echo "Generate OpenShift V3 configuration files"
 echo "===================================================="
+if [ $host = "local" ]; then
+  echo "===================================================="
+  echo "Stop eth0 adapter when using local vagrant"
+  echo "===================================================="
+  ifdown eth0
+fi
 ./openshift start --master=$HOST_IP --cors-allowed-origins=.* --hostname=$HOST_IP --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
@@ -106,7 +126,8 @@ Requires=docker.service
 [Service]
 Restart=always
 RestartSec=10s
-ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://$HOST_IP:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-$HOST_IP/node-config.yaml
+ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://$HOST_IP:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4
+/openshift.local.config/node-$HOST_IP/node-config.yaml
 WorkingDirectory=/opt/openshift-origin-v1.4
 
 [Install]
@@ -124,10 +145,17 @@ oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
 
+if [ $host = "local" ]; then
+  echo "===================================================="
+  echo "Restart the eth0"
+  echo "===================================================="
+  ifup eth0
+fi
+
+
 echo "===================================================="
 echo "Create Registry"
 echo "===================================================="
-mkdir /opt/openshift-registry
 chcon -Rt svirt_sandbox_file_t /opt/openshift-registry
 chown 1001.root /opt/openshift-registry
 oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
