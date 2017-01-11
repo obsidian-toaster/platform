@@ -16,13 +16,20 @@ echo "Deployed on : $host"
 echo "===================================================="
 
 echo "===================================================="
-echo "Clean directories & create them"
+echo "Setup variables"
 echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
+OPENSHIFT=/opt/openshift-origin-v1.4
+OPENSHIFT_VERSION=v1.4.0-rc1
+
 TEMP_DIR=/home/tmp
 REGISTRY_DIR=/opt/openshift-registry
 DOCKER_SERVICE=/etc/systemd/system/docker.service.d
-rm -rf {$TEMP_DIR,$OPENSHIFT_DIR/openshift.local.config,$REGISTRY_DIR,$DOCKER_SERVICE} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR,$DOCKER_SERVICE}
+
+echo "===================================================="
+echo "Clean directories & create them"
+echo "===================================================="
+rm -rf {$TEMP_DIR,$OPENSHIFT_DIR/openshift.local.config,$OPENSHIFT_DIR/openshift.local.etcd,$REGISTRY_DIR,$DOCKER_SERVICE} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR,$DOCKER_SERVICE}
 chmod 755 /opt $OPENSHIFT_DIR
 
 echo "===================================================="
@@ -75,8 +82,8 @@ echo "===================================================="
 echo "Set and load environments"
 echo "===================================================="
 cat > /etc/profile.d/openshift.sh << __EOF__
-export OPENSHIFT=/opt/openshift-origin-v1.4
-export OPENSHIFT_VERSION=v1.4.0-rc1
+export OPENSHIFT=$OPENSHIFT
+export OPENSHIFT_VERSION=$OPENSHIFT_VERSION
 export PATH=$OPENSHIFT:$PATH
 export KUBECONFIG=$OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 export CURL_CA_BUNDLE=$OPENSHIFT/openshift.local.config/master/ca.crt
@@ -97,13 +104,13 @@ docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 echo "===================================================="
 echo "Generate OpenShift V3 configuration files"
 echo "===================================================="
-if [ $host = "local" ]; then
-  echo "===================================================="
-  echo "Stop eth0 adapter when using local vagrant"
-  echo "===================================================="
-  ifdown eth0
-fi
-./openshift start --master=$HOST_IP --cors-allowed-origins=.* --hostname=$HOST_IP --write-config=openshift.local.config
+# if [ $host = "local" ]; then
+#   echo "===================================================="
+#   echo "Stop eth0 adapter when using local vagrant"
+#   echo "===================================================="
+#   ifdown eth0
+# fi
+$OPENSHIFT/openshift start --master=$HOST_IP --cors-allowed-origins=.* --hostname=$HOST_IP --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
@@ -150,19 +157,23 @@ systemctl enable openshift-origin
 systemctl start openshift-origin
 
 echo "===================================================="
+echo "Export KUBECONFIG to have access to the certs, ... "
+echo "===================================================="
+export KUBECONFIG=$OPENSHIFT/openshift.local.config/master/admin.kubeconfig
+
+echo "===================================================="
 echo "Create admin account"
 echo "===================================================="
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
 
-if [ $host = "local" ]; then
-  echo "===================================================="
-  echo "Restart the eth0"
-  echo "===================================================="
-  ifup eth0
-fi
-
+# if [ $host = "local" ]; then
+#   echo "===================================================="
+#   echo "Restart the eth0"
+#   echo "===================================================="
+#   ifup eth0
+# fi
 
 echo "===================================================="
 echo "Create Registry"
