@@ -27,7 +27,8 @@ echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 TEMP_DIR=/home/tmp
 REGISTRY_DIR=/opt/openshift-registry
-rm -rf {$TEMP_DIR,$OPENSHIFT_DIR/openshift.local.config,$REGISTRY_DIR} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR}
+DOCKER_SERVICE=/etc/systemd/system/docker.service.d
+rm -rf {$TEMP_DIR,$OPENSHIFT_DIR/openshift.local.config,$REGISTRY_DIR,$DOCKER_SERVICE} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR,$DOCKER_SERVICE}
 chmod 755 /opt $OPENSHIFT_DIR
 
 echo "===================================================="
@@ -57,9 +58,7 @@ tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/loc
 echo "===================================================="
 echo "Add Docker service and launch it"
 echo "===================================================="
-mkdir -p /etc/systemd/system/docker.service.d
-
-cat > /etc/systemd/system/docker.service.d/override.conf << __EOF__
+cat > $DOCKER_SERVICE/override.conf << __EOF__
 [Service]
 ExecStart=
 ExecStart=/usr/bin/docker daemon --storage-driver=overlay --insecure-registry 172.30.0.0/16
