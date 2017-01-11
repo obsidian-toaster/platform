@@ -108,12 +108,6 @@ docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 echo "===================================================="
 echo "Generate OpenShift V3 configuration files"
 echo "===================================================="
-# if [ $host = "local" ]; then
-#   echo "===================================================="
-#   echo "Stop eth0 adapter when using local vagrant"
-#   echo "===================================================="
-#   ifdown eth0
-# fi
 $OPENSHIFT/openshift start --master=$HOST_IP --cors-allowed-origins=.* --hostname=$HOST_IP --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
@@ -123,12 +117,6 @@ echo "===================================================="
 echo "Change default domain and replace 0.0.0.0 with the IP address"
 echo "===================================================="
 sed -i "s/router.default.svc.cluster.local/$HOST_IP.xip.io/" $OPENSHIFT/openshift.local.config/master/master-config.yaml
-
-#echo "===================================================="
-#echo "Replace 0.0.0.0 with the IP address"
-#echo "===================================================="
-#sed -i "s/0.0.0.0:/$HOST_IP:/" $OPENSHIFT/openshift.local.config/master/master-config.yaml
-#sed -i "s/0.0.0.0:/$HOST_IP:/" $OPENSHIFT/openshift.local.config/node-$HOST_IP/node-config.yaml
 
 echo "===================================================="
 echo "Stop/Disable Firewall"
@@ -173,13 +161,6 @@ oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
 
-# if [ $host = "local" ]; then
-#   echo "===================================================="
-#   echo "Restart the eth0"
-#   echo "===================================================="
-#   ifup eth0
-# fi
-
 echo "===================================================="
 echo "Create Registry"
 echo "===================================================="
@@ -205,11 +186,3 @@ cd openshift-ansible/roles/openshift_examples/files/examples/latest/
 for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n openshift -f -; done
 for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
 for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
-
-# echo "===================================================="
-# echo "Add external nameserver"
-# echo "===================================================="
-# cat >> /etc/resolv.conf << __EOF__
-# nameserver 8.8.8.8
-# __EOF__
-# service docker restart
