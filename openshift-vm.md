@@ -61,7 +61,7 @@ __EOF__
 ssh vagrant@172.28.128.4
 su -
 ifdown eth0
-sed -i '|ONBOOT="yes"|ONBOOT="no"|' /etc/sysconfig/network-scripts/ifcfg-eth0 
+sed -i 's|ONBOOT="yes"|ONBOOT="no"|' /etc/sysconfig/network-scripts/ifcfg-eth0 
 ```
 
 # Install Yum packages

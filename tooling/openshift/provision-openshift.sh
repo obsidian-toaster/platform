@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
 
+set -e
+
+# HOST_IP="172.16.50.40" # CI Widlfy Swarm
+HOST_IP="172.28.128.4" # Local Vagrant
+
+OPENSHIFT_DIR=/opt/openshift-origin-v1.4
+TEMP_DIR=/home/tmp
+rm -rf $TEMP_DIR && mkdir -p $TEMP_DIR
+rm -rf $OPENSHIFT_DIR && mkdir -p $OPENSHIFT_DIR
+ifup eth0
+
 echo "===================================================="
 echo "Install Yum packages"
 echo "===================================================="
-cat > /etc/yum.repos.d/docker.repo << '__EOF__'
+cat > /etc/yum.repos.d/docker.repo << __EOF__
 [docker]
 name=Docker Repository
 baseurl=https://yum.dockerproject.org/repo/main/centos/7/
@@ -18,17 +29,16 @@ yum -y update
 echo "===================================================="
 echo "Install OpenShift Client"
 echo "===================================================="
-HOME=/home/vagrant
 URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
-cd $HOME && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE
+cd $TEMP_DIR && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE
 wget -q $URL
 tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/local/bin
 
 echo "Add Docker service and launch it"
 mkdir -p /etc/systemd/system/docker.service.d
 
-cat > /etc/systemd/system/docker.service.d/override.conf << '__EOF__'
+cat > /etc/systemd/system/docker.service.d/override.conf << __EOF__
 [Service]
 ExecStart=
 ExecStart=/usr/bin/docker daemon --storage-driver=overlay --insecure-registry 172.30.0.0/16
@@ -42,7 +52,6 @@ systemctl restart docker
 echo "===================================================="
 echo "Get OpenShift Binaries"
 echo "===================================================="
-OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 mkdir $OPENSHIFT_DIR && chmod 755 /opt $OPENSHIFT_DIR && cd $OPENSHIFT_DIR
 wget -q $OPENSHIFT_URL
@@ -52,7 +61,7 @@ rm -f openshift-origin-server-*.tar.gz
 echo "===================================================="
 echo "Set and load environments"
 echo "===================================================="
-cat > /etc/profile.d/openshift.sh << '__EOF__'
+cat > /etc/profile.d/openshift.sh << __EOF__
 export OPENSHIFT=/opt/openshift-origin-v1.4
 export OPENSHIFT_VERSION=v1.4.0-rc1
 export PATH=$OPENSHIFT:$PATH
@@ -75,8 +84,7 @@ docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 echo "===================================================="
 echo "Generate OpenShift V3 configuration files"
 echo "===================================================="
-#./openshift start --master=172.28.128.4 --cors-allowed-origins=.* --hostname=172.28.128.4 --write-config=openshift.local.config
-./openshift start --master=172.16.50.40 --cors-allowed-origins=.* --hostname=172.16.50.40 --write-config=openshift.local.config
+./openshift start --master=$HOST_IP --cors-allowed-origins=.* --hostname=$HOST_IP --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
@@ -84,13 +92,12 @@ chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
 echo "===================================================="
 echo "Change default domain"
 echo "===================================================="
-# sed -i 's|router.default.svc.cluster.local|vagrant.ocp' $OPENSHIFT/openshift.local.config/master/master-config.yaml
-sed -i 's|router.default.svc.cluster.local|172.16.50.40.xip.io|' $OPENSHIFT/openshift.local.config/master/master-config.yaml
+sed -i "s/router.default.svc.cluster.local/$HOST_IP.xip.io/" $OPENSHIFT/openshift.local.config/master/master-config.yaml
 
 echo "===================================================="
 echo "Configure Openshift service & launch it"
 echo "===================================================="
-cat > /etc/systemd/system/openshift-origin.service << '__EOF__'
+cat > /etc/systemd/system/openshift-origin.service << __EOF__
 [Unit]
 Description=Origin Service
 After=docker.service
@@ -99,8 +106,7 @@ Requires=docker.service
 [Service]
 Restart=always
 RestartSec=10s
-# ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://172.28.128.4:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-172.28.128.4/node-config.yaml
-ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://172.16.50.40:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-172.16.50.40/node-config.yaml
+ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://$HOST_IP:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-$HOST_IP/node-config.yaml
 WorkingDirectory=/opt/openshift-origin-v1.4
 
 [Install]
@@ -148,7 +154,7 @@ for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; d
 echo "===================================================="
 echo "Add external nameserver"
 echo "===================================================="
-cat >> /etc/resolv.conf << '__EOF__'
+cat >> /etc/resolv.conf << __EOF__
 nameserver 8.8.8.8
 __EOF__
 service docker restart
