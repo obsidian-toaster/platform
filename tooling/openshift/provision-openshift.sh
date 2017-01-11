@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Author  : Charles Moulliard
+# Date    : 11-Jan-2017
+# Version : 1.0
+
 set -e
 
 host=${1:-local} # Host could be local or remote
@@ -21,6 +25,10 @@ echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 OPENSHIFT=/opt/openshift-origin-v1.4
 OPENSHIFT_VERSION=v1.4.0-rc1
+
+OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
+OC_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 
 TEMP_DIR=/home/tmp
 REGISTRY_DIR=/opt/openshift-registry
@@ -50,10 +58,8 @@ yum -y update
 echo "===================================================="
 echo "Install OpenShift Client"
 echo "===================================================="
-URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
-OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
 cd $TEMP_DIR && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE
-wget -q $URL
+wget $OC_URL
 tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/local/bin
 
 echo "===================================================="
@@ -72,9 +78,7 @@ systemctl restart docker
 echo "===================================================="
 echo "Get OpenShift Binaries"
 echo "===================================================="
-OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
-cd $OPENSHIFT_DIR
-wget -q $OPENSHIFT_URL
+cd $OPENSHIFT_DIR && wget $OPENSHIFT_URL
 tar -zxvf openshift-origin-server-*.tar.gz --strip-components 1
 rm -f openshift-origin-server-*.tar.gz
 
@@ -157,13 +161,9 @@ systemctl enable openshift-origin
 systemctl start openshift-origin
 
 echo "===================================================="
-echo "Export KUBECONFIG to have access to the certs, ... "
-echo "===================================================="
-export KUBECONFIG=$OPENSHIFT/openshift.local.config/master/admin.kubeconfig
-
-echo "===================================================="
 echo "Create admin account"
 echo "===================================================="
+. /etc/profile.d/openshift.sh
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
@@ -201,10 +201,10 @@ for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n open
 for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
 for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
 
-echo "===================================================="
-echo "Add external nameserver"
-echo "===================================================="
-cat >> /etc/resolv.conf << __EOF__
-nameserver 8.8.8.8
-__EOF__
-service docker restart
+# echo "===================================================="
+# echo "Add external nameserver"
+# echo "===================================================="
+# cat >> /etc/resolv.conf << __EOF__
+# nameserver 8.8.8.8
+# __EOF__
+# service docker restart
