@@ -148,7 +148,7 @@ systemctl daemon-reload
 systemctl enable openshift-origin
 systemctl start openshift-origin
 
-if [ $host != "local" ]; then
+if [ "$host" != "local" ]; then
   echo "===================================================="
   echo "Add external nameserver & restart docker"
   echo "===================================================="
