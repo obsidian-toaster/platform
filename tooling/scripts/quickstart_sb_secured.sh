@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token         --> quickstart_sb_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com/greeting -s https://secure-sso-sso.e8ca.engint.openshiftapps.com/auth
-# User/password --> quickstart_sb_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.16.50.40.xip.io/greeting -s https://secure-sso-sso.172.16.50.40.xip.io/auth
+# Token         --> quickstart_sb_secured.sh -a https://api.engint.openshift.com -t aehZPpWNbaMb3nfXaxAKNkp_o8qCLcwGRmdbGM9SqPU -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
+# User/password --> quickstart_sb_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.16.50.40.xip.io -s https://secure-sso-sso.172.16.50.40.xip.io
 
 while getopts a:t:u:p:c:s: option
 do
