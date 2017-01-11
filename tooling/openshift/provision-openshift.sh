@@ -11,18 +11,24 @@ else
 fi
 
 echo "===================================================="
+echo "IP Address to be used : $HOST_IP"
+echo "Deployed on : $host"
+echo "===================================================="
+
+echo "===================================================="
 echo "Stop Docker / OpenShift services if they are running"
 echo "===================================================="
 service openshift-origin stop
 service docker stop
 
 echo "===================================================="
-echo "Clean directories"
+echo "Clean directories & create them"
 echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 TEMP_DIR=/home/tmp
 REGISTRY_DIR=/opt/openshift-registry
-rm -rf {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR}
+rm -rf {$TEMP_DIR,$OPENSHIFT_DIR/openshift.local.config,$REGISTRY_DIR} && mkdir -p {$TEMP_DIR,$OPENSHIFT_DIR,$REGISTRY_DIR}
+chmod 755 /opt $OPENSHIFT_DIR
 
 echo "===================================================="
 echo "Install Yum packages"
@@ -53,7 +59,6 @@ mkdir -p /etc/systemd/system/docker.service.d
 
 cat > /etc/systemd/system/docker.service.d/override.conf << __EOF__
 [Service]
-ExecStart=
 ExecStart=/usr/bin/docker daemon --storage-driver=overlay --insecure-registry 172.30.0.0/16
 __EOF__
 
@@ -65,9 +70,8 @@ systemctl restart docker
 echo "===================================================="
 echo "Get OpenShift Binaries"
 echo "===================================================="
-OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
-mkdir $OPENSHIFT_DIR && chmod 755 /opt $OPENSHIFT_DIR && cd $OPENSHIFT_DIR
+cd $OPENSHIFT_DIR
 wget -q $OPENSHIFT_URL
 tar -zxvf openshift-origin-server-*.tar.gz --strip-components 1
 rm -f openshift-origin-server-*.tar.gz
@@ -126,8 +130,7 @@ Requires=docker.service
 [Service]
 Restart=always
 RestartSec=10s
-ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://$HOST_IP:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4
-/openshift.local.config/node-$HOST_IP/node-config.yaml
+ExecStart=/opt/openshift-origin-v1.4/openshift start --public-master=https://$HOST_IP:8443 --master-config=/opt/openshift-origin-v1.4/openshift.local.config/master/master-config.yaml --node-config=/opt/openshift-origin-v1.4/openshift.local.config/node-$HOST_IP/node-config.yaml
 WorkingDirectory=/opt/openshift-origin-v1.4
 
 [Install]
