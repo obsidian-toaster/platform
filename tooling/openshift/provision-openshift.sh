@@ -163,7 +163,12 @@ systemctl start openshift-origin
 echo "===================================================="
 echo "Create admin account"
 echo "===================================================="
-. /etc/profile.d/openshift.sh
+echo "Temporary workaround as file /etc/profile.d/openshift.sh is not sourced"
+export OPENSHIFT=$OPENSHIFT
+export OPENSHIFT_VERSION=$OPENSHIFT_VERSION
+export PATH=$OPENSHIFT:$PATH
+export KUBECONFIG=$OPENSHIFT/openshift.local.config/master/admin.kubeconfig
+export CURL_CA_BUNDLE=$OPENSHIFT/openshift.local.config/master/ca.crt
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
