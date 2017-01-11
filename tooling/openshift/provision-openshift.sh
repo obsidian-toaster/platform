@@ -194,7 +194,7 @@ oc adm router router --replicas=1 --service-account=router
 echo "===================================================="
 echo "Install Default images"
 echo "===================================================="
-cd ~
+cd $TEMP_DIR
 git clone https://github.com/openshift/openshift-ansible.git
 cd openshift-ansible/roles/openshift_examples/files/examples/latest/
 for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n openshift -f -; done
