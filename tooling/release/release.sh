@@ -17,14 +17,24 @@ function mvnRelease {
   REPODIR=$2
   git clone $REPO
   cd $REPODIR
-  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL -Dobsidian.forge.version=$REL
+  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
+  mvn release:clean
+  cd -
+}
+
+function mvnReleasePerform {
+  REPO=$1
+  REPODIR=$2
+  git clone $REPO
+  cd $REPODIR
+  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
   mvn release:perform
   cd -
 }
+
 echo Press any key to release the Quickstarts...
 read junk
-# Release Quickstarts - TODO: no need to release:perform it
-// TODO - Release the archetypes on Maven Central instead of JBoss Repository Maven Nexus
+# Release Quickstarts - no need to release:perform it
 mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
 mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
 mvnRelease https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git quick_secured_rest-springboot
@@ -33,21 +43,20 @@ echo Press any key to release the Platform...
 read junk
 
 # Release Platform. Archetypes should be previously generated and pushed
-// TODO - Step missing - Should be investigated by George Gastaldi
+# TODO - Step missing - Should be investigated by George Gastaldi
 mvnRelease https://github.com/obsidian-toaster/platform platform
 
 echo Press any key to release the Obsidian addon...
 read junk
 
 # Release Obsidian addon
-mvnRelease https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
+mvnReleasePerform https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
 echo Press any key to release the Backend...
 read junk
 
 # Release Backend
-// TODO - replace value using sed (George Gastaldi)
-mvnRelease https://github.com/obsidian-toaster/generator-backend.git generator-backend
+mvnReleasePerform https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
 echo Press any key to release the Frontend...
 read junk
