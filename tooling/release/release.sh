@@ -15,17 +15,16 @@ cd $WORK_DIR
 function mvnRelease {
   REPO=$1
   REPODIR=$2
-  git clone $REPO
+  git clone $REPO $REPODIR
   cd $REPODIR
   mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
-  mvn release:clean
   cd -
 }
 
 function mvnReleasePerform {
   REPO=$1
   REPODIR=$2
-  git clone $REPO
+  git clone $REPO $REPODIR
   cd $REPODIR
   mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
   mvn release:perform
@@ -43,8 +42,18 @@ echo Press any key to release the Platform...
 read junk
 
 # Release Platform. Archetypes should be previously generated and pushed
-# TODO - Step missing - Should be investigated by George Gastaldi
-mvnRelease https://github.com/obsidian-toaster/platform platform
+git clone https://github.com/obsidian-toaster/platform platform
+cd platform/archetype-builder
+mvn clean compile exec:java
+cd ../archetypes
+# Remove generated .gitignore files
+find . -name ".gitignore" -type f -print0 | xargs -0 /bin/rm -f
+# Commit changes
+git commit -a -m "Generating archetypes to release $REL"
+cd ..
+mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
+mvn release:perform
+cd ..
 
 echo Press any key to release the Obsidian addon...
 read junk
