@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token         --> quickstart_sb.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://springboot-rest-quicksb.e8ca.engint.openshiftapps.com/greeting
-# User/password --> quickstart_sb.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://springboot-rest-quicksb.172.16.50.40.xip.io/greeting
+# Token                         --> ./quickstart_sb.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://springboot-rest-quicksb.e8ca.engint.openshiftapps.com/greeting
+# User/password (CI Server)     --> ./quickstart_sb.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://springboot-rest-quicksb.172.16.50.40.xip.io/greeting
+# User/password (local vagrant) --> ./quickstart_sb.sh -a 172.28.128.4:8443 -u admin -p admin -c http://springboot-rest-quicksb.172.28.128.4.xip.io/greeting
 
 while getopts a:t:u:p:c: option
 do
@@ -32,7 +33,7 @@ oc delete project quicksb --now=true
 sleep 3
 oc new-project quicksb
 
-cd $TMPDIR
+rm -rf $TMPDIR/quick*.git && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git
 cd quick_rest_springboot-tomcat
 

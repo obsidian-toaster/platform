@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token         --> quickstart_sb_secured.sh -a https://api.engint.openshift.com -t aehZPpWNbaMb3nfXaxAKNkp_o8qCLcwGRmdbGM9SqPU -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
-# User/password --> quickstart_sb_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.16.50.40.xip.io -s https://secure-sso-sso.172.16.50.40.xip.io
+# Token                         --> ./quickstart_sb_secured.sh -a https://api.engint.openshift.com -t aehZPpWNbaMb3nfXaxAKNkp_o8qCLcwGRmdbGM9SqPU -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
+# User/password                 --> ./quickstart_sb_secured.sh -a 172.16.50.40:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.16.50.40.xip.io -s https://secure-sso-sso.172.16.50.40.xip.io
+# User/password (local vagrant) --> ./quickstart_sb_secured.sh -a 172.28.128.4:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.28.128.4.xip.io -s https://secure-sso-sso.172.28.128.4.xip.io
 
 while getopts a:t:u:p:c:s: option
 do
@@ -33,7 +34,7 @@ oc delete project sso --now=true
 sleep 5
 oc new-project sso
 
-cd $TMPDIR
+rm -rf $TMPDIR/quick*.git && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git
 cd quick_secured_rest-springboot
 

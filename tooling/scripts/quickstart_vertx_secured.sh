@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token         --> quickstart_sb_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com/greeting -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
-# User/password --> quickstart_sb_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.16.50.40.xip.io/greeting -s https://secure-sso-ssovertx.172.16.50.40.xip.io
+# Token                         --> ./quickstart_vertx_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com/greeting -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
+# User/password                 --> ./quickstart_vertx_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.16.50.40.xip.io/greeting -s https://secure-sso-ssovertx.172.16.50.40.xip.io
+# User/password (local vagrant) --> ./quickstart_vertx_secured.sh -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io/greeting -s https://secure-sso-ssovertx.172.28.128.4.xip.io
 
 while getopts a:t:u:p:c:s: option
 do
@@ -33,7 +34,7 @@ oc delete project ssovertx --now=true
 sleep 3
 oc new-project ssovertx
 
-cd $TMPDIR
+rm -rf $TMPDIR/quick*.git && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-vertx.git
 cd quick_secured_rest-vertx
 
