@@ -2,7 +2,7 @@
 
 : ${1:?"Must specify release version. Ex: 1.0.0.Alpha1"}
 api=${2:-https://api.engint.openshift.com}
-token=${3:-hRXsHSHzxwjiOUFbuvkgjIg2NWNHINuEeblNxq4zZ84}
+token=${3:-xxxxxxxx}
 
 REL=$1
 echo "Version : $REL"
