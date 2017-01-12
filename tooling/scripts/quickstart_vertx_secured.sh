@@ -56,5 +56,9 @@ done
 echo "Service $app replied : $(curl -s $app)"
 
 cd $current
+
+echo "Call Secured endpoint"
+./curl/token_req.sh $sso $app
+
 oc project default
 
