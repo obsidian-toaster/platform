@@ -46,8 +46,6 @@ git clone https://github.com/obsidian-toaster/platform platform
 cd platform/archetype-builder
 mvn clean compile exec:java
 cd ../archetypes
-# Remove generated .gitignore files
-find . -name ".gitignore" -type f -print0 | xargs -0 /bin/rm -f
 # Commit changes
 git commit -a -m "Generating archetypes to release $REL"
 cd ..
