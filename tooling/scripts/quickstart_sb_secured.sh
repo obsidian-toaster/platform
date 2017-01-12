@@ -50,8 +50,11 @@ do
   echo "Wait till we get http response 200 ...."
   sleep 3
 done
-./curl/token_req.sh $sso $app
 echo "Service $app replied"
 
 cd $current
+
+echo "Call Secured endpoint"
+./curl/token_req.sh $sso $app
+
 oc project default
