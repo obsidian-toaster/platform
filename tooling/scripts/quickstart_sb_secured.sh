@@ -34,7 +34,7 @@ oc delete project sso --now=true
 sleep 5
 oc new-project sso
 
-rm -rf $TMPDIR/quick*.git && cd $TMPDIR
+rm -rf $TMPDIR/quick* && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git
 cd quick_secured_rest-springboot
 

@@ -2,7 +2,7 @@
 
 # Example :
 # Token                         --> ./quickstart_vertx.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://vertx-rest-quickvertx.e8ca.engint.openshiftapps.com/greeting
-# User/password                 --> ./quickstart_vertx.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.16.50.40.xip.io/greeting
+# User/password                 --> ./quickstart_vertx.sh -a 172.16.50.40:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.16.50.40.xip.io/greeting
 # User/password (local vagrant) --> ./quickstart_vertx.sh -a 172.28.128.4:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.28.128.4.xip.io/greeting
 
 while getopts a:t:u:p:c: option
@@ -36,7 +36,7 @@ oc delete project quickvertx --now=true
 sleep 3
 oc new-project quickvertx
 
-rm -rf $TMPDIR/quick*.git && cd $TMPDIR
+rm -rf $TMPDIR/quick* && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git
 cd quick_rest_vertx
 

@@ -33,7 +33,7 @@ oc delete project quicksb --now=true
 sleep 3
 oc new-project quicksb
 
-rm -rf $TMPDIR/quick*.git && cd $TMPDIR
+rm -rf $TMPDIR/quick_* && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git
 cd quick_rest_springboot-tomcat
 

@@ -34,7 +34,7 @@ oc delete project ssovertx --now=true
 sleep 3
 oc new-project ssovertx
 
-rm -rf $TMPDIR/quick*.git && cd $TMPDIR
+rm -rf $TMPDIR/quick* && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-vertx.git
 cd quick_secured_rest-vertx
 
