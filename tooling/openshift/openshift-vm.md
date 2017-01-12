@@ -4,16 +4,15 @@ The procedure described within this document can also be used to setup on MacOS 
 to create a new VM running Centos 7.1, provision the machine with OpenShift.
 
 ```
-vagrant destroy -f
-rm Vagrantfile
-rm -rf .vagrant
-
+git clone https://github.com/obsidian-toaster/platform.git
+cd obsidian-toaster/platform/tooling/openshift
+vagrant plugin install landrush
 vagrant up --provider virtualbox
 ```
 
 # Steps required to install & configure OpenShift manually
 
-# Install Yum packages
+##  Install Yum packages
 ```
 cat > /etc/yum.repos.d/docker.repo << '__EOF__'
 [docker]
@@ -28,7 +27,7 @@ yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash
 yum -y update
 ```
 
-# Install OpenShift oc client
+##  Install OpenShift oc client
 ```
 URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
@@ -37,7 +36,7 @@ wget -q $URL
 tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/local/bin
 ```
 
-# Register Docker Service
+##  Register Docker Service
 
 ```
 mkdir -p /etc/systemd/system/docker.service.d 
@@ -54,7 +53,7 @@ systemctl enable docker
 systemctl restart docker
 ```
 
-# Get OpenShift Binaries
+##  Get OpenShift Binaries
 
 ```
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
@@ -65,7 +64,7 @@ tar -zxvf openshift-origin-server-*.tar.gz --strip-components 1
 rm -f openshift-origin-server-*.tar.gz
 ```
 
-# Set and load environments
+##  Set and load environments
 
 ```
 cat > /etc/profile.d/openshift.sh << '__EOF__'
@@ -79,7 +78,7 @@ chmod 755 /etc/profile.d/openshift.sh
 . /etc/profile.d/openshift.sh
 ```
 
-# Prefetch Docker images
+##  Prefetch Docker images
 
 ```
 docker pull openshift/origin-pod:$OPENSHIFT_VERSION
@@ -90,7 +89,7 @@ docker pull openshift/origin-docker-registry:$OPENSHIFT_VERSION
 docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 ```
 
-# Generate OpenShift V3 configuration files
+##  Generate OpenShift V3 configuration files
 
 ```
 ./openshift start --master=172.16.50.40 --cors-allowed-origins=.* --hostname=172.16.50.40 --write-config=openshift.local.config
@@ -99,13 +98,13 @@ chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
 ```
 
-# Change the default router subdomain in master-config.yaml
+##  Change the default router subdomain in master-config.yaml
 
 ```
 sed -i 's|router.default.svc.cluster.local|172.16.50.40.xip.io|' $OPENSHIFT/openshift.local.config/master/master-config.yaml
 ```
 
-# Define OpenShift Service & launch it
+##  Define OpenShift Service & launch it
 
 ```
 cat > /etc/systemd/system/openshift-origin.service << '__EOF__'
@@ -128,7 +127,7 @@ systemctl enable openshift-origin
 systemctl start openshift-origin
 ```
 
-# Create admin account
+##  Create admin account
 
 ```
 oc login -u system:admin
@@ -136,7 +135,7 @@ oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
 ```
 
-# Create Registry
+##  Create Registry
 
 ```
 mkdir /opt/openshift-registry
@@ -146,7 +145,7 @@ oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
 oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig --mount-host=/opt/openshift-registry
 ```
 
-# Create Router
+##  Create Router
 ```
 oc adm policy add-scc-to-user hostnetwork -z router
 oc adm policy add-scc-to-user hostnetwork system:serviceaccount:default:router
@@ -154,7 +153,7 @@ oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:defa
 oc adm router router --replicas=1 --service-account=router
 ```
 
-# Install Default images
+##  Install Default images
 
 ```
 cd ~
