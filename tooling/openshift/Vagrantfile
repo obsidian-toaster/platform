@@ -1,0 +1,37 @@
+$vmMemory = Integer(ENV['VM_MEMORY'] || 6000)
+
+# Override the default VM name appearing within VirtualBox
+$vmName = ENV['VM_NAME'] || "centos7-openshift"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+
+  # Top level domain
+  $tld = "vagrant.ocp"
+
+  config.landrush.enabled = true
+  config.landrush.tld = $tld
+  config.landrush.guest_redirect_dns = false
+  config.landrush.host_ip_address = '172.28.128.4'
+
+  config.vm.network "private_network", ip: "172.28.128.4"
+  config.vm.hostname = $tld
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = $vmMemory
+    v.cpus = 2
+    v.name = $vmName
+  end
+
+  #config.vm.provision "file", source: "provision-openshift.sh", destination: "/home/vagrant/provision-openshift.sh"
+  #config.vm.provision "file", source: "create_accounts_registry_router.sh", destination: "/home/vagrant/create_accounts_registry_router.sh"
+
+  config.vm.provision "shell" do |s|
+    s.path       = "./provision-openshift.sh"
+    s.keep_color = "true"
+    s.args       = ["local"]
+  end
+
+  config.vm.provision "shell", path: "./create_accounts_registry_router.sh", keep_color: "true"
+
+end

@@ -1,68 +1,17 @@
-# Vagrant
+# Deploy locally OpenShift using Vagrant & Virtualbox
 
 The procedure described within this document can also be used to setup on MacOS a VM using Virtualbox & Vagrant. The following steps describe how to
-to create a new VM running Centos 7.1, to ssh to the machine and also to provision the machine with OpenShift.
-
-Remarks:
-- Some manual steps have been included in order to ssh the vagrant vm using `ssh vagrant@IP_ADDRESS` 
-- The eth0 card should also be disabled otherwise OpenShift (for a reason which isn't yet know) will use the NAT address to redirect the user to be authenticated 
+to create a new VM running Centos 7.1, provision the machine with OpenShift.
 
 ```
 vagrant destroy -f
 rm Vagrantfile
 rm -rf .vagrant
-cat > Vagrantfile << '**EOF**'
-
-$vmMemory = Integer(ENV['VM_MEMORY'] || 4000)
-
-# Override the default VM name appearing within VirtualBox
-$vmName = ENV['VM_NAME'] || "centos7-openshift"
-
-Vagrant.configure("2") do |config|
-  config.vm.box = "centos/7"
-  
-  # Top level domain
-  $tld = "vagrant.ocp"
-
-  config.landrush.enabled = true
-  config.landrush.tld = $tld
-  config.landrush.guest_redirect_dns = false
-  config.landrush.host_ip_address = '172.28.128.4'
-
-  config.vm.network "private_network", ip: "172.28.128.4"
-  config.vm.hostname = $tld
-  
-  config.vm.provider "virtualbox" do |v|
-    v.memory = $vmMemory
-    v.cpus = 2
-    v.name = $vmName
-  end
-  
-  config.vm.provision "shell", path: "/path/to/provision-openshift.sh", keep_color: true
-
-end
-**EOF**
 
 vagrant up --provider virtualbox
-vagrant ssh
-
-OR
-
-cat > $HOME/.ssh/config << '__EOF__'
-Host 172.28.128.4
-    StrictHostKeyChecking no
-    UserKnownHostsFile /dev/null
-    IdentitiesOnly yes
-    User vagrant
-    IdentityFile $HOME/path/to/.vagrant/machines/default/virtualbox/private_key
-    PasswordAuthentication no
-__EOF__
-
-ssh vagrant@172.28.128.4
-su -
-ifdown eth0
-sed -i 's|ONBOOT="yes"|ONBOOT="no"|' /etc/sysconfig/network-scripts/ifcfg-eth0 
 ```
+
+# Steps required to install & configure OpenShift manually
 
 # Install Yum packages
 ```
@@ -216,49 +165,3 @@ for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
 for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
 ```
 
-# Add external nameserver
-```
-cat >> /etc/resolv.conf << '__EOF__'
-nameserver 8.8.8.8
-__EOF__
-service docker restart
-```
-
-# Update Firewall to accept port 8443
-
-```
-firewall-cmd --permanent --zone=public --add-port=80/tcp
-firewall-cmd --permanent --zone=public --add-port=443/tcp
-firewall-cmd --permanent --zone=public --add-port=8443/tcp
-firewall-cmd --reload
-firewall-cmd --list-all
-
-OR disable it
-
-systemctl stop firewalld
-
-AND
-
-iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
-iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
-iptables -A INPUT -p tcp -m tcp --dport 8443 -j ACCEPT
-iptables-save | sudo tee /etc/sysconfig/iptables
-service iptables restart
-
-systemctl status iptables.service
-chkconfig iptables off
-```
-
-# Temp
-
-```
-oc delete serviceaccount/registry
-oc delete clusterrolebinding/registry-registry-role
-oc delete dc/docker-registry
-oc delete svc/docker-registry
-
-oc delete serviceaccount/router
-oc delete clusterrolebinding/router-router-role
-oc delete dc/router
-oc delete svc/router
-```

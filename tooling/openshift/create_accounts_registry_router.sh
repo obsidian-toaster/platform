@@ -7,6 +7,10 @@ rm -rf $TEMP_DIR/openshift-ansible
 
 . /etc/profile.d/openshift.sh
 
+while true; do
+  curl -k -s -f -o /dev/null --connect-timeout 1 https://localhost:8443/healthz/ready && break || sleep 1
+done
+
 echo "===================================================="
 echo "Create admin account"
 echo "===================================================="
