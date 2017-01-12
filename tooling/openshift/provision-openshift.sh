@@ -52,7 +52,7 @@ echo "===================================================="
 echo "Install OpenShift Client"
 echo "===================================================="
 cd $TEMP_DIR && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE
-wget $OC_URL
+curl -kOL $OC_URL
 tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/local/bin
 
 echo "===================================================="
@@ -61,7 +61,7 @@ echo "===================================================="
 cat > $DOCKER_SERVICE/override.conf << __EOF__
 [Service]
 ExecStart=
-ExecStart=/usr/bin/docker daemon --storage-driver=overlay --insecure-registry 172.30.0.0/16
+ExecStart=/usr/bin/docker daemon --storage-driver=devicemapper --insecure-registry 172.30.0.0/16
 __EOF__
 
 systemctl daemon-reload
@@ -71,8 +71,8 @@ systemctl restart docker
 echo "===================================================="
 echo "Get OpenShift Binaries"
 echo "===================================================="
-cd $OPENSHIFT_DIR && wget $OPENSHIFT_URL
-tar -zxvf openshift-origin-server-*.tar.gz --strip-components 1
+cd $OPENSHIFT_DIR && curl -kOL $OPENSHIFT_URL
+tar -zxvf openshift-origin-server-*.tar.gz --strip-components=1
 rm -f openshift-origin-server-*.tar.gz
 
 echo "===================================================="
