@@ -37,10 +37,9 @@ oc new-project ssovertx
 rm -rf $TMPDIR/quick* && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-vertx.git
 cd quick_secured_rest-vertx
-
-mvn clean install
+mvn clean install -Popenshift
 cd sso
-mvn fabric8:deploy
+mvn fabric8:deploy -Popenshift
 oc env dc/secured-vertx-rest SSO_URL=$sso
 oc env dc/secured-vertx-rest REALM=master
 oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjSLQrbpwNkpuNc+LxcrG711/oIsqUshISLWjXALgx6/L7NItNrPjJTwzqtWCTJrl0/eQLcPdi7UeZA1qjPGa1l+AIj+FnLyCOl7gm65xB3xUpRuGNe5mJ9a+ZtzprXOKhd0WRC8ydiMwyFxIQJPjt7ywlNvU0hZR1U3QboLRICadP5WPaoYNOaYmpkX34r+kegVfdga+1xqG6Ba5v2/9rRg74KxJubCQxcinbH7gVIYSyFQPP5OpBo14SuynFL1YhWDpgUhLz7gr60sG+RC5eC0zuvCRTELn+JquSogPUopuDej/Sd3T5VYHIBJ8P4x4MIz9/FDX8bOFwM73nHgL5wIDAQAB
