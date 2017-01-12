@@ -3,6 +3,9 @@ $vmMemory = Integer(ENV['VM_MEMORY'] || 6000)
 # Override the default VM name appearing within VirtualBox
 $vmName = ENV['VM_NAME'] || "centos7-openshift"
 
+# Private IP address to be used between the Host and the Guest but also the Openshift Server
+$vmPrivateIP = ENV['VM_PRIVATE_IP'] || "172.28.128.4"
+
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
 
@@ -12,9 +15,9 @@ Vagrant.configure("2") do |config|
   config.landrush.enabled = true
   config.landrush.tld = $tld
   config.landrush.guest_redirect_dns = false
-  config.landrush.host_ip_address = '172.28.128.4'
+  config.landrush.host_ip_address = $vmPrivateIP
 
-  config.vm.network "private_network", ip: "172.28.128.4"
+  config.vm.network "private_network", ip: $vmPrivateIP
   config.vm.hostname = $tld
 
   config.vm.provider "virtualbox" do |v|
@@ -29,7 +32,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell" do |s|
     s.path       = "./provision-openshift.sh"
     s.keep_color = "true"
-    s.args       = ["local"]
+    s.args       = ["$vmPrivateIP"] # Argument used within the script to setup the IP address of the host
   end
 
   config.vm.provision "shell", path: "./create_accounts_registry_router.sh", keep_color: "true"

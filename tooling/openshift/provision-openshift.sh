@@ -1,22 +1,15 @@
 #!/usr/bin/env bash
 
 # Author  : Charles Moulliard
-# Date    : 11-Jan-2017
-# Version : 1.0
+# Date    : 12-Jan-2017
+# Version : 1.1
 
 set -e
 
-host=${1:-local} # Host could be local or remote
-
-if [ $host = "local" ]; then
-  HOST_IP="172.28.128.4" # Local Vagrant
-else
-  HOST_IP="172.16.50.40" # CI Widlfy Swarm
-fi
+HOST_IP=${1:-172.28.128.4} # Host IP
 
 echo "===================================================="
 echo "IP Address to be used : $HOST_IP"
-echo "Deployed on : $host"
 echo "===================================================="
 
 echo "===================================================="
@@ -148,7 +141,7 @@ systemctl daemon-reload
 systemctl enable openshift-origin
 systemctl start openshift-origin
 
-if [ "$host" != "local" ]; then
+if [ "$host_ip" != "172.28.128.4" ]; then
   echo "===================================================="
   echo "Add external nameserver & restart docker"
   echo "===================================================="
