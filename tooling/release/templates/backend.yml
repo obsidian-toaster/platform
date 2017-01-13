@@ -33,7 +33,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: generator-backend:latest
+        name: backend-generator:latest
     postCommit: {}
     resources: {}
     runPolicy: Serial
