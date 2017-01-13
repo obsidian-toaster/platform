@@ -8,16 +8,16 @@ objects:
   metadata:
     labels:
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend
+    name: backend-generator
   spec:
     tags:
     - annotations: {}
       from:
         kind: DockerImage
-        name: 172.30.92.36:5000/obsidian/generator-backend:latest
+        name: 172.30.92.36:5000/obsidian/backend-generator:latest
       importPolicy: {}
       name: latest
 - apiVersion: v1
@@ -25,10 +25,10 @@ objects:
   metadata:
     labels:
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend-s2i
+    name: backend-generator-s2i
   spec:
     output:
       to:
@@ -63,15 +63,15 @@ objects:
   metadata:
     labels:
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend
+    name: backend-generator
   spec:
     replicas: 1
     selector:
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
     strategy:
       resources: {}
@@ -86,7 +86,7 @@ objects:
       metadata:
         labels:
           group: org.obsidiantoaster
-          project: generator-backend
+          project: generator
           provider: obsidian
           version: VERSION
       spec:
@@ -137,7 +137,7 @@ objects:
         - wildfly-swarm
         from:
           kind: ImageStreamTag
-          name: generator-backend:latest
+          name: backend-generator:latest
       type: ImageChange
 - apiVersion: v1
   kind: Service
@@ -145,10 +145,10 @@ objects:
     labels:
       expose: "true"
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend-tls
+    name: backend-generator-tls
   spec:
     ports:
     - name: http
@@ -157,7 +157,7 @@ objects:
       targetPort: 8443
     selector:
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
     sessionAffinity: None
     type: LoadBalancer
@@ -167,10 +167,10 @@ objects:
     labels:
       expose: "true"
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend
+    name: backend-generator
   spec:
     ports:
     - name: http
@@ -179,7 +179,7 @@ objects:
       targetPort: 8080
     selector:
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
     sessionAffinity: None
     type: LoadBalancer
@@ -187,31 +187,31 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: generator-backend
+      app: backend-generator
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend-tls
+    name: backend-generator-tls
   spec:
     tls:
       termination: passthrough
     to:
       kind: Service
-      name: generator-backend-tls
+      name: backend-generator-tls
       weight: 100
 - apiVersion: v1
   kind: Route
   metadata:
     labels:
-      app: generator-backend
+      app: backend-generator
       group: org.obsidiantoaster
-      project: generator-backend
+      project: generator
       provider: obsidian
       version: VERSION
-    name: generator-backend
+    name: backend-generator
   spec:
     to:
       kind: Service
-      name: generator-backend
+      name: backend-generator
       weight: 100
