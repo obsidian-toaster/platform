@@ -42,6 +42,9 @@ suffix_lower=$(echo $suffix | tr '[:upper:]' '[:lower:]')
 oc new-project obsidian-$suffix_lower
 #sleep 5
 
+echo Press any key to create OpenShift Project and deploy ...
+read junk
+
 # Deploy the backend
 echo "Deploy the backend ..."
 oc create -f ./templates/backend-$REL.yml
