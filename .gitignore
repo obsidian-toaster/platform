@@ -18,6 +18,9 @@ atlassian-ide-plugin.xml
 .externalToolBuilders
 .vagrant/
 
+backend-*.yml
+front-*.yml
+
 quickstart
 trello-client
 git-clones
