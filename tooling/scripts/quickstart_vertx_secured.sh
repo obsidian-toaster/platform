@@ -4,6 +4,9 @@
 # Token                         --> ./quickstart_vertx_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com/greeting -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
 # User/password                 --> ./quickstart_vertx_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.16.50.40.xip.io/greeting -s https://secure-sso-ssovertx.172.16.50.40.xip.io
 # User/password (local vagrant) --> ./quickstart_vertx_secured.sh -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io/greeting -s https://secure-sso-ssovertx.172.28.128.4.xip.io
+# Minishift                     --> ./quickstart_vertx_secured.sh -a 192.168.64.25:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.64.25:8443.xip.io -s https://secure-sso-ssovertx.192.168.64.25:8443.xip.io
+#
+# ./httpie/token_req.sh https://secure-sso-sso.192.168.64.25.xip.io http://secured-springboot-rest-sso.192.168.64.25.xip.io
 
 while getopts a:t:u:p:c:s: option
 do
