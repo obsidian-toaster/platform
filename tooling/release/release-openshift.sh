@@ -1,30 +1,55 @@
 #!/usr/bin/env bash
 
-: ${1:?"Must specify release version. Ex: 1.0.0.Alpha1"}
-api=${2:-https://api.engint.openshift.com}
-token=${3:-xxxxxxxx}
+# Example :
+# Token                         --> ./quickstart_sb.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -v 1.0.0.Alpha1
+# User/password (CI Server)     --> ./quickstart_sb.sh -a https://172.16.50.40:8443 -u admin -p admin  -v 1.0.0.Alpha1
+# User/password (local vagrant) --> ./quickstart_sb.sh -a 172.28.128.4:8443 -u admin -p admin  -v 1.0.0.Alpha1
 
-REL=$1
+while getopts a:t:u:p:v: option
+do
+        case "${option}"
+        in
+                a) api=${OPTARG};;
+                t) token=${OPTARG};;
+                u) user=${OPTARG};;
+                p) password=${OPTARG};;
+                v) version=${OPTARG};;
+        esac
+done
+
+current=$PWD
+
+echo "Deploy Front & Backend to OpenShift"
+if [ "$token" != "" ]; then
+   oc login $api --token=$token
+else
+   echo "oc login $api -u $user -p $password"
+   oc login $api -u $user -p $password
+fi
+
+REL=$version
 echo "Version : $REL"
 
 # Change version
 sed -e "s/VERSION/$REL/g" ./templates/backend.yml > ./templates/backend-$REL.yml
 sed -e "s/VERSION/$REL/g" ./templates/front.yml > ./templates/front-$REL.yml
 
-# Log on to OpenShift
-#oc login $api --token=$token
-oc login --username=admin --password=admin
-oc new-project obsidian-alpha1
+# Remove first 6 chars (metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')
+suffix=${REL:6}
+suffix_lower=$(echo $suffix | tr '[:upper:]' '[:lower:]')
+
+# Create project
+oc new-project obsidian-$suffix_lower
 #sleep 5
 
 # Deploy the backend
-echo "Deploy the backend"
+echo "Deploy the backend ..."
 oc create -f ./templates/backend-$REL.yml
 oc process backend-generator-s2i | oc create -f -
-oc start-build generator-backend-s2i
+oc start-build backend-generator-s2i
 
 # Deploy the Front
-echo "Deploy the frontend"
+echo "Deploy the frontend ..."
 oc create -f templates/front-$REL.yml
 oc process front-generator-s2i | oc create -f -
 oc start-build front-generator-s2i
