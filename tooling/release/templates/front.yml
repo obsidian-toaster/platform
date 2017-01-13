@@ -30,7 +30,7 @@ objects:
           name: registry.access.redhat.com/rhscl/nginx-18-rhel7
         env:
           - name: FORGE_URL
-            value: BACKEND_URL
+            value: GENERATOR_URL
     triggers:
     - github:
         secret: BCedrGCnc2IWefYxQ9sr
