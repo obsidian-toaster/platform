@@ -97,6 +97,8 @@ objects:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.namespace
+          - name: RELEASE
+            value: VERSION
           - name: AB_JOLOKIA_OFF
             value: "true"
           - name: JAVA_APP_DIR
