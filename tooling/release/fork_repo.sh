@@ -16,7 +16,8 @@ githubRepos=("obsidian-toaster-quickstarts/quick_rest_vertx" \
 "obsidian-toaster/platform"  \
 "obsidian-toaster/obsidian-addon"  \
 "obsidian-toaster/generator-backend"  \
-"obsidian-toaster/generator-frontend")
+"obsidian-toaster/generator-frontend" \
+"obsidian-toaster/obsidian-toaster.github.io")
 
 githubReposForked=("quick_rest_vertx" \
 "quick_rest_springboot-tomcat"  \
@@ -24,7 +25,8 @@ githubReposForked=("quick_rest_vertx" \
 "platform"  \
 "obsidian-addon"  \
 "generator-backend" \
-"generator-frontend")
+"generator-frontend" \
+"obsidian-toaster.github.io")
 
 for repo in "${githubReposForked[@]}"
 do
