@@ -7,6 +7,7 @@ rm -rf $TEMP_DIR/openshift-ansible
 
 . /etc/profile.d/openshift.sh
 
+echo "====== Wait till OpenShift is started & replies to http request on port 8443 ======"
 while true; do
   curl -k -s -f -o /dev/null --connect-timeout 1 https://localhost:8443/healthz/ready && break || sleep 1
 done

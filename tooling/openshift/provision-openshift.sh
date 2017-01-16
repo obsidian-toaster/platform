@@ -98,6 +98,13 @@ docker pull openshift/origin-deployer:$OPENSHIFT_VERSION
 docker pull openshift/origin-docker-registry:$OPENSHIFT_VERSION
 docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
 
+if [ "$host_ip" != "172.28.128.4" ]; then
+  echo "===================================================="
+  echo "Start Eth1 device - required since vagrant 1.9.1"
+  echo "===================================================="
+  ifup eth1
+fi
+
 echo "===================================================="
 echo "Generate OpenShift V3 configuration files"
 echo "===================================================="
