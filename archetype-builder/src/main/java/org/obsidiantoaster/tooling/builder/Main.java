@@ -37,8 +37,7 @@ public class Main {
 
 		List<String> dirs = new ArrayList<>();
 		try {
-			builder.generateArchetypesFromGithubOrganisation("obsidian-toaster-quickstarts", outputDir, dirs);
-
+			builder.generateArchetypesFromGithubOrganisation(System.getProperty("github.organisation","obsidian-toaster-quickstarts"), outputDir, dirs);
 		} finally {
 			LOG.debug("Completed the generation. Closing!");
 		}
