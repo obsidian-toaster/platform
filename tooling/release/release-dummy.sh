@@ -3,7 +3,7 @@
 #
 # Script using Forked Github repo & publish the artifacts to a local Maven Repo (Nexus, ...)
 # Example :
-# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots/
+# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/
 #
 
 
@@ -11,13 +11,14 @@
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
 : ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
 : ${4:?"Must specify github organization containing forked repo"}
-: ${5:?"Could specify Alternate Maven Repo to publish. Ex: openshift-nexus::default::http://nexus-nexus.172.28.128.4.xip.io/content/repositories/snapshots/"}
+: ${5:?"Could specify Alternate Maven Repo to publish. Ex: openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/"}
 
 REL=$1
 DEV=$2
 export FORGE_URL=$3
 ORG=$4
 MAVEN_REPO=$5
+#MAVEN_REPO_RELEASES=openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
@@ -53,7 +54,7 @@ function mvnReleasePerform {
   mvn release:prepare -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPO.git" \
                       -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPO.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
-                      -Dobs.scm.tag=HEAD
+                      -Dobs.scm.tag=HEAD \
                       -D-DaltDeploymentRepository=$MAVEN_REPO \
                       -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
   mvn release:perform -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPO.git" \
