@@ -31,11 +31,6 @@ function mvnRelease {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  echo "mvn release:prepare -Darguments=-Dobs.scm.git.connection=\"scm:git:git://github.com/$ORG/$REPODIR.git\" \
-                      -Dobs.scm.dev.connection=\"scm:git:git@github.com:$ORG/$REPODIR.git\" \
-                      -Dobs.scm.url=\"http://github.com/$ORG/$REPODIR\" \
-                      -Dobs.scm.tag=\"HEAD\" \
-                      -B -DaltDeploymentRepository=$MAVEN_REPO -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL"
   mvn release:prepare -Darguments=-Dobs.scm.git.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
@@ -61,6 +56,7 @@ function mvnReleasePerform {
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag="HEAD" \
+                      -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL \
                       -DaltDeploymentRepository=$MAVEN_REPO
   cd -
 }
@@ -85,8 +81,8 @@ mvnRelease https://github.com/$ORG/quick_secured_rest-springboot.git quick_secur
 # Generate from the QuickStarts the Maven corresponding archetypes
 # Generate a Maven POM file containing the different archetypes to be used
 #
-echo Press any key to release the Platform...
-read junk
+#echo Press any key to release the Platform...
+#read junk
 git clone https://github.com/$ORG/platform platform
 cd platform/archetype-builder
 mvn clean compile exec:java -Dgithub.organisation=$ORG
@@ -107,8 +103,8 @@ cd ..
 #
 # Step 3 : Release Obsidian Forge addon
 #
-echo Press any key to release the Obsidian addon...
-read junk
+#echo Press any key to release the Obsidian addon...
+#read junk
 mvnReleasePerform https://github.com/$ORG/obsidian-addon.git obsidian-addon
 
 #
