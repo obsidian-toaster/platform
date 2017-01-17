@@ -3,10 +3,24 @@
 The procedure described within this document can also be used to setup on MacOS a VM using Virtualbox & Vagrant. The following steps describe how to
 to create a new VM running Centos 7.1, provision the machine with OpenShift.
 
+Version of Vagrant used 1.8.7 which has been installed using brew :
+ 
+`https://raw.githubusercontent.com/johnjelinek/homebrew-cask/7f9e37e23d7c6c394cb838ea408b05e4c803f41f/Casks/vagrant.rb`
+
+Remark: The eth1 card/device added is nit restarted automatically after a `vagrant halt and vagrant up` using version 1.9.1 of vagrant. This is why I recommend
+to continue to use this older version
+
+Next, install vagrant landrush plugin
+
+```
+vagrant plugin install landrush
+```
+
+and the project
+
 ```
 git clone https://github.com/obsidian-toaster/platform.git
 cd obsidian-toaster/platform/tooling/openshift
-vagrant plugin install landrush
 vagrant up --provider virtualbox
 ```
 
