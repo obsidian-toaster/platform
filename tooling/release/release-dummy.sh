@@ -50,15 +50,15 @@ function mvnReleasePerform {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  mvn release:prepare -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPO.git" \
-                      -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPO.git" \
+  mvn release:prepare -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
+                      -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag=HEAD \
                       -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL \
                       -DaltDeploymentRepository=$MAVEN_REPO \
                       -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
-  mvn release:perform -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPO.git" \
-                      -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPO.git" \
+  mvn release:perform -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
+                      -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag=HEAD \
                       -DaltDeploymentRepository=$MAVEN_REPO
