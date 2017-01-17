@@ -12,6 +12,30 @@ oc create -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus
 oc new-app nexus2
 ```
 
+Configure your maven settings.xml file to have a profile & server definition
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <localRepository>/Users/chmoulli/.m2/repository</localRepository>
+  <servers>
+  	<server>
+      <id>openshift-nexus</id>
+      <username>admin</username>
+      <password>admin123</password>
+    </server>
+    ...
+    
+  <profile>
+  <id>openshift-nexus</id>
+  <properties>
+    <altReleaseDeploymentRepository>openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases</altReleaseDeploymentRepository>
+    <altSnapshotDeploymentRepository>openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots</altSnapshotDeploymentRepository>
+  </properties>
+</profile>
+```
+
 # Front Generator
 
 ## OpenShift 
