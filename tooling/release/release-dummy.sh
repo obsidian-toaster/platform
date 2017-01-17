@@ -49,7 +49,11 @@ function mvnReleasePerform {
                       -Dobs.scm.url=http://github.com/$ORG/$REPODIR \
                       -Dobs.scm.tag=HEAD" \
                       -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
-  mvn release:perform -Darguments="-DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL"
+  mvn release:perform -Darguments="-Dobs.scm.git.connection=scm:git:git://github.com/$ORG/$REPODIR.git \
+                      -Dobs.scm.dev.connection=scm:git:git@github.com:$ORG/$REPODIR.git \
+                      -Dobs.scm.url=http://github.com/$ORG/$REPODIR \
+                      -Dobs.scm.tag=HEAD \
+                      -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL"
   cd -
 }
 
