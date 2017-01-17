@@ -31,8 +31,6 @@ function mvnRelease {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  #sed -i -e "s/obsidian-toaster-quickstarts\//$ORG\//g" pom.xml
-  #sed -i -e "s/obsidian-toaster\//$ORG\//g" pom.xml
   echo "mvn release:prepare -Darguments=-Dobs.scm.git.connection=\"scm:git:git://github.com/$ORG/$REPODIR.git\" \
                       -Dobs.scm.dev.connection=\"scm:git:git@github.com:$ORG/$REPODIR.git\" \
                       -Dobs.scm.url=\"http://github.com/$ORG/$REPODIR\" \
@@ -52,8 +50,6 @@ function mvnReleasePerform {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  #sed -i -e "s/obsidian-toaster-quickstarts\//$ORG\//g" pom.xml
-  #sed -i -e "s/obsidian-toaster\//$ORG\//g" pom.xml
   mvn release:prepare -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPO.git" \
                       -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPO.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
