@@ -50,14 +50,14 @@ function mvnReleasePerform {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  mvn release:prepare -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
+  mvn release:prepare -Darguments=-Dobs.scm.git.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag="HEAD" \
                       -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL \
                       -DaltDeploymentRepository=$MAVEN_REPO \
                       -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
-  mvn release:perform -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
+  mvn release:perform -Darguments=-Dobs.scm.git.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag="HEAD" \
