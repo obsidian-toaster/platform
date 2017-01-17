@@ -2,7 +2,8 @@
 
 #
 # Script using Forked Github repo & publish the artifacts to a local Maven Repo (Nexus, ...)
-# Example : ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester openshift-nexus::default::http://nexus-nexus.172.28.128.4.xip.io/content/repositories/snapshots/
+# Example :
+# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots/
 #
 
 
@@ -77,7 +78,6 @@ read junk
 mvnRelease https://github.com/$ORG/quick_rest_vertx.git quick_rest_vertx
 mvnRelease https://github.com/$ORG/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
 mvnRelease https://github.com/$ORG/quick_secured_rest-springboot.git quick_secured_rest-springboot
-
 
 #
 # Step 2. : Release Platform. Archetypes should be previously generated and pushed
