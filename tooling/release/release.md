@@ -1,3 +1,16 @@
+# Infrastructure
+
+## Nexus
+
+To build the Obsidian project locally, we recommend to use your own Nexus repository. If you haven't a server installed, you can create a nexus server
+top of OpenShift
+
+```
+oc login https://172.28.128.4:8443 -u admin -p admin
+oc new-project infra
+oc create -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus2-template.yaml
+oc new-app nexus2
+```
 
 # Front Generator
 
