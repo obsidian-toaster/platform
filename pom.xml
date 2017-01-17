@@ -11,7 +11,11 @@
    <version>1.0.0-SNAPSHOT</version>
    <packaging>pom</packaging>
    <name>Obsidian :: Platform project</name>
-
+   <properties>
+      <!-- Nexus Staging Repo -->
+      <serverId>jboss-releases-repository</serverId>
+      <nexusUrl>https://repository.jboss.org/nexus/</nexusUrl>      
+   </properties>
    <modules>
       <module>archetype-builder</module>
       <module>archetypes</module>
@@ -20,6 +24,18 @@
 
    <build>
       <plugins>
+         <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.3</version>
+            <extensions>true</extensions>
+            <configuration>
+               <autoReleaseAfterClose>true</autoReleaseAfterClose>
+               <serverId>${serverId}</serverId>
+               <nexusUrl>${nexusUrl}</nexusUrl>
+               <skipStaging>true</skipStaging>
+            </configuration>
+         </plugin>                  
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
