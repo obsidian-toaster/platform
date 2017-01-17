@@ -37,8 +37,6 @@ do
 done
 
 sleep 5
-echo Press any key to fork the repos
-read junk
 for repo in "${githubRepos[@]}"
 do
    #echo "curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/$repo/forks?org=$ORG"
