@@ -88,7 +88,7 @@ echo Press any key to release the Platform...
 read junk
 git clone https://github.com/$ORG/platform platform
 cd platform/archetype-builder
-mvn clean compile exec:java
+mvn clean compile exec:java -Dgithub.organisation=$ORG
 cd ../archetypes
 git commit -a -m "Generating archetypes to release $REL"
 cd ..
