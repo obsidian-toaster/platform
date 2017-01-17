@@ -19,6 +19,8 @@ export FORGE_URL=$3
 ORG=$4
 MAVEN_REPO=$5
 #MAVEN_REPO_RELEASES=openshift-nexus::default::http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/
+NEXUS_STAGING_URL=http://nexus-infra.172.28.128.4.xip.io/
+SERVER_ID=openshift-nexus
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
@@ -40,7 +42,8 @@ function mvnRelease {
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag=HEAD \
-                      -B -DaltDeploymentRepository=$MAVEN_REPO -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
+                      -DaltDeploymentRepository=$MAVEN_REPO \
+                      -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
   cd -
 }
 
@@ -55,7 +58,8 @@ function mvnReleasePerform {
                       -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPO.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag=HEAD \
-                      -D-DaltDeploymentRepository=$MAVEN_REPO \
+                      -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL \
+                      -DaltDeploymentRepository=$MAVEN_REPO \
                       -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
   mvn release:perform -Darguments=-Dobs.scm.connection="scm:git:git://github.com/$ORG/$REPO.git" \
                       -Dobs.developer.connection="scm:git:git@github.com:$ORG/$REPO.git" \
