@@ -31,11 +31,11 @@ function mvnRelease {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  mvn release:prepare -Darguments="-Dobs.scm.git.connection=scm:git:git://github.com/$ORG/$REPODIR.git \
+  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL \
+                      -Dobs.scm.git.connection=scm:git:git://github.com/$ORG/$REPODIR.git \
                       -Dobs.scm.dev.connection=scm:git:git@github.com:$ORG/$REPODIR.git \
                       -Dobs.scm.url=http://github.com/$ORG/$REPODIR \
-                      -Dobs.scm.tag=HEAD" \
-                      -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
+                      -Dobs.scm.tag=HEAD
   cd -
 }
 
@@ -44,16 +44,12 @@ function mvnReleasePerform {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  mvn release:prepare -Darguments="-Dobs.scm.git.connection=scm:git:git://github.com/$ORG/$REPODIR.git \
+  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL \
+                      -Dobs.scm.git.connection=scm:git:git://github.com/$ORG/$REPODIR.git \
                       -Dobs.scm.dev.connection=scm:git:git@github.com:$ORG/$REPODIR.git \
                       -Dobs.scm.url=http://github.com/$ORG/$REPODIR \
-                      -Dobs.scm.tag=HEAD" \
-                      -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL
-  mvn release:perform -Darguments="-Dobs.scm.git.connection=scm:git:git://github.com/$ORG/$REPODIR.git \
-                      -Dobs.scm.dev.connection=scm:git:git@github.com:$ORG/$REPODIR.git \
-                      -Dobs.scm.url=http://github.com/$ORG/$REPODIR \
-                      -Dobs.scm.tag=HEAD \
-                      -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL"
+                      -Dobs.scm.tag=HEAD
+  mvn release:perform -Darguments="-DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL"
   cd -
 }
 
@@ -88,7 +84,7 @@ cd ..
 mvn versions:set -DnewVersion=$REL
 git commit -a -m "Releasing $REL"
 git tag "$REL"
-mvn clean deploy -DaltDeploymentRepository=$MAVEN_REPO
+mvn clean deploy -DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL
 git push origin --tags
 mvn versions:set -DnewVersion=$DEV
 git commit -a -m "Preparing for next version $DEV"
