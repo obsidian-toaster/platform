@@ -73,8 +73,8 @@ mvnRelease https://github.com/$ORG/quick_secured_rest-springboot.git quick_secur
 # Generate from the QuickStarts the Maven corresponding archetypes
 # Generate a Maven POM file containing the different archetypes to be used
 #
-#echo Press any key to release the Platform...
-#read junk
+echo Press any key to release the Platform...
+read junk
 git clone https://github.com/$ORG/platform platform
 cd platform/archetype-builder
 mvn clean compile exec:java -Dgithub.organisation=$ORG
@@ -95,8 +95,8 @@ cd ..
 #
 # Step 3 : Release Obsidian Forge addon
 #
-#echo Press any key to release the Obsidian addon...
-#read junk
+echo Press any key to release the Obsidian addon...
+read junk
 mvnReleasePerform https://github.com/$ORG/obsidian-addon.git obsidian-addon
 
 #
