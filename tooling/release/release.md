@@ -8,8 +8,15 @@ top of OpenShift
 ```
 oc login https://172.28.128.4:8443 -u admin -p admin
 oc new-project infra
-oc create -f https://raw.githubusercontent.com/OpenShiftDemos/nexus/master/nexus2-template.yaml
-oc new-app nexus2
+oc create -f templates/ci/nexus2-ephemeral.yaml
+oc process nexus | oc create -f -
+oc start-build nexus
+```
+
+Nexus works better with `anyuid`. To enable it (as admin):
+
+```
+oc adm policy add-scc-to-user anyuid -z nexus -n infra
 ```
 
 Configure your maven settings.xml file to have a profile & server definition
