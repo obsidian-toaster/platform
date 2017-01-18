@@ -3,22 +3,21 @@
 #
 # Script using Forked Github repo & publishing the artifacts to a local Nexus Maven Repo
 # Example :
-# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester nexus-infra.172.28.128.4.xip.io/content/repositories/releases openshift-nexus
+# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT obsidian-tester nexus-infra.172.28.128.4.xip.io/content/repositories/releases openshift-nexus
 #
 
 : ${1:?"Must specify release version. Ex: 2.0.1.Final"}
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
-: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
-: ${4:?"Must specify github organization containing forked repo"}
-: ${5:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/releases"}
-: ${6:?"Must specify Alternate Maven Repo ID which is set to a <server><id> tag in your settings.xml file. Ex: openshift-nexus, jboss-releases-repository"}
+#: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
+: ${3:?"Must specify github organization containing forked repo"}
+: ${4:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/releases"}
+: ${5:?"Must specify Alternate Maven Repo ID which is set to a <server><id> tag in your settings.xml file. Ex: openshift-nexus, jboss-releases-repository"}
 
 REL=$1
 DEV=$2
-export BACKEND_URL=$3
-ORG=$4
-MAVEN_REPO=$5
-MAVEN_REPO_ID=$6
+ORG=$3
+MAVEN_REPO=$4
+MAVEN_REPO_ID=$5
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
