@@ -29,7 +29,7 @@
   <name>Fabric8 :: Archetypes :: parent</name>
   <packaging>maven-archetype</packaging>
 
-  <description>Creates a new Obsidian :: Quickstart :: Secured Vertx - Rest &amp; Red Hat SSO</description>
+  <description>Secured Vertx - Rest &amp; Red Hat SSO</description>
 
   <build>
     <extensions>

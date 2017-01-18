@@ -29,7 +29,7 @@
   <name>Fabric8 :: Archetypes :: rest</name>
   <packaging>maven-archetype</packaging>
 
-  <description>Creates a new Obsidian :: Quickstart :: Spring Boot Tomcat - Rest</description>
+  <description>Spring Boot Tomcat - Rest</description>
 
   <build>
     <extensions>
