@@ -109,7 +109,7 @@ objects:
           - name: JAVA_APP_JAR
             value: generator-swarm.jar
           - name: ARCHETYPE_CATALOG
-            value: https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=public&g=org.obsidiantoaster&a=archetypes-catalog&v=VERSION&e=xml&c=archetype-catalog
+            value: ARCHETYPECATALOG
           image: 172.30.92.36:5000/obsidian/backend-generator:latest
           imagePullPolicy: IfNotPresent
           name: wildfly-swarm
