@@ -19,7 +19,7 @@ objects:
     runPolicy: Serial
     source:
       git:
-        uri: https://github.com/obsidian-toaster/obsidian-toaster.github.io.git
+        uri: https://github.com/ORG/obsidian-toaster.github.io.git
         ref: VERSION
       type: Git
     strategy:

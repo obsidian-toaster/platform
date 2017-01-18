@@ -39,7 +39,7 @@ objects:
     runPolicy: Serial
     source:
       git:
-        uri: https://github.com/obsidian-toaster/generator-backend.git
+        uri: https://github.com/ORG/generator-backend.git
         ref: VERSION
       type: Git
     strategy:
