@@ -4,11 +4,12 @@
 # Token                         --> ./release-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -v 1.0.0.Alpha1 -g obsidian-toaster
 # User/password (CI Server)     --> ./release-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin  -v 1.0.0.Alpha1 -g obsidian-toaster
 # User/password (local vagrant) --> ./release-openshift.sh -a 172.28.128.4:8443 -u admin -p admin -v 1.0.0.Dummy \
-#                                                          -b backend-generator-obsidian-dummy.172.28.128.4.xip.io \
+#                                                          -b backend-generator-obsidian-dummy.172.28.128.4.xip.io/ \
 #                                                          -o obsidian-tester \
-#                                                          -c http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/org/obsidiantoaster/archetypes-catalog/1.0.0.Dummy/archetypes-catalog-1.0.0.Dummy-archetype-catalog.xml
+#                                                          -c http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/org/obsidiantoaster/archetypes-catalog/1.0.0.Dummy/archetypes-catalog-1.0.0.Dummy-archetype-catalog.xml \
+#                                                          -n http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases
 
-while getopts a:t:u:p:v:b:o:c: option
+while getopts a:t:u:p:v:b:o:c:n: option
 do
         case "${option}"
         in
@@ -20,6 +21,7 @@ do
                 b) backendurl=${OPTARG};;
                 o) githuborg=${OPTARG};;
                 c) archetypecatalog=${OPTARG};;
+                n) nexusserver=${OPTARG};;
 
         esac
 done
@@ -39,7 +41,7 @@ echo "Version : $REL"
 echo "Backend : $backendurl"
 
 # Change version
-sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s/ARCHETYPECATALOG/$archetypecatalog/g" ./templates/backend.yml > ./templates/backend-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s/NEXUSSERVER/$nexusserver/g" -e "s/ARCHETYPECATALOG/$archetypecatalog/g" ./templates/backend.yml > ./templates/backend-$REL.yml
 sed -e "s/VERSION/$REL/g" -e "s/GENERATOR_URL/http:\/\/$backendurl/g" -e "s/ORG\//$githuborg\//g" ./templates/front.yml > ./templates/front-$REL.yml
 
 #
