@@ -3,24 +3,20 @@
 #
 # Script using Forked Github repo & publish the artifacts to a local Maven Repo (Nexus, ...)
 # Example :
-# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/
+# ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester nexus-infra.172.28.128.4.xip.io/content/repositories/releases
 #
-
 
 : ${1:?"Must specify release version. Ex: 2.0.1.Final"}
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
 : ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
 : ${4:?"Must specify github organization containing forked repo"}
-: ${5:?"Could specify Alternate Maven Repo to publish. Ex: http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/"}
+: ${5:?"Could specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/releases"}
 
 REL=$1
 DEV=$2
 export BACKEND_URL=$3
 ORG=$4
 MAVEN_REPO=$5
-#MAVEN_REPO_RELEASES=http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/
-NEXUS_STAGING_URL=http://nexus-infra.172.28.128.4.xip.io/
-SERVER_ID=openshift-nexus
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
@@ -49,8 +45,7 @@ function mvnReleasePerform {
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag="HEAD"
-  #mvn release:perform -Darguments="-DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL"
-  mvn release:perform -Darguments="-DaltDeploymentRepository=$MAVEN_REPO"
+  mvn release:perform -Darguments="-Djboss.releases.repo.url=http://$MAVEN_REPO"
   cd -
 }
 
@@ -80,13 +75,13 @@ git clone https://github.com/$ORG/platform platform
 cd platform/archetype-builder
 mvn clean compile exec:java -Dgithub.organisation=$ORG
 cd ../archetypes
+
 git commit -a -m "Generating archetypes to release $REL"
 cd ..
 mvn versions:set -DnewVersion=$REL
 git commit -a -m "Releasing $REL"
 git tag "$REL"
-mvn clean deploy -Darguments="-DserverId=$SERVER_ID -DnexusUrl=$NEXUS_STAGING_URL"
-# mvn clean deploy -DaltDeploymentRepository=$MAVEN_REPO
+mvn clean deploy -Djboss.releases.repo.url=http://$MAVEN_REPO
 git push origin --tags
 mvn versions:set -DnewVersion=$DEV
 git commit -a -m "Preparing for next version $DEV"
@@ -114,7 +109,7 @@ mvnReleasePerform https://github.com/$ORG/generator-backend.git generator-backen
 # Step 5 : Release Frontend (PROD is not required)
 # This is HTML/javascript project
 # It uses REST Api exposed by the backend to access the services
-# BACKEND_URL : REST endpoint
+# FORGE_URL : REST endpoint
 #
 echo Press any key to release the Frontend...
 read junk
