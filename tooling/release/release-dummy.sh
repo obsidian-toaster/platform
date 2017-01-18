@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Script using Forked Github repo & publish the artifacts to a local Maven Repo (Nexus, ...)
+# Script using Forked Github repo & publishing the artifacts to a local Nexus Maven Repo
 # Example :
 # ./release-dummy.sh 1.0.0.Dummy 1.0.1-SNAPSHOT backend-generator-obsidian-dummy.172.28.128.4.xip.io obsidian-tester nexus-infra.172.28.128.4.xip.io/content/repositories/releases openshift-nexus
 #
@@ -11,7 +11,7 @@
 : ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
 : ${4:?"Must specify github organization containing forked repo"}
 : ${5:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/releases"}
-: ${6:?"Must specify Alternate Maven Repo ID. Ex: openshift-nexus"}
+: ${6:?"Must specify Alternate Maven Repo ID which is set to a <server><id> tag in your settings.xml file. Ex: openshift-nexus, jboss-releases-repository"}
 
 REL=$1
 DEV=$2
@@ -47,7 +47,7 @@ function mvnReleasePerform {
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag="HEAD"
-  mvn release:perform -Darguments="-Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO"
+  mvn release:perform -Darguments="-DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO"
   cd -
 }
 
@@ -83,7 +83,7 @@ cd ..
 mvn versions:set -DnewVersion=$REL
 git commit -a -m "Releasing $REL"
 git tag "$REL"
-mvn clean deploy -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO
+mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO
 git push origin --tags
 mvn versions:set -DnewVersion=$DEV
 git commit -a -m "Preparing for next version $DEV"
