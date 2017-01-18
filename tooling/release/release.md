@@ -27,6 +27,12 @@ Configure your maven settings.xml file to have a profile & server definition
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <localRepository>/Users/chmoulli/.m2/repository</localRepository>
   <servers>
+    <!-- USE THIS ID TILL WE CAN CHANGE IT WITHIN THE JBOSS PARENT POM -->
+    <server>
+      <id>jboss-releases-repository</id>
+      <username>admin</username>
+      <password>admin123</password>
+    </server>
   	<server>
       <id>openshift-nexus</id>
       <username>admin</username>
