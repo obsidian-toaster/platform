@@ -44,7 +44,7 @@ echo "Catalog URL : $archetypecatalog"
 echo "Nexus Server : $nexusserver"
 
 # Change version
-sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|NEXUSSERVER|$nexusserver|g" -e "s|ARCHETYPECATALOG|http:\/\/$archetypecatalog|g" ./templates/backend.yml > ./templates/backend-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|NEXUSSERVER|$nexusserver|g" -e "s|ARCHETYPECATALOG|$archetypecatalog|g" ./templates/backend.yml > ./templates/backend-$REL.yml
 sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front.yml > ./templates/front-$REL.yml
 
 #
