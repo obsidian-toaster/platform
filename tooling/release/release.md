@@ -33,7 +33,7 @@ Configure your maven settings.xml file to have a profile & server definition
       <password>admin123</password>
     </server>
     ...
-    
+
   <profile>
   <id>openshift-nexus</id>
   <properties>
@@ -45,7 +45,7 @@ Configure your maven settings.xml file to have a profile & server definition
 
 # Front Generator
 
-## OpenShift 
+## OpenShift
 
 To deploy this project on OpenShift, verify that an OpenShift instance is available or setup one locally
 using minishift
@@ -58,7 +58,7 @@ eval $(minishift docker-env)
 ```
 
 To create our Obsidian Front UI OpenShift application, we will deploy an OpenShift template which
-contains the required objects; service, route, BuildConfig & Deployment config. The docker image 
+contains the required objects; service, route, BuildConfig & Deployment config. The docker image
 used is registry.access.redhat.com/rhscl/nginx-18-rhel7 which exposes a HTTP Server.
 
 To install the template and create a new application, use these commands
@@ -70,7 +70,7 @@ oc process front-generator-s2i | oc create -f -
 oc start-build front-generator
 ```
 
-Remark: In order to change the address of the backend that you will use on OpenShift, change the `forge_url` value defined within the file src/assets/settings.json and commit the change. 
+Remark: In order to change the address of the backend that you will use on OpenShift, change the `BACKEND_URL` value defined within the file src/assets/settings.json and commit the change.
 
 You can now access the backend using its route
 

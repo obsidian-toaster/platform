@@ -15,7 +15,7 @@
 
 REL=$1
 DEV=$2
-export FORGE_URL=$3
+export BACKEND_URL=$3
 ORG=$4
 MAVEN_REPO=$5
 #MAVEN_REPO_RELEASES=http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/
@@ -114,7 +114,7 @@ mvnReleasePerform https://github.com/$ORG/generator-backend.git generator-backen
 # Step 5 : Release Frontend (PROD is not required)
 # This is HTML/javascript project
 # It uses REST Api exposed by the backend to access the services
-# FORGE_URL : REST endpoint
+# BACKEND_URL : REST endpoint
 #
 echo Press any key to release the Frontend...
 read junk

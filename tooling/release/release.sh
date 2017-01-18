@@ -6,7 +6,7 @@
 
 REL=$1
 DEV=$2
-export FORGE_URL=$3
+export BACKEND_URL=$3
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
@@ -92,7 +92,7 @@ mvnReleasePerform https://github.com/obsidian-toaster/generator-backend.git gene
 # Step 5 : Release Frontend (PROD is not required)
 # This is HTML/javascript project
 # It uses REST Api exposed by the backend to access the services
-# FORGE_URL : REST endpoint
+# BACKEND_URL : REST endpoint
 #
 echo Press any key to release the Frontend...
 read junk
