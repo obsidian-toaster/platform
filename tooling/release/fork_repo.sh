@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-: ${1:?"Must specify a github username."}
-: ${2:?"Must specify the password"}
-: ${3:?"Organisation where repo will be forked."}
-: ${4:?"Delete forked repo first"}
+: ${1:?"Organisation where repo will be forked."}
+: ${2:?"Delete forked repo first"}
 
-USERNAME=$1
-PASSWORD=$2
-ORG=$3
-TO_BE_DELETED=$4
+ORG=$1
+TO_BE_DELETED=$2
+
+read -p "Enter Github Username/account: " USERNAME
+read -s -p "Enter Password: " PASSWORD
+
+echo "$USERNAME : $PASSWORD"
 
 githubRepos=("obsidian-toaster-quickstarts/quick_rest_vertx" \
 "obsidian-toaster-quickstarts/quick_rest_springboot-tomcat"  \
@@ -39,6 +40,6 @@ done
 sleep 5
 for repo in "${githubRepos[@]}"
 do
-   #echo "curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/$repo/forks?org=$ORG"
+   echo "Fork repo : $repo"
    curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/$repo/forks?org=$ORG
 done
