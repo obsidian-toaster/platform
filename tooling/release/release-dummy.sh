@@ -45,7 +45,7 @@ function mvnReleasePerform {
                       -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
                       -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
                       -Dobs.scm.tag="HEAD"
-  mvn release:perform -Darguments="-DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO"
+  mvn release:perform -Darguments="-DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO -DskipStaging=true"
   cd -
 }
 
@@ -82,7 +82,7 @@ cd ..
 mvn versions:set -DnewVersion=$REL
 git commit -a -m "Releasing $REL"
 git tag "$REL"
-mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO
+mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.id=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO -DskipStaging=true
 git push origin --tags
 mvn versions:set -DnewVersion=$DEV
 git commit -a -m "Preparing for next version $DEV"
