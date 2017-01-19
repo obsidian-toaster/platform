@@ -47,12 +47,14 @@ objects:
       sourceStrategy:
         from:
           kind: DockerImage
-          name: fabric8/s2i-java:1.3
+          name: fabric8/s2i-java:2.0
         env:
           - name: RELEASE
             value: VERSION
           - name: MAVEN_MIRROR_URL
             value: NEXUSSERVER
+          - name: JAVA_OPTIONS
+            value: -D=org.apache.maven.user-settings=/deployments/settings.xml
         incremental: true
     triggers:
     - github:
