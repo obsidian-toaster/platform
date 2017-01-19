@@ -303,6 +303,8 @@ Example of scenario
                        -n http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases
 ``` 
 
+Access your front server at this address : http://front-generator-obsidian-dummy.172.28.128.4.xip.io & enjoy to play with Obsidian !
+
 ## Releasing
 
 When a new release of Obsidian is ready to be tagged within the Github repo, artefacts published within the JBoss Nexus Server, then you will use the `./release.sh` script which is equivalent to the previous script except
