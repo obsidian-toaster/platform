@@ -53,8 +53,6 @@ objects:
             value: VERSION
           - name: MAVEN_MIRROR_URL
             value: NEXUSSERVER
-          - name: JAVA_OPTIONS
-            value: -D=org.apache.maven.user-settings=/deployments/settings.xml
         incremental: true
     triggers:
     - github:
