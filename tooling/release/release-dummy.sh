@@ -8,7 +8,6 @@
 
 : ${1:?"Must specify release version. Ex: 2.0.1.Final"}
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
-#: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
 : ${3:?"Must specify github organization containing forked repo"}
 : ${4:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/releases"}
 : ${5:?"Must specify Alternate Maven Repo ID which is set to a <server><id> tag in your settings.xml file. Ex: openshift-nexus, jboss-releases-repository"}
