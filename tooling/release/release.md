@@ -1,17 +1,42 @@
-# Infrastructure
+# Release 
+
+This document describes how to build Obsidian project (Front, Backend & QuickStarts)and deploy it in OpenShift. To support the building and deployment process, different shell script have been created.
+They are described here after :
+
+- release.sh : Build Obsidian and publish the maven artefacts within the JBoss Nexus Server. An account is required with the appropraite credentials to use it from your machine
+- release-dummy.sh: Build Obsidian and publish the maven artefacts to a local Nexus server
+- release-openshift.sh: Deploy a specific version of Obsidian into an OpenShift Server
+
+The following projects are part of the build process :
+
+- [Platform](https://github.com/obsidian-toaster/platform) : Tooling used to build, deploy Obisidan, convert QuickStart to Maven Archetypes and generate XML Maven Archetypes Catalog
+- [Obsidian Addon](https://github.com/obsidian-toaster/obsidian-addon) : Forge Addons hadnling the requests to create an Obsidian Zip file using one of the QuickStarts or the starters (Vrt.x, WildFly Swarm, Spring Boot)
+- [Generator Backend](https://github.com/obsidian-toaster//generator-backend) : WildFly Swarm server exposing the REST services called by the Front
+- [Generator Front](https://github.com/obsidian-toaster/generator-front) : Obsidian Front end (Angularjs, Almighty JS & CSS)
+
+## Prerequisites Infrastructure
+
+To build the project on your machine, the following software are required:
+
+- [Apache Maven 3.3.9](https://maven.apache.org/download.cgi)
+- [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [OpenShift](https://github.com/obsidian-toaster/platform/blob/master/tooling/openshift/openshift-vm.md#deploy-locally-openshift-using-vagrant--virtualbox)  - optional
+- [Sonatype Nexus Server](https://www.sonatype.com/oss-thank-you-tgz) - optional
 
 ## Nexus
 
-To build the Obsidian project locally, we recommend to use your own Nexus repository. If you haven't a server installed, you can create a nexus server
-top of OpenShift
+To build the Obsidian project locally, we recommend to use a Nexus Server. If you haven't a server installed, you can create a nexus server
+top of OpenShift using the following instructions: 
 
 ```
 oc login https://172.28.128.4:8443 -u admin -p admin
 oc new-project infra
-oc create -f templates/ci/nexus2-ephemeral.yaml
-oc process nexus | oc create -f -
+oc create -f templates/ci/nexus2-ephemeral.json
+oc process nexus-ephemeral | oc create -f -
 oc start-build nexus
 ```
+
+The login/password to be used to access as admin your nexus server is `admin/admin123`
 
 Nexus works better with `anyuid`. To enable it (as admin):
 
