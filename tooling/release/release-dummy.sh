@@ -62,6 +62,7 @@ echo Press any key to release the Quickstarts...
 read junk
 mvnRelease https://github.com/$ORG/quick_rest_vertx.git quick_rest_vertx
 mvnRelease https://github.com/$ORG/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
+mvnRelease https://github.com/$ORG/quick_rest_wildfly-swarm
 mvnRelease https://github.com/$ORG/quick_secured_rest-springboot.git quick_secured_rest-springboot
 
 #
