@@ -112,6 +112,8 @@ objects:
             value: generator-swarm.jar
           - name: ARCHETYPE_CATALOG
             value: ARCHETYPECATALOG
+          - name: JAVA_OPTIONS
+            value: -Dorg.apache.maven.user-settings=/opt/jboss/.m2/settings.xml
           image: 172.30.92.36:5000/obsidian/backend-generator:latest
           imagePullPolicy: IfNotPresent
           name: wildfly-swarm
