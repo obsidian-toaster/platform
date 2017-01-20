@@ -23,8 +23,8 @@ githubRepos=("obsidian-toaster-quickstarts/rest_vertx" \
 
 githubReposForked=("rest_vertx" \
 "rest_springboot-tomcat"  \
-"secured_rest-springboot"  \
 "rest_wildfly-swarm" \
+"secured_rest-springboot"  \
 "platform"  \
 "obsidian-addon"  \
 "generator-backend" \
