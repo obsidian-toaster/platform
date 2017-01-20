@@ -34,7 +34,7 @@
   <modules>
     <module>rest_springboot-tomcat-archetype</module>
     <module>rest_vertx-archetype</module>
-    <module>secured_rest-springboot-archetype</module>
     <module>rest_wildfly-swarm-archetype</module>
+    <module>secured_rest-springboot-archetype</module>
   </modules>
 </project>
