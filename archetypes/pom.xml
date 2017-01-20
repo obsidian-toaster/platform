@@ -32,9 +32,9 @@
   <name>Obsidian :: Archetypes :: Parent</name>
 
   <modules>
-    <module>quick_rest_springboot-tomcat-archetype</module>
-    <module>quick_rest_vertx-archetype</module>
-    <module>quick_secured_rest-springboot-archetype</module>
-    <module>quick_rest_wildfly-swarm-archetype</module>
+    <module>rest_springboot-tomcat-archetype</module>
+    <module>rest_vertx-archetype</module>
+    <module>secured_rest-springboot-archetype</module>
+    <module>rest_wildfly-swarm-archetype</module>
   </modules>
 </project>

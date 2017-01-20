@@ -37,8 +37,8 @@ sleep 3
 oc new-project quickvertx
 
 rm -rf $TMPDIR/quick* && cd $TMPDIR
-git clone https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git
-cd quick_rest_vertx
+git clone https://github.com/obsidian-toaster-quickstarts/rest_vertx.git
+cd rest_vertx
 
 mvn clean package fabric8:deploy -Popenshift -DskipTests
 echo "Endpoint : $app"

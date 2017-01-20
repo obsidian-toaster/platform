@@ -28,7 +28,7 @@ Git clone this project `git clone https://github.com/obsidian-toaster/platform.g
 ## Nexus on OpenShift
 
 To build the Obsidian project locally, we recommend to use a Nexus Server. If you haven't a server installed, you can create a nexus server
-top of OpenShift using the following instructions: 
+top of OpenShift using the following instructions:
 
 ```
 oc login https://172.28.128.4:8443 -u admin -p admin
@@ -99,9 +99,9 @@ cd $WORK_DIR
 3) Git clone the quickstarts & release them
 
 ```
-mvnRelease https://github.com/$ORG/quick_rest_vertx.git quick_rest_vertx
-mvnRelease https://github.com/$ORG/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
-mvnRelease https://github.com/$ORG/quick_secured_rest-springboot.git quick_secured_rest-springboot
+mvnRelease https://github.com/$ORG/rest_vertx.git rest_vertx
+mvnRelease https://github.com/$ORG/rest_springboot-tomcat.git rest_springboot-tomcat
+mvnRelease https://github.com/$ORG/secured_rest-springboot.git secured_rest-springboot
 ...
 ```
 
@@ -111,7 +111,7 @@ the following info required to commit the modifications & tag the release in git
 ```
 -DreleaseVersion=$REL # Version to release (example: 1.0.0.Dummy)
 -DdevelopmentVersion=$DEV  # Next version of the project (example : 1.0.1-SNAPSHOT)
--Dtag=$REL 
+-Dtag=$REL
 -Darguments=-Dobs.scm.git.connection="scm:git:git://github.com/$ORG/$REPODIR.git" # Git dummy repo
 -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git"  # Git dummy repo
 -Dobs.scm.url="http://github.com/$ORG/$REPODIR"  # Git dummy repo URL
@@ -128,9 +128,9 @@ cd ../archetypes
 git commit -a -m "Generating archetypes to release $REL"
 ```
 
-5) Release platform project 
+5) Release platform project
 
-During this step, the project will be released like the QuickStarts, Maven Archetypes & Maven Archetypes Catalog 
+During this step, the project will be released like the QuickStarts, Maven Archetypes & Maven Archetypes Catalog
 and the artifacts pushed to the Nexus Server
 
 ```
@@ -157,7 +157,7 @@ It includes new parameters which are required to by pass the staging step execut
 the nexus server defined within the `distributionManagement` xml tag of the parent project which is jboss.
 
 ```
--Darguments="-DserverId=$MAVEN_REPO_ID  # Not yet used 
+-Darguments="-DserverId=$MAVEN_REPO_ID  # Not yet used
 -Djboss.releases.repo.id=$MAVEN_REPO_ID # Server ID as defined within the settings.xml file
 -Djboss.releases.repo.url=http://$MAVEN_REPO" # Address of the Nexus Server to push the artefacts
 ```
@@ -230,7 +230,7 @@ We will add the version within the openshift yaml file to specify it as Kubernet
 
 ```
 sed -e "s/VERSION/$REL/g"
-``` 
+```
 - Github Org
 
 To git clone the fotked project, we will replace the parameter with the dummy github org passed as parameter
@@ -240,7 +240,7 @@ sed -e "s/ORG\//$githuborg\//g"
 ```
 
 - Nexus Server
- 
+
 To tell to the Obsidian Backend where it can download the Maven Archetypes or Quickstart to be used when a zip file will be populated, then
 we will add a MAVEN_MIRROR_URL address which is used by the Java S2I docker image during the S2I build to configure the settings.xml file
 
@@ -249,7 +249,7 @@ sed  -e "s|NEXUSSERVER|$nexusserver|g"
 ```
 
 - Archetype Catalog
-  
+
 The archetype catalog parameter is used by the Obsidian Addon project in order to load the catalog of the XML Maven Archetypes catalog
 
 ```
@@ -270,7 +270,7 @@ To perform the steps described before, you will use 2 shell scripts `fork_repo.s
 .
 
 Example of scenario
-  
+
 ```
 #
 # Fork the Github project within your dummy github org
@@ -280,7 +280,7 @@ Example of scenario
 #
 ./fork_repo.sh obsidian-tester true
 
-# 
+#
 # Execute steps 2) to 9) using ./release-dummy script
 # Version of the release
 # Next project version
@@ -292,8 +292,8 @@ Example of scenario
                    obsidian-tester \
                    nexus-infra.172.28.128.4.xip.io/content/repositories/releases \
                    openshift-nexus
-                   
-                   
+
+
 
 ./release-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
                        -v 1.0.0.Dummy \
@@ -301,7 +301,7 @@ Example of scenario
                        -o obsidian-tester \
                        -c http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/org/obsidiantoaster/archetypes-catalog/1.0.0.Dummy/archetypes-catalog-1.0.0.Dummy-archetype-catalog.xml \
                        -n http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases
-``` 
+```
 
 Access your front server at this address : http://front-generator-obsidian-dummy.172.28.128.4.xip.io & enjoy to play with Obsidian !
 

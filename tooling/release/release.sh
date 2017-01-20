@@ -22,7 +22,7 @@ function tagAndBump {
   git tag "$REL"
   mvn versions:set -DnewVersion=$DEV
   git commit -a -m "Preparing for next version $DEV"
-  git push --tags && git push origin master 
+  git push --tags && git push origin master
   cd -
 }
 
@@ -47,10 +47,10 @@ function mvnReleasePerform {
 #
 echo Press any key to release the Quickstarts...
 read junk
-tagAndBump https://github.com/obsidian-toaster-quickstarts/quick_rest_vertx.git quick_rest_vertx
-tagAndBump https://github.com/obsidian-toaster-quickstarts/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
-tagAndBump https://github.com/obsidian-toaster-quickstarts/quick_rest_wildfly-swarm quick_rest_wildfly-swarm
-tagAndBump https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git quick_secured_rest-springboot
+tagAndBump https://github.com/obsidian-toaster-quickstarts/rest_vertx.git rest_vertx
+tagAndBump https://github.com/obsidian-toaster-quickstarts/rest_springboot-tomcat.git rest_springboot-tomcat
+tagAndBump https://github.com/obsidian-toaster-quickstarts/rest_wildfly-swarm rest_wildfly-swarm
+tagAndBump https://github.com/obsidian-toaster-quickstarts/secured_rest-springboot.git secured_rest-springboot
 
 #
 # Step 2. : Release Platform. Archetypes should be previously generated and pushed

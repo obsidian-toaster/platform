@@ -11,20 +11,20 @@ read -s -p "Enter Password: " PASSWORD
 
 echo "$USERNAME : $PASSWORD"
 
-githubRepos=("obsidian-toaster-quickstarts/quick_rest_vertx" \
-"obsidian-toaster-quickstarts/quick_rest_springboot-tomcat"  \
-"obsidian-toaster-quickstarts/quick_secured_rest-springboot"  \
-"obsidian-toaster-quickstarts/quick_rest_wildfly-swarm" \
+githubRepos=("obsidian-toaster-quickstarts/rest_vertx" \
+"obsidian-toaster-quickstarts/rest_springboot-tomcat"  \
+"obsidian-toaster-quickstarts/secured_rest-springboot"  \
+"obsidian-toaster-quickstarts/rest_wildfly-swarm" \
 "obsidian-toaster/platform"  \
 "obsidian-toaster/obsidian-addon"  \
 "obsidian-toaster/generator-backend"  \
 "obsidian-toaster/generator-frontend" \
 "obsidian-toaster/obsidian-toaster.github.io")
 
-githubReposForked=("quick_rest_vertx" \
-"quick_rest_springboot-tomcat"  \
-"quick_secured_rest-springboot"  \
-"quick_rest_wildfly-swarm" \
+githubReposForked=("rest_vertx" \
+"rest_springboot-tomcat"  \
+"secured_rest-springboot"  \
+"rest_wildfly-swarm" \
 "platform"  \
 "obsidian-addon"  \
 "generator-backend" \

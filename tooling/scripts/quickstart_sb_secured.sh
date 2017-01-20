@@ -42,8 +42,8 @@ sleep 5
 oc new-project sso
 
 rm -rf $TMPDIR/quick* && cd $TMPDIR
-git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-springboot.git
-cd quick_secured_rest-springboot
+git clone https://github.com/obsidian-toaster-quickstarts/secured_rest-springboot.git
+cd secured_rest-springboot
 
 mvn clean install -Popenshift
 cd sso

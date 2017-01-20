@@ -38,16 +38,16 @@ sleep 3
 oc new-project ssovertx
 
 rm -rf $TMPDIR/quick* && cd $TMPDIR
-git clone https://github.com/obsidian-toaster-quickstarts/quick_secured_rest-vertx.git
-cd quick_secured_rest-vertx
-mvn clean install -Popenshift -Dobs.scm.git.connection="scm:git:git://github.com/obsidian-tester/quick_secured_rest-vertx.git" \
--Dobs.scm.dev.connection="scm:git:git@github.com:obsidian-tester/quick_secured_rest-vertx.git" \
--Dobs.scm.url="http://github.com/obsidian-tester/quick_secured_rest-vertx" \
+git clone https://github.com/obsidian-toaster-quickstarts/secured_rest-vertx.git
+cd secured_rest-vertx
+mvn clean install -Popenshift -Dobs.scm.git.connection="scm:git:git://github.com/obsidian-tester/secured_rest-vertx.git" \
+-Dobs.scm.dev.connection="scm:git:git@github.com:obsidian-tester/secured_rest-vertx.git" \
+-Dobs.scm.url="http://github.com/obsidian-tester/secured_rest-vertx" \
 -Dobs.scm.tag="HEAD"
 cd sso
-mvn fabric8:deploy -Popenshift -Dobs.scm.git.connection="scm:git:git://github.com/obsidian-tester/quick_secured_rest-vertx.git" \
--Dobs.scm.dev.connection="scm:git:git@github.com:obsidian-tester/quick_secured_rest-vertx.git" \
--Dobs.scm.url="http://github.com/obsidian-tester/quick_secured_rest-vertx" \
+mvn fabric8:deploy -Popenshift -Dobs.scm.git.connection="scm:git:git://github.com/obsidian-tester/secured_rest-vertx.git" \
+-Dobs.scm.dev.connection="scm:git:git@github.com:obsidian-tester/secured_rest-vertx.git" \
+-Dobs.scm.url="http://github.com/obsidian-tester/secured_rest-vertx" \
 -Dobs.scm.tag="HEAD"
 
 oc env dc/secured-vertx-rest SSO_URL=$sso

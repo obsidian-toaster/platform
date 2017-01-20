@@ -25,7 +25,7 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>quick_rest_wildfly-swarm-archetype</artifactId>
+  <artifactId>rest_wildfly-swarm-archetype</artifactId>
   <name>Fabric8 :: Archetypes :: rest</name>
   <packaging>maven-archetype</packaging>
 
