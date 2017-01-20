@@ -22,16 +22,17 @@ WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
 cd $WORK_DIR
 
-function mvnRelease {
+function tagAndBump {
   REPO=$1
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  mvn release:prepare -B -DreleaseVersion=$REL -DdevelopmentVersion=$DEV -Dtag=$REL \
-                      -Darguments=-Dobs.scm.git.connection="scm:git:git://github.com/$ORG/$REPODIR.git" \
-                      -Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git" \
-                      -Dobs.scm.url="http://github.com/$ORG/$REPODIR" \
-                      -Dobs.scm.tag="HEAD"
+  mvn versions:set -DnewVersion=$REL
+  git commit -a -m "Releasing $REL"
+  git tag "$REL"
+  mvn versions:set -DnewVersion=$DEV
+  git commit -a -m "Preparing for next version $DEV"
+  git push --tags && git push origin master 
   cd -
 }
 
@@ -60,10 +61,10 @@ function mvnReleasePerform {
 #
 echo Press any key to release the Quickstarts...
 read junk
-mvnRelease https://github.com/$ORG/quick_rest_vertx.git quick_rest_vertx
-mvnRelease https://github.com/$ORG/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
-mvnRelease https://github.com/$ORG/quick_rest_wildfly-swarm
-mvnRelease https://github.com/$ORG/quick_secured_rest-springboot.git quick_secured_rest-springboot
+tagAndBump https://github.com/$ORG/quick_rest_vertx.git quick_rest_vertx
+tagAndBump https://github.com/$ORG/quick_rest_springboot-tomcat.git quick_rest_springboot-tomcat
+tagAndBump https://github.com/$ORG/quick_rest_wildfly-swarm quick_rest_wildfly-swarm
+tagAndBump https://github.com/$ORG/quick_secured_rest-springboot.git quick_secured_rest-springboot
 
 #
 # Step 2. : Release Platform. Archetypes should be previously generated and pushed
