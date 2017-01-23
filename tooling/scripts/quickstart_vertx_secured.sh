@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token                         --> ./quickstart_vertx_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
-# User/password (local vagrant) --> ./quickstart_vertx_secured.sh -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io -s https://secure-sso-ssovertx.172.28.128.4.xip.io
-# Minishift                     --> ./quickstart_vertx_secured.sh -a 192.168.99.100:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.99.100.xip.io -s https://secure-sso-ssovertx.192.168.99.100.xip.io
+# Token                         --> ./quickstart_vertx_secured.sh -n ssovertx -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
+# User/password (local vagrant) --> ./quickstart_vertx_secured.sh -n ssovertx -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io -s https://secure-sso-ssovertx.172.28.128.4.xip.io
+# Minishift                     --> ./quickstart_vertx_secured.sh -n ssovertx -a 192.168.99.100:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.99.100.xip.io -s https://secure-sso-ssovertx.192.168.99.100.xip.io
 #
 # ./httpie/token_req.sh https://secure-sso-ssovertx.172.28.128.4.xip.io http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io
 
-while getopts a:t:u:p:c:s: option
+while getopts n:a:t:u:p:c:s: option
 do
         case "${option}"
         in
+                n) project=${OPTARG};;
                 a) api=${OPTARG};;
                 t) token=${OPTARG};;
                 u) user=${OPTARG};;
@@ -37,15 +38,13 @@ else
 fi
 
 #
-# Create project/namespace ssovertx if it doesn't exist otherwise delete all resources
+# Create project/namespace $project if it doesn't exist otherwise delete all resources
 #
-project=ssovertx
 status=$(oc get project $project -o yaml | grep phase)
 if [[ $status == *"Active"* ]]; then
     echo "Project $project already exist. We will delete all the resources"
-    oc delete all --all -n $project
     oc project $project
-    sleep 3
+    oc delete all --all -n $project
 else
     echo "Project $project doesn't exist. We will create it"
     oc new-project $project
