@@ -23,6 +23,11 @@ done
 
 current=$PWD
 http_code=200
+echo "================================================================================"
+echo "Openshift --> Api: $api, Token: $token, User: $user, Password: $password"
+echo "App: $app"
+echo "sso: $sso"
+echo "================================================================================"
 
 echo "# Quickstart - Secured Vert.x with Red Hat SSO"
 if [ "$token" != "" ]; then
@@ -39,22 +44,19 @@ oc new-project ssovertx
 
 rm -rf $TMPDIR/quick* && cd $TMPDIR
 git clone https://github.com/obsidian-toaster-quickstarts/secured_rest-vertx.git
+
 cd secured_rest-vertx
-mvn clean install -Popenshift -Dobs.scm.git.connection="scm:git:git://github.com/obsidian-tester/secured_rest-vertx.git" \
--Dobs.scm.dev.connection="scm:git:git@github.com:obsidian-tester/secured_rest-vertx.git" \
--Dobs.scm.url="http://github.com/obsidian-tester/secured_rest-vertx" \
--Dobs.scm.tag="HEAD"
+mvn clean install -Popenshift
+
 cd sso
-mvn fabric8:deploy -Popenshift -Dobs.scm.git.connection="scm:git:git://github.com/obsidian-tester/secured_rest-vertx.git" \
--Dobs.scm.dev.connection="scm:git:git@github.com:obsidian-tester/secured_rest-vertx.git" \
--Dobs.scm.url="http://github.com/obsidian-tester/secured_rest-vertx" \
--Dobs.scm.tag="HEAD"
+mvn fabric8:deploy -Popenshift
 
 oc env dc/secured-vertx-rest SSO_URL=$sso
 oc env dc/secured-vertx-rest REALM=master
-oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjSLQrbpwNkpuNc+LxcrG711/oIsqUshISLWjXALgx6/L7NItNrPjJTwzqtWCTJrl0/eQLcPdi7UeZA1qjPGa1l+AIj+FnLyCOl7gm65xB3xUpRuGNe5mJ9a+ZtzprXOKhd0WRC8ydiMwyFxIQJPjt7ywlNvU0hZR1U3QboLRICadP5WPaoYNOaYmpkX34r+kegVfdga+1xqG6Ba5v2/9rRg74KxJubCQxcinbH7gVIYSyFQPP5OpBo14SuynFL1YhWDpgUhLz7gr60sG+RC5eC0zuvCRTELn+JquSogPUopuDej/Sd3T5VYHIBJ8P4x4MIz9/FDX8bOFwM73nHgL5wIDAQAB
+oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
 oc env dc/secured-vertx-rest CLIENT_ID=demoapp
 oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
+
 cd ../
 echo "Endpoint : $app & SSO : $sso"
 while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
