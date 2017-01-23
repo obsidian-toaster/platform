@@ -21,7 +21,7 @@ do
 done
 
 current=$PWD
-http_code=200
+
 echo "================================================================================"
 echo "Openshift --> Api: $api, Token: $token, User: $user, Password: $password"
 echo "App: $app"
@@ -87,7 +87,7 @@ echo "Endpoint : $app & SSO : $sso"
 #echo "curl -k --write-out %{http_code} --silent --output /dev/null $sso for return code : $http_code"
 while [ $(curl -k --write-out %{http_code} --silent --output /dev/null $sso) != 200 ]
 do
-  echo "Wait till we SSO Server is up : $http_code ...."
+  echo "Wait till we SSO Server is up ...."
   sleep 10
 done
 
