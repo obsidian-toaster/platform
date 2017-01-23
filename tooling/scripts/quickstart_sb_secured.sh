@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Example :
-# OSO     : Token         --> ./quickstart_sb_secured.sh -n sso -a https://api.engint.openshift.com -t aehZPpWNbaMb3nfXaxAKNkp_o8qCLcwGRmdbGM9SqPU -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
+# OSO     : Token         --> ./quickstart_sb_secured.sh -n sso -a https://api.engint.openshift.com -t xxxxxxxxx -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
 # Vagrant : User/password --> ./quickstart_sb_secured.sh -n sso -a 172.28.128.4:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.28.128.4.xip.io -s https://secure-sso-sso.172.28.128.4.xip.io
 # Minishift (1.0.0.Beta2) --> ./quickstart_sb_secured.sh -n sso -a 192.168.99.101:8443 -u admin -p admin -c http://secured-springboot-rest-sso.192.168.99.101.xip.io -s https://secure-sso-sso.192.168.99.101.xip.io
 #
@@ -83,7 +83,7 @@ echo "Endpoint : $app & SSO : $sso"
 while [ $(curl --write-out %{http_code} --silent --output /dev/null $sso) != 200 ]
 do
   echo "Wait till SSO Server is up ...."
-  sleep 3
+  sleep 10
 done
 
 #
