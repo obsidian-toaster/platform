@@ -22,7 +22,7 @@ do
 done
 
 current=$PWD
-http_code=200
+http_code=401
 echo "================================================================================"
 echo "Openshift --> Api: $api, Token: $token, User: $user, Password: $password"
 echo "App: $app"
@@ -37,7 +37,6 @@ else
    oc login $api -u $user -p $password
 fi
 
-oc project default
 oc delete project ssovertx --now=true
 sleep 3
 oc new-project ssovertx
@@ -59,9 +58,9 @@ oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 
 cd ../
 echo "Endpoint : $app & SSO : $sso"
-while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
+while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) = $http_code ]
 do
-  echo "Wait till we get http response 200 ...."
+  echo "Wait till we get http response : $http_code ...."
   sleep 10
 done
 echo "Service $app replied : $(curl -s $app)"
@@ -70,6 +69,4 @@ cd $current
 
 echo "Call Secured endpoint"
 ./curl/token_req.sh $sso $app
-
-oc project default
 
