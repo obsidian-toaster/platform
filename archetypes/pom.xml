@@ -39,6 +39,5 @@
     <module>secured_rest-vertx-archetype</module>
     <module>rest_configmap_springboot-tomcat-archetype</module>
     <module>rest_configmap_vertx-archetype</module>
-    <module>quick_rest_jdbc_swarm-archtetype</module>
    </modules>
 </project>
