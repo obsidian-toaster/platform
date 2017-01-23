@@ -29,7 +29,7 @@ else
 fi
 
 oc project default
-# TODO : Check how we could use this trick to ait till project is created : false; while [ $? -ne 0 ]; do sleep 10; oc get project sso; done
+# TODO : Check how we could use this trick to it till project is created : false; while [ $? -ne 0 ]; do sleep 10; oc get project sso; done
 oc delete project quicksb --now=true
 sleep 3
 oc new-project quicksb

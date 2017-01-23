@@ -1,21 +1,18 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token                         --> ./quickstart_sb_secured.sh -a https://api.engint.openshift.com -t aehZPpWNbaMb3nfXaxAKNkp_o8qCLcwGRmdbGM9SqPU -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
-# User/password                 --> ./quickstart_sb_secured.sh -a 172.16.50.40:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.16.50.40.xip.io -s https://secure-sso-sso.172.16.50.40.xip.io
-# User/password (local vagrant) --> ./quickstart_sb_secured.sh -a 172.28.128.4:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.28.128.4.xip.io -s https://secure-sso-sso.172.28.128.4.xip.io
-# Minishift                     --> ./quickstart_sb_secured.sh -a 192.168.64.25:8443 -u admin -p admin -c http://secured-springboot-rest-sso.192.168.64.25:8443.xip.io -s https://secure-sso-sso.192.168.64.25:8443.xip.io
+# Token                         --> ./quickstart_sb_secured.sh -n sso -a https://api.engint.openshift.com -t aehZPpWNbaMb3nfXaxAKNkp_o8qCLcwGRmdbGM9SqPU -c http://secured-springboot-rest-sso.e8ca.engint.openshiftapps.com -s https://secure-sso-sso.e8ca.engint.openshiftapps.com
+# User/password (local vagrant) --> ./quickstart_sb_secured.sh -n sso -a 172.28.128.4:8443 -u admin -p admin -c http://secured-springboot-rest-sso.172.28.128.4.xip.io -s https://secure-sso-sso.172.28.128.4.xip.io
+# Minishift                     --> ./quickstart_sb_secured.sh -n sso -a 192.168.99.100:8443 -u admin -p admin -c http://secured-springboot-rest-sso.192.168.99.100.xip.io -s https://secure-sso-sso.192.168.99.100.xip.io
 #
 # ./httpie/token_req.sh https://secure-sso-sso.192.168.64.25.xip.io http://secured-springboot-rest-sso.192.168.64.25.xip.io
-
-
-
 
 
 while getopts a:t:u:p:c:s: option
 do
         case "${option}"
         in
+                n) project=${OPTARG};;
                 a) api=${OPTARG};;
                 t) token=${OPTARG};;
                 u) user=${OPTARG};;
@@ -26,7 +23,11 @@ do
 done
 
 current=$PWD
-http_code=200
+echo "================================================================================"
+echo "Openshift --> Api: $api, Token: $token, User: $user, Password: $password"
+echo "App: $app"
+echo "sso: $sso"
+echo "================================================================================"
 
 echo "# Quickstart - Secured Spring Boot with Red Hat SSO"
 if [ "$token" != "" ]; then
@@ -36,32 +37,58 @@ else
    oc login $api -u $user -p $password
 fi
 
-oc project default
-oc delete project sso --now=true
-sleep 5
-oc new-project sso
+#
+# Create project/namespace $project if it doesn't exist otherwise delete all resources
+#
+status=$(oc get project $project -o yaml | grep phase)
+if [[ $status == *"Active"* ]]; then
+    echo "Project $project already exist. We will delete all the resources"
+    oc project $project
+    oc delete all --all -n $project
+else
+    echo "Project $project doesn't exist. We will create it"
+    oc new-project $project
+fi
 
-rm -rf $TMPDIR/quick* && cd $TMPDIR
-git clone https://github.com/obsidian-toaster-quickstarts/secured_rest-springboot.git
-cd secured_rest-springboot
+#
+# Git clone the Quickstart
+#
+gitRepo=secured_rest-springboot
+rm -rf $TMPDIR/$gitRepo && cd $TMPDIR
+git clone https://github.com/obsidian-toaster-quickstarts/$gitRepo.git
 
+#
+# Compile project
+#
+cd $gitRepo
 mvn clean install -Popenshift
+
+#
+# Deploy using fabric8 maven plugin the OpenShift objects
+#
 cd sso
 mvn fabric8:deploy -Popenshift
+
+#
+# Set the ENV var to configure the App to access the Red Hat SSO
+#
 oc env dc/secured-springboot-rest SSO_URL=$sso/auth
+
+#
+# Wait till the SSO Server replies
+#
 cd ../
 sleep 5
 echo "Endpoint : $app & SSO : $sso"
-while [ $(curl --write-out %{http_code} --silent --output /dev/null $app) != 404 ]
+while [ $(curl --write-out %{http_code} --silent --output /dev/null $sso) != 200 ]
 do
-  echo "Wait till we get http response 200 ...."
+  echo "Wait till SSO Server is up ...."
   sleep 3
 done
-echo "Service $app replied"
 
+#
+# Issue Request against the App using the Token issued by the Red Hat SSO Server
+#
 cd $current
-
-echo "Call Secured endpoint"
+echo "Call Secured endpoint using the Token issued by the Red Hat SSO Server"
 ./curl/token_req.sh $sso $app
-
-oc project default
