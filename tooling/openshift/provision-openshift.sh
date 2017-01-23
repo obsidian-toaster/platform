@@ -61,7 +61,7 @@ echo "===================================================="
 cat > $DOCKER_SERVICE/override.conf << __EOF__
 [Service]
 ExecStart=
-ExecStart=/usr/bin/docker daemon --selinux-enabled --storage-driver=devicemapper --insecure-registry 172.30.0.0/16
+ExecStart=/usr/bin/docker daemon --selinux-enabled --storage-driver devicemapper --insecure-registry 172.30.0.0/16
 __EOF__
 
 systemctl daemon-reload
