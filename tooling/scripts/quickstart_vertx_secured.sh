@@ -2,9 +2,8 @@
 
 # Example :
 # Token                         --> ./quickstart_vertx_secured.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
-# User/password                 --> ./quickstart_vertx_secured.sh -a https://172.16.50.40:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.16.50.40.xip.io -s https://secure-sso-ssovertx.172.16.50.40.xip.io
 # User/password (local vagrant) --> ./quickstart_vertx_secured.sh -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io -s https://secure-sso-ssovertx.172.28.128.4.xip.io
-# Minishift                     --> ./quickstart_vertx_secured.sh -a 192.168.64.25:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.64.25:8443.xip.io -s https://secure-sso-ssovertx.192.168.64.25:8443.xip.io
+# Minishift                     --> ./quickstart_vertx_secured.sh -a 192.168.99.100:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.99.100.xip.io -s https://secure-sso-ssovertx.192.168.99.100.xip.io
 #
 # ./httpie/token_req.sh https://secure-sso-ssovertx.172.28.128.4.xip.io http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io
 
@@ -85,8 +84,8 @@ oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 #
 cd ../
 echo "Endpoint : $app & SSO : $sso"
-echo "curl -k --write-out %{http_code} --silent --output /dev/null $sso for CODE : $http_code"
-while [ $(curl -k --write-out %{http_code} --silent --output /dev/null $sso) = $http_code ]
+#echo "curl -k --write-out %{http_code} --silent --output /dev/null $sso for return code : $http_code"
+while [ $(curl -k --write-out %{http_code} --silent --output /dev/null $sso) != 200 ]
 do
   echo "Wait till we SSO Server is up : $http_code ...."
   sleep 10
