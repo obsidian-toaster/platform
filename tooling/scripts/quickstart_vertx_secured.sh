@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token                         --> ./quickstart_vertx_secured.sh -n ssovertx -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
-# User/password (local vagrant) --> ./quickstart_vertx_secured.sh -n ssovertx -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io -s https://secure-sso-ssovertx.172.28.128.4.xip.io
-# Minishift                     --> ./quickstart_vertx_secured.sh -n ssovertx -a 192.168.99.100:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.99.100.xip.io -s https://secure-sso-ssovertx.192.168.99.100.xip.io
+# OSO     : Token          --> ./quickstart_vertx_secured.sh -n ssovertx -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://secured-vertx-rest-ssovertx.e8ca.engint.openshiftapps.com -s https://secure-sso-ssovertx.e8ca.engint.openshiftapps.com
+# Vagrant : User/password  --> ./quickstart_vertx_secured.sh -n ssovertx -a 172.28.128.4:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io -s https://secure-sso-ssovertx.172.28.128.4.xip.io
+# Minishift (1.0.0.Beta2)  --> ./quickstart_vertx_secured.sh -n ssovertx -a 192.168.99.101:8443 -u admin -p admin -c http://secured-vertx-rest-ssovertx.192.168.99.101.xip.io -s https://secure-sso-ssovertx.192.168.99.101.xip.io
 #
-# ./httpie/token_req.sh https://secure-sso-ssovertx.172.28.128.4.xip.io http://secured-vertx-rest-ssovertx.172.28.128.4.xip.io
+# ./httpie/token_req.sh https://secure-sso-ssovertx.192.168.99.101.xip.io http://secured-vertx-rest-ssovertx.192.168.99.101.xip.io
 
 while getopts n:a:t:u:p:c:s: option
 do
@@ -86,7 +86,7 @@ echo "Endpoint : $app & SSO : $sso"
 #echo "curl -k --write-out %{http_code} --silent --output /dev/null $sso for return code : $http_code"
 while [ $(curl -k --write-out %{http_code} --silent --output /dev/null $sso) != 200 ]
 do
-  echo "Wait till we SSO Server is up ...."
+  echo "Wait till SSO Server is up ...."
   sleep 10
 done
 
