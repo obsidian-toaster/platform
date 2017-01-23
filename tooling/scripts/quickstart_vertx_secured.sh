@@ -22,7 +22,7 @@ do
 done
 
 current=$PWD
-http_code=401
+http_code=200
 echo "================================================================================"
 echo "Openshift --> Api: $api, Token: $token, User: $user, Password: $password"
 echo "App: $app"
@@ -37,36 +37,65 @@ else
    oc login $api -u $user -p $password
 fi
 
-oc delete project ssovertx --now=true
-sleep 3
-oc new-project ssovertx
+#
+# Create project/namespace ssovertx if it doesn't exist otherwise delete all resources
+#
+project=ssovertx
+status=$(oc get project $project -o yaml | grep phase)
+if [[ $status == *"Active"* ]]; then
+    echo "Project $project already exist. We will delete all the resources"
+    oc delete all --all -n $project
+    oc project $project
+    sleep 3
+else
+    echo "Project $project doesn't exist. We will create it"
+    oc new-project $project
+fi
 
-rm -rf $TMPDIR/quick* && cd $TMPDIR
-git clone https://github.com/obsidian-toaster-quickstarts/secured_rest-vertx.git
+#
+# Git clone the Quickstart
+#
+gitRepo=secured_rest-vertx
+rm -rf $TMPDIR/$gitRepo && cd $TMPDIR
+git clone https://github.com/obsidian-toaster-quickstarts/$gitRepo.git
 
-cd secured_rest-vertx
+#
+# Compile project
+#
+cd $gitRepo
 mvn clean install -Popenshift
 
+#
+# Deploy using fabric8 maven plugin the OpenShift objects
+#
 cd sso
 mvn fabric8:deploy -Popenshift
 
+#
+# Set the ENV var to configure the App to access the Red Hat SSO
+#
 oc env dc/secured-vertx-rest SSO_URL=$sso
 oc env dc/secured-vertx-rest REALM=master
 oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
 oc env dc/secured-vertx-rest CLIENT_ID=demoapp
 oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 
+#
+# Wait till the SSO Server replies
+#
 cd ../
 echo "Endpoint : $app & SSO : $sso"
-while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) = $http_code ]
+echo "curl -k --write-out %{http_code} --silent --output /dev/null $sso for CODE : $http_code"
+while [ $(curl -k --write-out %{http_code} --silent --output /dev/null $sso) = $http_code ]
 do
-  echo "Wait till we get http response : $http_code ...."
+  echo "Wait till we SSO Server is up : $http_code ...."
   sleep 10
 done
-echo "Service $app replied : $(curl -s $app)"
 
+#
+# Issue Request against the App using the Token issued by the Red Hat SSO Server
+#
 cd $current
-
-echo "Call Secured endpoint"
+echo "Call Secured endpoint using the Token issued by the Red Hat SSO Server"
 ./curl/token_req.sh $sso $app
 
