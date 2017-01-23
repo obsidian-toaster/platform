@@ -36,5 +36,8 @@
     <module>rest_vertx-archetype</module>
     <module>rest_wildfly-swarm-archetype</module>
     <module>secured_rest-springboot-archetype</module>
+    <module>secured_rest-vertx-archetype</module>
+    <module>rest_configmap_springboot-tomcat-archetype</module>
+    <module>rest_configmap_vertx-archetype</module>
   </modules>
 </project>
