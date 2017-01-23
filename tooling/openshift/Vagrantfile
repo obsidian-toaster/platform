@@ -22,8 +22,10 @@ OPENSHIFT=/opt/openshift-origin-v1.4
 OPENSHIFT_VERSION=v1.4.0-rc1
 
 OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
-OC_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
-OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+# 1.4.rc1 --> OC_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+OC_URL=https://github.com/openshift/origin/releases/download/v1.4.0/openshift-origin-client-tools-v1.4.0-208f053-linux-64bit.tar.gz
+# 1.4.rc1 --> OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0/openshift-origin-server-v1.4.0-208f053-linux-64bit.tar.gz
 
 TEMP_DIR=/home/tmp
 REGISTRY_DIR=/opt/openshift-registry
