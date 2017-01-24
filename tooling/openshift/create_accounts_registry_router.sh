@@ -5,6 +5,8 @@ set -e
 TEMP_DIR=/home/tmp
 rm -rf $TEMP_DIR/openshift-ansible
 
+OPENSHIFT_DIR=/opt/openshift-origin-v1.4
+
 . /etc/profile.d/openshift.sh
 
 echo "====== Wait till OpenShift is started & replies to http request on port 8443 ======"
@@ -25,7 +27,7 @@ echo "===================================================="
 chcon -Rt svirt_sandbox_file_t /opt/openshift-registry
 chown 1001.root /opt/openshift-registry
 oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
-oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig --mount-host=/opt/openshift-registry
+oc adm registry --service-account=registry --config=$OPENSHIFT_DIR/openshift.local.config/master/admin.kubeconfig --mount-host=/opt/openshift-registry
 
 echo "===================================================="
 echo "Create Router"
