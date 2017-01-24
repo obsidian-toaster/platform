@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Example :
-# OSO     : Token         --> ./quickstart_sb.sh -n quicksb -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://springboot-rest-quicksb.e8ca.engint.openshiftapps.com
-# Vagrant : User/password --> ./quickstart_sb.sh -n quicksb -a 172.28.128.4:8443 -u admin -p admin -c http://springboot-rest-quicksb.172.28.128.4.xip.io
+# OSO     : Token           --> ./quickstart_sb.sh -n quicksb -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://springboot-rest-quicksb.e8ca.engint.openshiftapps.com
+# Vagrant : User/password   --> ./quickstart_sb.sh -n quicksb -a 172.28.128.4:8443 -u admin -p admin -c http://springboot-rest-quicksb.172.28.128.4.xip.io
+# Minishift : User/password --> ./quickstart_sb.sh -n quicksb -a 192.168.64.25:8443 -u admin -p admin -c http://springboot-rest-quicksb.192.168.64.25.xip.io
 
 while getopts n:a:t:u:p:c: option
 do
