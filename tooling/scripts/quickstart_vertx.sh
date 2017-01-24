@@ -2,7 +2,7 @@
 
 # Example :
 # OSO     : Token           --> ./quickstart_vertx.sh -n quickvertx -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://vertx-rest-quickvertx.e8ca.engint.openshiftapps.com
-# Minishift : User/password --> ./quickstart_vertx.sh -n quickvertx -a 172.28.128.4:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.28.128.4.xip.io
+# Vagrant : User/password   --> ./quickstart_vertx.sh -n quickvertx -a 172.28.128.4:8443 -u admin -p admin -c http://vertx-rest-quickvertx.172.28.128.4.xip.io
 
 while getopts n:a:t:u:p:c: option
 do
@@ -62,6 +62,6 @@ do
   echo "Wait till we get http response 200 ...."
   sleep 10
 done
-echo "Service $app replied : $(curl -s $app)"
+echo "Service $app replied : $(curl -s $app/greeting)"
 
 cd $current
