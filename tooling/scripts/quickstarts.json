@@ -1,0 +1,14 @@
+[
+  {
+    "name": "rest_vertx",
+    "service": "vertx-rest"
+  },
+  {
+    "name": "rest_springboot-tomcat",
+    "service": "springboot-rest"
+  },
+  {
+    "name": "rest_wildfly-swarm",
+    "service": "wildfy-swarm-rest"
+  }
+]
