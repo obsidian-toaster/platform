@@ -24,6 +24,18 @@ cd obsidian-toaster/platform/tooling/openshift
 vagrant up --provider virtualbox
 ```
 
+# Deploy OpenShift using Minishift
+
+Minishift is a Go Application which has been created from Minikube project of Kubernetes. It extends the features proposed by the Kubernetes client to package/Deploy
+OpenShift within a VM machine. Different hypervisors are supported as Virtualbox, xhyve & VMWare. You can find more information about Minishift like also how to intall from the project:
+https://github.com/minishift/minishift
+
+To install the required environment which support the Obsidian quickstarts, it is recommended to pass the following parameters when you will request to minishift to start a new VM.
+
+```
+minishift start --iso-url=https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-beta.1/minishift-centos.iso --memory=6000 --openshift-version=v1.4.0-rc1 --vm-driver=virtualbox --docker-env=[storage-driver=devicemapper]
+```
+
 # Steps required to install & configure OpenShift manually
 
 ##  Install Yum packages

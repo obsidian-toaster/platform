@@ -99,24 +99,14 @@ cd $WORK_DIR
 3) Git clone the quickstarts & release them
 
 ```
-mvnRelease https://github.com/$ORG/rest_vertx.git rest_vertx
-mvnRelease https://github.com/$ORG/rest_springboot-tomcat.git rest_springboot-tomcat
-mvnRelease https://github.com/$ORG/secured_rest-springboot.git secured_rest-springboot
+tagAndBump https://github.com/$ORG/rest_vertx.git rest_vertx
+tagAndBump https://github.com/$ORG/rest_springboot-tomcat.git rest_springboot-tomcat
+tagAndBump https://github.com/$ORG/secured_rest-springboot.git secured_rest-springboot
 ...
 ```
 
-The mvnRelease function will git clone the project within the temporary folder and next will call the maven goal `mvn release:prepare` using as parameters
-the following info required to commit the modifications & tag the release in github using your forked repo
-
-```
--DreleaseVersion=$REL # Version to release (example: 1.0.0.Dummy)
--DdevelopmentVersion=$DEV  # Next version of the project (example : 1.0.1-SNAPSHOT)
--Dtag=$REL
--Darguments=-Dobs.scm.git.connection="scm:git:git://github.com/$ORG/$REPODIR.git" # Git dummy repo
--Dobs.scm.dev.connection="scm:git:git@github.com:$ORG/$REPODIR.git"  # Git dummy repo
--Dobs.scm.url="http://github.com/$ORG/$REPODIR"  # Git dummy repo URL
--Dobs.scm.tag="HEAD"
-```
+The tagAndBump function will git clone the project within the temporary folder, change the version to the release specified, 
+tag the release in github using your forked repo and bump the version to the snapshot version specified.
 
 4) Git clone the Platform project & generate the Maven Archetypes
 
@@ -152,7 +142,7 @@ cd ..
 mvnReleasePerform https://github.com/$ORG/obsidian-addon.git obsidian-addon
 ```
 
-The mvnReleasePerform function extends the mvnRelease function to execute the maven `maven:perform` step.
+The mvnReleasePerform function executes the maven `release:prepare release:perform` goals.
 It includes new parameters which are required to by pass the staging step executed by default by the nexus-maven-plugin to use
 the nexus server defined within the `distributionManagement` xml tag of the parent project which is jboss.
 
