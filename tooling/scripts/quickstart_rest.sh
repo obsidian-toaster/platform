@@ -43,7 +43,7 @@ do
   project=demo$COUNTER
 	name=$(jq -r '.['$c'].name' ./quickstarts.json)
 	service=$(jq -r '.['$c'].service' ./quickstarts.json)
-	app=http://$service-$project.$api.xip.io/
+	app=http://$service-$project.$api.xip.io
 
 	echo "Git repo Name : $name to be created within the namespace/project $project"
 	echo "App endpoint : $app"
@@ -92,7 +92,7 @@ do
   while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
    do
      echo "Wait till we get http response 200 .... from $app/greeting"
-     sleep 20
+     sleep 30
   done
   echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $app/greeting)"
 
