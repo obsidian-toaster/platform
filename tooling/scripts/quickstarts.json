@@ -14,5 +14,9 @@
   {
     "name": "rest_configmap_springboot-tomcat",
     "service": "springboot-rest-configmap"
+  },
+  {
+    "name": "rest_configmap_swarm",
+    "service": "wildfly-swarm-configmap"
   }
 ]
