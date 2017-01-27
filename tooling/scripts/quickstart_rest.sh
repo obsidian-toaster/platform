@@ -6,15 +6,16 @@
 #
 
 # Example :
-# OpenShift Online/Dedicated using Token --> ./quickstart_rest.sh -a api.engint.openshift.com -t xxxxxxxxxxxx
+# OpenShift Online/Dedicated using Token --> ./quickstart_rest.sh -a api.engint.openshift.com -d e8ca -t xxxxxxxxxxxx
 # Vagrant/Minishift                      --> ./quickstart_rest.sh -a HOST_IP_ADDRESS -u admin -p admin
 # CI/CD OpenShift Server                 --> ./quickstart_rest.sh -a 172.16.50.40 -u admin -p admin (only available from the Red Hat VPN & access is required
 
-while getopts a:t:u:p: option
+while getopts a:d:t:u:p: option
 do
         case "${option}"
         in
                 a) api=${OPTARG};;
+                d) domain=${OPTARG};;
                 t) token=${OPTARG};;
                 u) user=${OPTARG};;
                 p) password=${OPTARG};;
@@ -44,7 +45,18 @@ do
   project=demo$COUNTER
 	name=$(jq -r '.['$c'].name' ./$JSONFILE)
 	service=$(jq -r '.['$c'].service' ./$JSONFILE)
-	APP=http://$service-$project.$api.xip.io
+
+	#
+  # If the Server is an openshift online/dedicated machine, then the address of the SSO & APP should be reformated
+  #
+	if [[ -n $domain ]]; then
+	  CONTENT=(${api//./ })
+	  INSTANCE=${CONTENT[1]}
+	  SUFFIX=openshiftapps
+	  APP=http://$service-$project.$domain.$INSTANCE.$SUFFIX.com
+	else
+    APP=http://$service-$project.$api.xip.io
+	fi
 
 	echo "Git repo Name : $name to be created within the namespace/project $project"
 	echo "App endpoint : $APP"
