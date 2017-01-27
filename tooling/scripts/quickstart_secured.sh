@@ -26,7 +26,8 @@ GITHUB_ORG=http://github.com/obsidian-toaster-quickstarts
 
 echo "Log on to OpenShift Machine"
 if [ "$token" != "" ]; then
-   oc login $api:8443 --token=$token
+   echo "oc login $api --token=$token"
+   oc login $api --token=$token
 else
    echo "oc login $api -u $user -p $password"
    oc login $api:8443 -u $user -p $password
@@ -120,15 +121,20 @@ do
   CLIENT_ID=demoapp
   SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 
-  auth_result=$(curl -sk -X POST $SSO/auth/realms/$REALM/protocol/openid-connect/token -d grant_type=password -d username=$USER -d client_secret=$SECRET -d password=$PASSWORD -d client_id=$CLIENT_ID)
-  access_token=$(echo -e "$auth_result" | awk -F"," '{print $1}' | awk -F":" '{print $2}' | sed s/\"//g | tr -d ' ')
-  while [ $(curl --write-out %{http_code} --silent --output /dev/null $APP/greeting -H "Authorization:Bearer $access_token") != 200 ]
-   do
+  replied="false"
+  while ! $replied; do
      echo "Wait till we get http response 200 .... from $APP/greeting"
-     sleep 30
+     auth_result=$(curl -sk -X POST $SSO/auth/realms/$REALM/protocol/openid-connect/token -d grant_type=password -d username=$USER -d client_secret=$SECRET -d password=$PASSWORD -d client_id=$CLIENT_ID)
+     access_token=$(echo -e "$auth_result" | awk -F"," '{print $1}' | awk -F":" '{print $2}' | sed s/\"//g | tr -d ' ')
+     result=$(curl --write-out %{http_code} --silent --output /dev/null $APP/greeting -H "Authorization:Bearer $access_token")
+     if [ $result = 200 ]; then
+       replied=true
+     else
+       sleep 30
+     fi
   done
   echo "==============================="
-  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $APP/greeting -H "Authorization:Bearer $access_token")"
+  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied"
   echo "==============================="
 
   echo "==============================="
