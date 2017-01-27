@@ -31,14 +31,17 @@ To build the Obsidian project locally, we recommend to use a Nexus Server. If yo
 top of OpenShift using the following instructions:
 
 ```
-oc login https://172.28.128.4:8443 -u admin -p admin
+oc login https://$HOSTNAME_OPENSHIT_SERVER:8443 -u admin -p admin
 oc new-project infra
 oc create -f templates/ci/nexus2-ephemeral.json
 oc process nexus-ephemeral | oc create -f -
 oc start-build nexus
 ```
 
-The login/password to be used to access as admin your nexus server is `admin/admin123`
+Remarks :
+- The login/password to be used to access as admin your nexus server is `admin/admin123`
+- Change the HOSTNAME_OPENSHIT_SERVER var with the name of the Openshift Server to be tested
+- You can use the CI/CD server for that purpose `172.16.50.40`if you have access through the VPN to it. Contact George Gastaldi for more 
 
 Nexus works better with `anyuid`. To enable it (as admin):
 

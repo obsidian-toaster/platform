@@ -3,12 +3,12 @@
 #
 # Prerequisites : Install jq --> https://stedolan.github.io/jq/download/
 # brew install jq
+#
 
 # Example :
-# OSO     : Token           --> ./quickstart_rest.sh -a api.engint.openshift.com -t xxxxxxxxxxxx
-# Vagrant : User/password   --> ./quickstart_rest.sh -a 172.28.128.4 -u admin -p admin
-# Minishift : User/password --> ./quickstart_rest.sh -a 192.168.64.25 -u admin -p admin
-# CI/CD Server ./quickstart_rest.sh -a 172.16.50.40 -u admin -p admin
+# OpenShift Online/Dedicated using Token --> ./quickstart_rest.sh -a api.engint.openshift.com -t xxxxxxxxxxxx
+# Vagrant/Minishift                      --> ./quickstart_rest.sh -a HOST_IP_ADDRESS -u admin -p admin
+# CI/CD OpenShift Server                 --> ./quickstart_rest.sh -a 172.16.50.40 -u admin -p admin (only available from the Red Hat VPN & access is required
 
 while getopts a:t:u:p: option
 do
@@ -21,8 +21,8 @@ do
         esac
 done
 
-current=$PWD
-counter=0
+CURRENT=$PWD
+GITHUB_ORG=http://github.com/obsidian-toaster-quickstarts
 
 echo "Log on to OpenShift Machine"
 if [ "$token" != "" ]; then
@@ -33,7 +33,7 @@ else
 fi
 
 #
-# Read the quickstarts json file which contains the name of the github repos to be cloned as the api address to check if the service replies
+# Read the QuickStarts json file which contains the name of the github repo to be cloned as the api address to check the service (/greeting)
 #
 START=0
 END=$(jq '. | length' ./quickstarts.json)
@@ -44,6 +44,7 @@ do
 	name=$(jq -r '.['$c'].name' ./quickstarts.json)
 	service=$(jq -r '.['$c'].service' ./quickstarts.json)
 	app=http://$service-$project.$api.xip.io/
+
 	echo "Git repo Name : $name to be created within the namespace/project $project"
 	echo "App endpoint : $app"
 
@@ -56,16 +57,13 @@ do
   # Git clone the Quickstart
   #
   rm -rf $TMPDIR/$name && cd $TMPDIR
-  git clone https://github.com/obsidian-toaster-quickstarts/$name.git
+  git clone $GITHUB_ORG/$name.git
   cd $name
 
   #
   # Compile project & deploy within the namespace $project under OpenShift
   #
   mvn clean package fabric8:deploy -DskipTests -Popenshift
-
-  echo "Press any key to continue & test the service ..."
-  read junk
 
   #
   # Wait till the Service replies
@@ -77,7 +75,8 @@ do
      sleep 10
   done
   echo "Service $service replied : $(curl -s $app/greeting)"
+  echo "Processing next quickstart ...."
 
-  cd $current
+  cd $CURRENT
   oc delete project/$project
 done
