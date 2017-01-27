@@ -36,17 +36,18 @@ fi
 # Read the QuickStarts json file which contains the name of the github repo to be cloned as the api address to check the service (/greeting)
 #
 START=0
+JSONFILE=quickstarts.json
 END=$(jq '. | length' ./quickstarts.json)
 for ((c=$START;c<=$END-1; c++ ))
 do
   COUNTER=$((COUNTER + 1))
   project=demo$COUNTER
-	name=$(jq -r '.['$c'].name' ./quickstarts.json)
-	service=$(jq -r '.['$c'].service' ./quickstarts.json)
-	app=http://$service-$project.$api.xip.io
+	name=$(jq -r '.['$c'].name' ./$JSONFILE)
+	service=$(jq -r '.['$c'].service' ./JSONFILE)
+	APP=http://$service-$project.$api.xip.io
 
 	echo "Git repo Name : $name to be created within the namespace/project $project"
-	echo "App endpoint : $app"
+	echo "App endpoint : $APP"
 
 	#
 	# Create OpenShift Namespace/project
@@ -89,21 +90,21 @@ do
   echo "Call service"
   echo "==============================="
 
-  while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
+  while [ $(curl --write-out %{http_code} --silent --output /dev/null $APP/greeting) != 200 ]
    do
-     echo "Wait till we get http response 200 .... from $app/greeting"
+     echo "Wait till we get http response 200 .... from $APP/greeting"
      sleep 30
   done
-  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $app/greeting)"
-
-  echo "==============================="
-  echo "Processing next project ...."
-  echo "==============================="
-
-  cd $CURRENT
+  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $APP/greeting)"
 
   echo "==============================="
   echo "Delete project/namespace $project"
   echo "==============================="
   oc delete project/$project
+
+  echo "==============================="
+  echo "Processing next project ...."
+  echo "==============================="
+  cd $CURRENT
+
 done
