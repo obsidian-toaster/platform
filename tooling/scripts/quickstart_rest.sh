@@ -5,9 +5,10 @@
 # brew install jq
 
 # Example :
-# OSO     : Token           --> ./quickstart_sb.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -c http://springboot-rest-quicksb.e8ca.engint.openshiftapps.com
-# Vagrant : User/password   --> ./quickstart_sb.sh -a 172.28.128.4:8443 -u admin -p admin -c http://springboot-rest-quicksb.172.28.128.4.xip.io
-# Minishift : User/password --> ./quickstart_sb.sh -a 192.168.64.25:8443 -u admin -p admin -c http://springboot-rest-quicksb.192.168.64.25.xip.io
+# OSO     : Token           --> ./quickstart_rest.sh -a api.engint.openshift.com -t xxxxxxxxxxxx
+# Vagrant : User/password   --> ./quickstart_rest.sh -a 172.28.128.4 -u admin -p admin
+# Minishift : User/password --> ./quickstart_rest.sh -a 192.168.64.25 -u admin -p admin
+# CI/CD Server ./quickstart_rest.sh -a 172.16.50.40 -u admin -p admin
 
 while getopts a:t:u:p: option
 do
@@ -25,12 +26,15 @@ counter=0
 
 echo "Log on to OpenShift Machine"
 if [ "$token" != "" ]; then
-   oc login $api --token=$token
+   oc login $api:8443 --token=$token
 else
    echo "oc login $api -u $user -p $password"
-   oc login $api -u $user -p $password
+   oc login $api:8443 -u $user -p $password
 fi
 
+#
+# Read the quickstarts json file which contains the name of the github repos to be cloned as the api address to check if the service replies
+#
 START=0
 END=$(jq '. | length' ./quickstarts.json)
 for ((c=$START;c<=$END-1; c++ ))
@@ -39,30 +43,41 @@ do
   project=demo$COUNTER
 	name=$(jq -r '.['$c'].name' ./quickstarts.json)
 	service=$(jq -r '.['$c'].service' ./quickstarts.json)
-	echo "Git repo Name : $name, service: $service - to be created within the project : project$((counter+1))"
+	app=http://$service-$project.$api.xip.io/
+	echo "Git repo Name : $name to be created within the namespace/project $project"
+	echo "App endpoint : $app"
+
+	#
+	# Create OpenShift Namespace/project
+	#
+	oc new-project $project
 
   #
   # Git clone the Quickstart
   #
   rm -rf $TMPDIR/$name && cd $TMPDIR
   git clone https://github.com/obsidian-toaster-quickstarts/$name.git
-  cd $gitRepo
+  cd $name
 
   #
-  # Compile project
+  # Compile project & deploy within the namespace $project under OpenShift
   #
-  # mvn clean package fabric8:deploy -Popenshift -DskipTests
-#
-  # #
-  # # Wait till the Service replies
-  # #
-  # echo "Endpoint : $app"
-  # while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
-  # do
-  #   echo "Wait till we get http response 200 ...."
-  #   sleep 10
-  # done
-  # echo "Service $app replied : $(curl -s $app/greeting)"
+  mvn clean package fabric8:deploy -DskipTests -Popenshift
+
+  echo "Press any key to continue & test the service ..."
+  read junk
+
+  #
+  # Wait till the Service replies
+  #
+  echo "Endpoint : $app"
+  while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
+   do
+     echo "Wait till we get http response 200 ...."
+     sleep 10
+  done
+  echo "Service $service replied : $(curl -s $app/greeting)"
 
   cd $current
+  oc delete project/$project
 done
