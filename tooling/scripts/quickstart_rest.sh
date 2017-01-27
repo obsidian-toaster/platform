@@ -43,7 +43,7 @@ do
   COUNTER=$((COUNTER + 1))
   project=demo$COUNTER
 	name=$(jq -r '.['$c'].name' ./$JSONFILE)
-	service=$(jq -r '.['$c'].service' ./JSONFILE)
+	service=$(jq -r '.['$c'].service' ./$JSONFILE)
 	APP=http://$service-$project.$api.xip.io
 
 	echo "Git repo Name : $name to be created within the namespace/project $project"
