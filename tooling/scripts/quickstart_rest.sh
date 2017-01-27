@@ -51,16 +51,25 @@ do
 	#
 	# Create OpenShift Namespace/project
 	#
+	echo "==============================="
+	echo "Create OpenShift Project"
+	echo "==============================="
 	oc new-project $project
 
 	#
 	# Add role to user view system:serviceaccount which is required to access ConfigMap (f-m-p)
 	#
+	echo "==============================="
+	echo "Add role to user"
+	echo "==============================="
 	oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
 
   #
   # Git clone the Quickstart
   #
+  echo "==============================="
+  echo "git clone project : $GITHUB_ORG/$name.git"
+  echo "==============================="
   rm -rf $TMPDIR/$name && cd $TMPDIR
   git clone $GITHUB_ORG/$name.git
   cd $name
@@ -68,20 +77,33 @@ do
   #
   # Compile project & deploy within the namespace $project under OpenShift
   #
+  echo "==============================="
+  echo "Build & deploy on openshift"
+  echo "==============================="
   mvn clean package fabric8:deploy -DskipTests -Popenshift
 
   #
   # Wait till the Service replies
   #
-  echo "Endpoint : $app"
+  echo "==============================="
+  echo "Call service
+  echo "==============================="
+
   while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
    do
-     echo "Wait till we get http response 200 ...."
-     sleep 10
+     echo "Wait till we get http response 200 .... from $app/greeting"
+     sleep 20
   done
-  echo "Service $service replied : $(curl -s $app/greeting)"
-  echo "Processing next quickstart ...."
+  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $app/greeting)"
+
+  echo "==============================="
+  echo "Processing next project ...."
+  echo "==============================="
 
   cd $CURRENT
+
+  echo "==============================="
+  echo "Delete project/namespace $project"
+  echo "==============================="
   oc delete project/$project
 done

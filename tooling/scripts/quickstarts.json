@@ -9,6 +9,10 @@
   },
   {
     "name": "rest_wildfly-swarm",
-    "service": "wildfy-swarm-rest"
+    "service": "wildfly-swarm-rest"
+  },
+  {
+    "name": "rest_configmap_springboot-tomcat",
+    "service": "springboot-rest-configmap"
   }
 ]
