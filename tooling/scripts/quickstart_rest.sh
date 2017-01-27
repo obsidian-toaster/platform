@@ -53,6 +53,11 @@ do
 	#
 	oc new-project $project
 
+	#
+	# Add role to user view system:serviceaccount which is required to access ConfigMap (f-m-p)
+	#
+	oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
+
   #
   # Git clone the Quickstart
   #
