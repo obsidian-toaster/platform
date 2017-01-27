@@ -86,7 +86,7 @@ do
   # Wait till the Service replies
   #
   echo "==============================="
-  echo "Call service
+  echo "Call service"
   echo "==============================="
 
   while [ $(curl --write-out %{http_code} --silent --output /dev/null $app/greeting) != 200 ]
