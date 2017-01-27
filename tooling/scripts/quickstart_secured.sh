@@ -93,16 +93,14 @@ do
     oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
   fi
 
-  echo "Press any key to release the Obsidian addon..."
-  read junk
   #
   # Wait till the SSO server replies
   #
   echo "==============================="
-  echo "Call service"
+  echo "Call SSO server : $SSO"
   echo "==============================="
 
-  while [ $(curl --write-out %{http_code} --silent --output /dev/null $SSO) != 200 ]
+  while [ $(curl -k --write-out %{http_code} --silent --output /dev/null $SSO) != 200 ]
    do
      echo "Wait till SSO server is up & running"
      sleep 30
@@ -122,14 +120,16 @@ do
   CLIENT_ID=demoapp
   SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
 
-  auth_result=$(curl -sk -X POST $SSO_HOST/auth/realms/$REALM/protocol/openid-connect/token -d grant_type=password -d username=$USER -d client_secret=$SECRET -d password=$PASSWORD -d client_id=$CLIENT_ID)
+  auth_result=$(curl -sk -X POST $SSO/auth/realms/$REALM/protocol/openid-connect/token -d grant_type=password -d username=$USER -d client_secret=$SECRET -d password=$PASSWORD -d client_id=$CLIENT_ID)
   access_token=$(echo -e "$auth_result" | awk -F"," '{print $1}' | awk -F":" '{print $2}' | sed s/\"//g | tr -d ' ')
   while [ $(curl --write-out %{http_code} --silent --output /dev/null $APP/greeting -H "Authorization:Bearer $access_token") != 200 ]
    do
-     echo "Wait till we get http response 200 .... from $app/greeting"
+     echo "Wait till we get http response 200 .... from $APP/greeting"
      sleep 30
   done
-  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $APP/greeting)"
+  echo "==============================="
+  echo "SUCCESSFULLY TESTED : $GITHUB_ORG & Service $service replied : $(curl -s $APP/greeting -H "Authorization:Bearer $access_token")"
+  echo "==============================="
 
   echo "==============================="
   echo "Delete project/namespace $project"
@@ -139,4 +139,5 @@ do
   echo "==============================="
   echo "Processing next project ...."
   echo "==============================="
+
 done
