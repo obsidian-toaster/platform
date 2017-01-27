@@ -45,7 +45,7 @@ gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 __EOF__
 
-yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion docker-engine
+yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion docker-engine socat
 yum -y update
 
 echo "===================================================="
@@ -62,6 +62,7 @@ cat > $DOCKER_SERVICE/override.conf << __EOF__
 [Service]
 ExecStart=
 ExecStart=/usr/bin/docker daemon -s devicemapper --insecure-registry 172.30.0.0/16
+# TODO : -H unix:// -H tcp://0.0.0.0:2376 --tlsverify --tlscacert=/var/lib/boot2docker/ca.pem --tlscert=/var/lib/boot2docker/server.pem --tlskey=/var/lib/boot2docker/server-key.pem
 __EOF__
 
 systemctl daemon-reload
