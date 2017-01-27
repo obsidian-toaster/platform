@@ -1,0 +1,10 @@
+[
+  {
+    "name": "secured_rest-springboot",
+    "service": "secured-springboot-rest"
+  },
+  {
+    "name": "secured_rest-vertx",
+    "service": "secured-vertx-rest"
+  }
+]
