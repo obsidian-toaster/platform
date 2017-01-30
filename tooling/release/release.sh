@@ -7,6 +7,7 @@
 REL=$1
 DEV=$2
 export BACKEND_URL=$3
+CURRENT=$(pwd)
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
@@ -47,10 +48,14 @@ function mvnReleasePerform {
 #
 echo Press any key to release the Quickstarts...
 read junk
-tagAndBump https://github.com/obsidian-toaster-quickstarts/rest_vertx.git rest_vertx
-tagAndBump https://github.com/obsidian-toaster-quickstarts/rest_springboot-tomcat.git rest_springboot-tomcat
-tagAndBump https://github.com/obsidian-toaster-quickstarts/rest_wildfly-swarm rest_wildfly-swarm
-tagAndBump https://github.com/obsidian-toaster-quickstarts/secured_rest-springboot.git secured_rest-springboot
+JSONFILE=$CURRENT/quickstarts.json
+START=0
+END=$(jq '. | length' $JSONFILE)
+for ((c=$START;c<=$END-1; c++ ))
+do
+  name=$(jq -r '.['$c'].name' $JSONFILE)
+  tagAndBump https://github.com/$ORG/$name.git $name
+done
 
 #
 # Step 2. : Release Platform. Archetypes should be previously generated and pushed
