@@ -40,7 +40,7 @@ if [ $TO_BE_DELETED = true ]; then
 fi
 
 sleep 5
-read junk
+
 for repo in "${githubPlatformRepos[@]}"
 do
   echo "Platform repo to be git cloned : $repo"
