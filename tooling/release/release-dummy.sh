@@ -17,6 +17,7 @@ DEV=$2
 ORG=$3
 MAVEN_REPO=$4
 MAVEN_REPO_ID=$5
+CURRENT=$(pwd)
 
 WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
@@ -62,12 +63,12 @@ function mvnReleasePerform {
 echo Press any key to release the Quickstarts...
 read junk
 
-JSONFILE=quickstarts.json
+JSONFILE=$CURRENT/quickstarts.json
 START=0
-END=$(jq '. | length' ./quickstarts.json)
+END=$(jq '. | length' $JSONFILE)
 for ((c=$START;c<=$END-1; c++ ))
 do
-  name=$(jq -r '.['$c'].name' ./$JSONFILE)
+  name=$(jq -r '.['$c'].name' $JSONFILE)
   tagAndBump https://github.com/$ORG/$name.git $name
 done
 
