@@ -29,7 +29,7 @@
   <name>Fabric8 :: Archetypes :: rest-configmap</name>
   <packaging>maven-archetype</packaging>
 
-  <description>Creates a new Obsidian :: Quickstart :: Spring Boot Tomcat - Rest &amp; Config Map</description>
+  <description>Creates a new Spring Boot Tomcat - Rest &amp; Config Map</description>
 
   <build>
     <extensions>
