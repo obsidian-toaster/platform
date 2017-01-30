@@ -21,25 +21,26 @@ githubPlatformRepos=(
 
 JSONFILE=quickstarts.json
 START=0
-END=$(jq '. | length' ./quickstarts.json)
+END=$(jq '. | length' $JSONFILE)
 
 if [ $TO_BE_DELETED = true ]; then
   for repo in "${githubPlatformRepos[@]}"
   do
-    echo "Platform Forked repo to be deleted : $repo"
+    echo "Platform Forked repo to be deleted : https://api.github.com/repos/$ORG/obsidian-toaster-quickstarts/$repo"
     curl -u $USERNAME:$PASSWORD -X DELETE https://api.github.com/repos/$ORG/$repo
   done
 
-  # Delete Quickstarts as defined within the JSON file
+  # Delete QuickStarts as defined within the JSON file
   for ((c=$START;c<=$END-1; c++ ))
   do
-	  name=$(jq -r '.['$c'].name' ./$JSONFILE)
-    echo "QuickStarts Forked repo to be deleted : $name"
-    curl -u $USERNAME:$PASSWORD -X DELETE https://api.github.com/repos/$ORG/$repo
+	  name=$(jq -r '.['$c'].name' $JSONFILE)
+    echo "QuickStarts Forked repo to be deleted : https://api.github.com/repos/$ORG/obsidian-toaster-quickstarts/$name"
+    curl -u $USERNAME:$PASSWORD -X DELETE https://api.github.com/repos/$ORG/$name
   done
 fi
 
 sleep 5
+read junk
 for repo in "${githubPlatformRepos[@]}"
 do
   echo "Platform repo to be git cloned : $repo"
@@ -48,7 +49,7 @@ done
 
 for ((c=$START;c<=$END-1; c++ ))
 do
-  name=$(jq -r '.['$c'].name' ./$JSONFILE)
+  name=$(jq -r '.['$c'].name' $JSONFILE)
   echo "QuickStart to be git cloned : $name"
   curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/obsidian-toaster-quickstarts/$name/forks?org=$ORG
 done
