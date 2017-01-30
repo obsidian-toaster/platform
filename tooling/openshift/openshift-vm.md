@@ -33,10 +33,10 @@ https://github.com/minishift/minishift
 To install the required environment which support the Obsidian quickstarts, it is recommended to pass the following parameters when you will request to minishift to start a new VM.
 
 ```
-minishift start --openshift-version=v1.4.1 --memory=4000 --vm-driver=virtualbox --iso-url=https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.1/minishift-centos7.iso --docker-env=[storage-driver=devicemapper]
+minishift start --memory=4000 --vm-driver=virtualbox --iso-url=https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.1/minishift-centos7.iso --docker-env=[storage-driver=devicemapper]
 ```
 
-Version of Minishift to be used is >= 1.0.0.Beta2
+Version of Minishift to be used is **>= 1.0.0.Beta3**
 
 # Steps required to install & configure OpenShift manually
 
