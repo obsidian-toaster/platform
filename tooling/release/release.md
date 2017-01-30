@@ -226,7 +226,7 @@ sed -e "s/VERSION/$REL/g"
 ```
 - Github Org
 
-To git clone the fotked project, we will replace the parameter with the dummy github org passed as parameter
+To git clone the forked project, we will replace the parameter with the dummy github org passed as parameter
 
 ```
 sed -e "s/ORG\//$githuborg\//g"
@@ -285,8 +285,6 @@ Example of scenario
                    obsidian-tester \
                    nexus-infra.172.28.128.4.xip.io/content/repositories/releases \
                    openshift-nexus
-
-
 
 ./release-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
                        -v 1.0.0.Dummy \
