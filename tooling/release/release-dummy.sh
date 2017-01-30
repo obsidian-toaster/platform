@@ -61,10 +61,15 @@ function mvnReleasePerform {
 #
 echo Press any key to release the Quickstarts...
 read junk
-tagAndBump https://github.com/$ORG/rest_vertx.git rest_vertx
-tagAndBump https://github.com/$ORG/rest_springboot-tomcat.git rest_springboot-tomcat
-tagAndBump https://github.com/$ORG/rest_wildfly-swarm rest_wildfly-swarm
-tagAndBump https://github.com/$ORG/secured_rest-springboot.git secured_rest-springboot
+
+JSONFILE=quickstarts.json
+START=0
+END=$(jq '. | length' ./quickstarts.json)
+for ((c=$START;c<=$END-1; c++ ))
+do
+  name=$(jq -r '.['$c'].name' ./$JSONFILE)
+  tagAndBump https://github.com/$ORG/$name.git $name
+done
 
 #
 # Step 2. : Release Platform. Archetypes should be previously generated and pushed
