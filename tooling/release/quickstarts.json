@@ -1,0 +1,10 @@
+[
+  {"name": "rest_springboot-tomcat"},
+  {"name": "rest_vertx"},
+  {"name": "rest_wildfly-swarm"},
+  {"name": "rest_configmap_springboot-tomcat"},
+  {"name": "rest_configmap_vertx"},
+  {"name": "rest_configmap_swarm"},
+  {"name": "secured_rest-springboot"},
+  {"name": "secured_rest-vertx"}
+]

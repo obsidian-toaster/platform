@@ -11,30 +11,44 @@ read -s -p "Enter Password: " PASSWORD
 
 echo "$USERNAME : $PASSWORD"
 
-githubRepos=(
-"obsidian-toaster-quickstarts/rest_vertx" \
-"obsidian-toaster-quickstarts/rest_springboot-tomcat"  \
-"obsidian-toaster-quickstarts/secured_rest-springboot"  \
-"obsidian-toaster-quickstarts/rest_wildfly-swarm" \
-"obsidian-toaster/platform"  \
-"obsidian-toaster/obsidian-addon"  \
-"obsidian-toaster/generator-backend"  \
-"obsidian-toaster/generator-frontend" \
-"obsidian-toaster/obsidian-toaster.github.io"
+githubPlatformRepos=(
+"platform" \
+"obsidian-addon"  \
+"generator-backend"  \
+"generator-frontend" \
+"obsidian-toaster.github.io"
 )
 
-for repo in "${githubRepos[@]}"
-do
-   if [ $TO_BE_DELETED = true ]; then
-      IFS='/' read -r -a array <<< "$repo"
-      echo "Forked repo to be deleted : ${array[1]}"
-      curl -u $USERNAME:$PASSWORD -X DELETE https://api.github.com/repos/$ORG/$repo
-   fi
-done
+JSONFILE=quickstarts.json
+START=0
+END=$(jq '. | length' ./quickstarts.json)
+
+if [ $TO_BE_DELETED = true ]; then
+  for repo in "${githubPlatformRepos[@]}"
+  do
+    echo "Platform Forked repo to be deleted : $repo"
+    curl -u $USERNAME:$PASSWORD -X DELETE https://api.github.com/repos/$ORG/$repo
+  done
+
+  # Delete Quickstarts as defined within the JSON file
+  for ((c=$START;c<=$END-1; c++ ))
+  do
+	  name=$(jq -r '.['$c'].name' ./$JSONFILE)
+    echo "QuickStarts Forked repo to be deleted : $name"
+    curl -u $USERNAME:$PASSWORD -X DELETE https://api.github.com/repos/$ORG/$repo
+  done
+fi
 
 sleep 5
-for repo in "${githubRepos[@]}"
+for repo in "${githubPlatformRepos[@]}"
 do
-   echo "Fork repo : $repo"
-   curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/$repo/forks?org=$ORG
+  echo "Platform repo to be git cloned : $repo"
+  curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/obsidian-toaster/$repo/forks?org=$ORG
+done
+
+for ((c=$START;c<=$END-1; c++ ))
+do
+  name=$(jq -r '.['$c'].name' ./$JSONFILE)
+  echo "QuickStart to be git cloned : $name"
+  curl -u $USERNAME:$PASSWORD -X POST https://api.github.com/repos/obsidian-toaster-quickstarts/$name/forks?org=$ORG
 done
