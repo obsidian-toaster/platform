@@ -29,7 +29,7 @@
   <name>Fabric8 :: Archetypes :: rest</name>
   <packaging>maven-archetype</packaging>
 
-  <description>Creates a new Obsidian :: Quickstart :: WildflySwarm- Rest</description>
+  <description>Creates a new WildFly Swarm - Rest</description>
 
   <build>
     <extensions>
