@@ -21,7 +21,7 @@ WORK_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 echo "Working in temp directory $WORK_DIR"
 cd $WORK_DIR
 
-function mvnReleasePerform {
+function mvnDeploy {
   REPO=$1
   REPODIR=$2
   git clone $REPO $REPODIR
@@ -52,7 +52,7 @@ cd ..
 #
 echo Press any key to release the Obsidian addon...
 read junk
-mvnReleasePerform https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
+mvnDeploy https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
 #
 # Step 3. : Release Backend (PROD is not required)
@@ -61,7 +61,7 @@ mvnReleasePerform https://github.com/obsidian-toaster/obsidian-addon.git obsidia
 #
 echo Press any key to release the Backend...
 read junk
-mvnReleasePerform https://github.com/obsidian-toaster/generator-backend.git generator-backend
+mvnDeploy https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
 #
 # Step 4. : Release Frontend (PROD is not required)
