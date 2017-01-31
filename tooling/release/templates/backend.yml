@@ -51,8 +51,10 @@ objects:
         env:
           - name: RELEASE
             value: VERSION
+          - name: MAVEN_SERVER
+            value: MAVENSERVER
           - name: MAVEN_MIRROR_URL
-            value: NEXUSSERVER
+            value: MAVENMIRRORURL
         incremental: true
     triggers:
     - github:
