@@ -95,7 +95,6 @@ npm install package-json-io
 
 git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
 cd build
-git checkout -b master
 rm -rf *
 cd -
 npm install
