@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token                         --> ./release-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx
-# User/password (CI Server)     --> ./release-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin
-# User/password (local vagrant) --> ./release-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
-#                                                          -v 1.0.0-SNAPSHOT
-#                                                          -b http://backend-generator-obsidian-dummy.172.28.128.4.xip.io/ \
-#                                                          -c http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/org/obsidiantoaster/archetypes-catalog/1.0.0.Dummy/archetypes-catalog-1.0.0.Dummy-archetype-catalog.xml \
-#                                                          -n http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases
+# Token                         --> ./deploy-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx
+# User/password (CI Server)     --> ./deploy-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin
+# User/password (local vagrant) --> ./deploy-openshift.sh  -a 172.28.128.4:8443 -u admin -p admin \
+#                                                          -v 1.0.0-SNAPSHOT \
+#                                                          -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
+#                                                          -c 'http://nexus-infra.172.28.128.4.xip.io/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
+#                                                          -n http://nexus-infra.172.28.128.4.xip.io
 
 while getopts a:t:u:p:v:b:c:n: option
 do
@@ -20,7 +20,7 @@ do
                 v) version=${OPTARG};;
                 b) backendurl=${OPTARG};;
                 c) archetypecatalog=${OPTARG};;
-                n) nexusserver=${OPTARG};;
+                n) mavenserver=${OPTARG};;
 
         esac
 done
@@ -37,15 +37,19 @@ fi
 
 REL=$version
 BRANCH="master"
+githuborg="obsidian-toaster"
+mavenmirrorurl=$mavenserver/content/repositories/snapshots
+
 echo "Version for the front : $REL"
 echo "Branch : $BRANCH"
 echo "Backend : $backendurl"
 echo "Github Org : $githuborg"
 echo "Catalog URL : $archetypecatalog"
-echo "Nexus Server : $nexusserver"
+echo "Maven Server : $mavenserver"
+echo "Maven Mirror URL : $mavenmirrorurl"
 
 # Change version
-sed -e "s/VERSION/$BRANCH/g" -e "s/ORG\//$githuborg\//g" -e "s|NEXUSSERVER|$nexusserver|g" -e "s|ARCHETYPECATALOG|$archetypecatalog|g" ./templates/backend.yml > ./templates/backend-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s/BRANCH/$BRANCH/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g"  -e "s|ARCHETYPECATALOG|$archetypecatalog|" ./templates/backend-deploy.yml > ./templates/backend-$REL.yml
 sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front.yml > ./templates/front-$REL.yml
 
 #
@@ -53,6 +57,7 @@ sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$github
 #
 suffix=${REL:6}
 suffix_lower=$(echo $suffix | tr '[:upper:]' '[:lower:]')
+echo "Project to be created : obsidian-$suffix_lower"
 
 echo Press any key to create OpenShift Project and deploy ...
 read junk
