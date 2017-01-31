@@ -58,8 +58,10 @@ do
     APP=http://$service-$project.$api.xip.io
 	fi
 
+	echo "==============================="
 	echo "Git repo Name : $name to be created within the namespace/project $project"
 	echo "App endpoint : $APP"
+	echo "==============================="
 
 	#
 	# Create OpenShift Namespace/project
