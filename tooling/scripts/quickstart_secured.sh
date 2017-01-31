@@ -89,9 +89,20 @@ do
   echo "==============================="
   echo "Build & deploy on openshift"
   echo "==============================="
-  mvn clean install -Popenshift
-  cd sso
-  mvn fabric8:deploy -Popenshift
+  case $name in
+    *"springboot"*|*"vertx"*)
+      mvn clean install -Popenshift
+      cd sso
+      mvn fabric8:deploy -Popenshift
+      ;;
+  *"swarm"*)
+     # As F8 can't deploy the yaml files packaged as a WAR, we will deploy the app first before sso
+     cd app
+     mvn fabric8:deploy -Popenshift
+     cd ../sso
+     mvn fabric8:deploy -Popenshift
+     ;;
+  esac
 
   #
   # Set ENV var for Vert.x, SpringBoot
