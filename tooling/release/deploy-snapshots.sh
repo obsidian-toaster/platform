@@ -32,21 +32,7 @@ function mvnDeploy {
   cd -
 }
 
-# Step 1. : Build, Deploy QuickStarts
-#
-echo Press any key to release the Quickstarts...
-read junk
-JSONFILE=$CURRENT/quickstarts.json
-START=0
-END=$(jq '. | length' $JSONFILE)
-for ((c=$START;c<=$END-1; c++ ))
-do
-  name=$(jq -r '.['$c'].name' $JSONFILE)
-  mvnDeploy https://github.com/$ORG/$name.git $name
-done
-
-#
-# Step 2. : Release Platform. Archetypes should be previously generated and pushed
+# Step 1. : Release Platform. Archetypes should be previously generated and pushed
 # Generate from the QuickStarts the Maven corresponding archetypes
 # Generate a Maven POM file containing the different archetypes to be used
 #
@@ -62,14 +48,14 @@ cd ..
 
 
 #
-# Step 3. : Release Obsidian Forge addon
+# Step 2. : Deploy Obsidian Forge addon
 #
 echo Press any key to deploy the Obsidian addon...
 read junk
 mvnDeploy https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
 #
-# Step 4. : Release Backend (PROD is not required)
+# Step 3. : Release Backend (PROD is not required)
 #
 # CATALOG_URL : List of the Archetypes that we will use to generate the code (zip file downloaded by the user)
 #
@@ -78,7 +64,7 @@ read junk
 mvnDeploy https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
 #
-# Step 5. : Release Frontend (PROD is not required)
+# Step 4. : Release Frontend (PROD is not required)
 # This is HTML/javascript project
 # It uses REST Api exposed by the backend to access the services
 # FORGE_URL : REST endpoint
