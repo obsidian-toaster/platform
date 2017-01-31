@@ -95,7 +95,7 @@ npm install package-json-io
 
 git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
 cd build
-git checkout -b "$DEV"
+git checkout -b master
 rm -rf *
 cd -
 npm install
@@ -103,11 +103,9 @@ npm run build:prod
 cp -r dist/* build
 cd build
 git add .
-git commit -a -m "Released $DEV of generator-frontend"
-git push origin "$DEV"
+git commit -a -m "Released snapshot of generator-frontend on master branche"
+git push origin master
 cd -
-#git tag "$DEV"
-#git push origin --tags
 
 # clean up
 echo "Cleaning up temp directory $WORK_DIR"
