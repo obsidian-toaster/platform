@@ -76,6 +76,7 @@ do
 	echo "Add role to user"
 	echo "==============================="
 	oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
+	oc policy add-role-to-group view system:serviceaccount -n $(oc project -q)
 
   #
   # Git clone the Quickstart
