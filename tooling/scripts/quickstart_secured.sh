@@ -8,7 +8,7 @@
 # Example :
 # OpenShift Online/Dedicated using Token --> ./quickstart_secured.sh -a api.engint.openshift.com -d e8ca -t xxxxxxxxxxxx
 # Vagrant/Minishift                      --> ./quickstart_secured.sh -a HOST_IP_ADDRESS -u admin -p admin
-# CI/CD OpenShift Server                 --> ./quickstart_secured.sh -a 172.16.50.40 -u admin -p admin (only available from the Red Hat VPN & access is required
+# CI/CD OpenShift Server                 --> ./quickstart_secured.sh -a 172.16.50.40 -u admin -p admin (only available from the Red Hat VPN & access is required)
 
 while getopts a:d:t:u:p: option
 do
@@ -97,15 +97,28 @@ do
   # Set ENV var for Vert.x, SpringBoot
   # TODO : should be improved & externalized
   #
-  if [[ $name == *"springboot"* ]]; then
-    oc env dc/secured-springboot-rest SSO_URL=$SSO/auth
-  else
-    oc env dc/secured-vertx-rest SSO_URL=$SSO
-    oc env dc/secured-vertx-rest REALM=master
-    oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
-    oc env dc/secured-vertx-rest CLIENT_ID=demoapp
-    oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
-  fi
+  case $name in
+    *"springboot"*)
+        echo "Set env var for Spring Boot"
+        oc env dc/secured-springboot-rest SSO_URL=$SSO/auth
+        ;;
+    *"vertx"*)
+        echo "Set env var for Vert.x"
+        oc env dc/secured-vertx-rest SSO_URL=$SSO
+        oc env dc/secured-vertx-rest REALM=master
+        oc env dc/secured-vertx-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
+        oc env dc/secured-vertx-rest CLIENT_ID=demoapp
+        oc env dc/secured-vertx-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
+        ;;
+    *"swarm"*)
+        echo "Set env var for WildFly Swarm"
+        oc env dc/secured-swarm-rest SSO_URL=$SSO
+        oc env dc/secured-swarm-rest REALM=master
+        oc env dc/secured-swarm-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
+        oc env dc/secured-swarm-rest CLIENT_ID=demoapp
+        oc env dc/secured-swarm-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
+        ;;
+  esac
 
   #
   # Wait till the SSO server replies
