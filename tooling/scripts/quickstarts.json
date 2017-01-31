@@ -16,6 +16,10 @@
     "service": "springboot-rest-configmap"
   },
   {
+    "name": "rest_configmap_vertx",
+    "service": "vertx-rest-configmap"
+  },
+  {
     "name": "rest_configmap_swarm",
     "service": "wildfly-swarm-configmap"
   }
