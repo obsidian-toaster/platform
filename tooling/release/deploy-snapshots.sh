@@ -26,7 +26,7 @@ function mvnDeploy {
   REPODIR=$2
   git clone $REPO $REPODIR
   cd $REPODIR
-  mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO -DskipStaging=true
+  mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.snapshots.repo.url=http://$MAVEN_REPO -DskipStaging=true
   cd -
 }
 
@@ -42,8 +42,7 @@ cd platform/archetype-builder
 mvn clean compile exec:java -Dgithub.organisation=$ORG
 
 cd ..
-mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO -DskipStaging=true
-
+mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.snapshots.repo.url=http://$MAVEN_REPO -DskipStaging=true
 cd ..
 
 
