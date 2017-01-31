@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #
-# Script responsible to build & publish the snapshots
+# Script responsible to build & publish the snapshots of the Obsidian Project
+#
 # Example :
 # ./deploy-snapshots.sh 1.0.0-SNAPSHOT nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots
 #
