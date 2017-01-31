@@ -8,7 +8,7 @@
 
 : ${1:?"Must specify snapshot version. Ex: 1.0.0-SNAPSHOT"}
 : ${2:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots"}
-: $(3:?"Must specify the Maven Server Id. Ex: openshift-nexus"}
+: ${3:?"Must specify the Maven Server Id. Ex: openshift-nexus"}
 
 DEV=$1
 ORG="obsidian-toaster-quickstarts"
@@ -29,8 +29,6 @@ function mvnReleasePerform {
   mvn clean deploy -DserverId=$MAVEN_REPO_ID -Djboss.releases.repo.url=http://$MAVEN_REPO -DskipStaging=true
   cd -
 }
-
-
 
 #
 # Step 1. : Release Platform. Archetypes should be previously generated and pushed
