@@ -36,12 +36,10 @@ else
 fi
 
 REL=$version
-BRANCH="master"
 githuborg="obsidian-toaster"
 mavenmirrorurl=$mavenserver/content/repositories/snapshots
 
 echo "Version for the front : $REL"
-echo "Branch : $BRANCH"
 echo "Backend : $backendurl"
 echo "Github Org : $githuborg"
 echo "Catalog URL : $archetypecatalog"
@@ -49,8 +47,8 @@ echo "Maven Server : $mavenserver"
 echo "Maven Mirror URL : $mavenmirrorurl"
 
 # Change version
-sed -e "s/VERSION/$REL/g" -e "s/BRANCH/$BRANCH/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g"  -e "s|ARCHETYPECATALOG|$archetypecatalog|" ./templates/backend-deploy.yml > ./templates/backend-$REL.yml
-sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front.yml > ./templates/front-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g"  -e "s|ARCHETYPECATALOG|$archetypecatalog|" ./templates/backend-deploy.yml > ./templates/backend-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front-deploy.yml > ./templates/front-$REL.yml
 
 #
 # Remove first 6 chars otherwise OpenShift will complaints --> metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')
