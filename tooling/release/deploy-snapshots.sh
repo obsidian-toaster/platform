@@ -35,7 +35,7 @@ function mvnDeploy {
 # Generate from the QuickStarts the Maven corresponding archetypes
 # Generate a Maven POM file containing the different archetypes to be used
 #
-echo Press any key to release the Platform...
+echo Press any key to deploy the Platform...
 read junk
 git clone https://github.com/obsidian-toaster/platform platform
 cd platform/archetype-builder
@@ -50,16 +50,16 @@ cd ..
 #
 # Step 2. : Release Obsidian Forge addon
 #
-echo Press any key to release the Obsidian addon...
+echo Press any key to deploy the Obsidian addon...
 read junk
 mvnDeploy https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
 #
 # Step 3. : Release Backend (PROD is not required)
 #
-# CATALOG_URL : List of the Archetypes that we will use to genetate the code (zip file downloaded by the user)
+# CATALOG_URL : List of the Archetypes that we will use to generate the code (zip file downloaded by the user)
 #
-echo Press any key to release the Backend...
+echo Press any key to deploy the Backend...
 read junk
 mvnDeploy https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
@@ -69,7 +69,7 @@ mvnDeploy https://github.com/obsidian-toaster/generator-backend.git generator-ba
 # It uses REST Api exposed by the backend to access the services
 # FORGE_URL : REST endpoint
 #
-echo Press any key to release the Frontend...
+echo Press any key to deploy the Frontend...
 read junk
 git clone https://github.com/obsidian-toaster/generator-frontend.git
 cd generator-frontend
@@ -89,7 +89,7 @@ git add .
 git commit -a -m "Released $DEV of generator-frontend"
 git push origin "$DEV"
 cd -
-#git tag "$REL"
+#git tag "$DEV"
 #git push origin --tags
 
 # clean up
