@@ -112,11 +112,11 @@ do
         ;;
     *"swarm"*)
         echo "Set env var for WildFly Swarm"
-        oc env dc/secured-swarm-rest SSO_URL=$SSO
-        oc env dc/secured-swarm-rest REALM=master
-        oc env dc/secured-swarm-rest REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
-        oc env dc/secured-swarm-rest CLIENT_ID=demoapp
-        oc env dc/secured-swarm-rest SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
+        oc env dc/secured-swarm-rest SSO_AUTH_SERVER_URL=$SSO
+        oc env dc/secured-swarm-rest SSO_REALM=master
+        oc env dc/secured-swarm-rest SSO_REALM_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjoVg6150oqh7csrGMsttu7r+s4YBkYDkKrg2v6Gd5NhJw9NKnFlojPnLPoDSlxpNpN2sWegexcsFdDdmtuMzTxQ3hnkFWHDDXsyfj2fKQwDjgcxg95nRaaI+/OGhWbEsGdt/A5jxg2f4Vp4VLTwCj7Ujq4hVx67vO/zbJ2k0cD2uz5T731tvqweC7H/Os+G8B1+PpH5e1jGkDPZohe4ERCEdwNcC9IAt1tPr/LKfh+84hOkE3i9mGG/LGUiJShtw7ia2jXTMb1JErlJsLJOjh+guz6OztQOICN//+rRA4AACB//+IeJ8mr/jN/dww+RfYyeAd/SId56ae8H4SE4HQQIDAQAB
+        oc env dc/secured-swarm-rest SSO_CLIENT_ID=demoapp
+        oc env dc/secured-swarm-rest SSO_SECRET=cb7a8528-ad53-4b2e-afb8-72e9795c27c8
         ;;
   esac
 
@@ -137,7 +137,7 @@ do
   # Issue Request against the App using the Token issued by the Red Hat SSO Server
   #
   echo "==============================="
-  echo " Call the Secured Service : $APP/greting" using token issued by the SSO Server
+  echo " Call the Secured Service : $APP/greeting" using token issued by the SSO Server
   echo "==============================="
   cd $CURRENT
   echo "Call Secured endpoint using the Token issued by the Red Hat SSO Server"
