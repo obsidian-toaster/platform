@@ -6,5 +6,9 @@
   {
     "name": "secured_rest-vertx",
     "service": "secured-vertx-rest"
+  },
+  {
+    "name": "secured_rest_swarm",
+    "service": "secured-swarm-rest"
   }
 ]
