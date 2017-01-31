@@ -4,20 +4,17 @@
 # Script responsible to build & publish the snapshots of the Obsidian Project
 #
 # Example :
-# ./deploy-snapshots.sh 1.0.0-SNAPSHOT nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots
+# ./deploy-snapshots.sh nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots
 #
 #
-# For local deployment, verify thatyou have added within the settings.xml file a server id for
+# For local deployment, verify that you have added within your maven settings.xml file a server id for
 # <id>jboss-releases-repository</id> and <id>jboss-snapshots-repository</id> containing the username/password
 #
 
-: ${1:?"Must specify snapshot version. Ex: 1.0.0-SNAPSHOT"}
-: ${2:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots"}
+: ${1:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots"}
 
-DEV=$1
 ORG="obsidian-toaster-quickstarts"
-MAVEN_REPO=$2
-MAVEN_REPO_ID=$3
+MAVEN_REPO=$1
 
 CURRENT=$(pwd)
 
