@@ -7,7 +7,7 @@
 #                                                          -b http://backend-generator-obsidian-dummy.172.28.128.4.xip.io/ \
 #                                                          -o obsidian-tester \
 #                                                          -c http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases/org/obsidiantoaster/archetypes-catalog/1.0.0.Dummy/archetypes-catalog-1.0.0.Dummy-archetype-catalog.xml \
-#                                                          -n http://nexus-infra.172.28.128.4.xip.io/content/repositories/releases
+#                                                          -n http://nexus-infra.172.28.128.4.xip.io
 
 while getopts a:t:u:p:v:b:o:c:n: option
 do
@@ -21,7 +21,7 @@ do
                 b) backendurl=${OPTARG};;
                 o) githuborg=${OPTARG};;
                 c) archetypecatalog=${OPTARG};;
-                n) nexusserver=${OPTARG};;
+                n) mavenserver=${OPTARG};;
 
         esac
 done
@@ -37,14 +37,16 @@ else
 fi
 
 REL=$version
+mavenmirrorurl=$mavensever/content/repositories/releases
 echo "Version : $REL"
 echo "Backend : $backendurl"
 echo "Github Org : $githuborg"
 echo "Catalog URL : $archetypecatalog"
-echo "Nexus Server : $nexusserver"
+echo "Maven Server : $mavenserver"
+echo "Maven Mirror URL : $mavenmirrorurl"
 
 # Change version
-sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|NEXUSSERVER|$nexusserver|g" -e "s|ARCHETYPECATALOG|$archetypecatalog|g" ./templates/backend.yml > ./templates/backend-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g" -e "s|ARCHETYPECATALOG|$archetypecatalog|g" ./templates/backend.yml > ./templates/backend-$REL.yml
 sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front.yml > ./templates/front-$REL.yml
 
 #
