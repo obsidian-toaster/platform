@@ -3,7 +3,7 @@
 #
 # Script responsible to build & publish the snapshots
 # Example :
-# ./release-snapshots.sh 1.0.0-SNAPSHOT nexus-infra.172.28.128.4.xip.io/content/repositories/releases openshift-nexus
+# ./deploy-snapshots.sh 1.0.0-SNAPSHOT nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots openshift-nexus
 #
 
 : ${1:?"Must specify snapshot version. Ex: 1.0.0-SNAPSHOT"}
