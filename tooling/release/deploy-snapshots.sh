@@ -5,16 +5,16 @@
 #
 # Example :
 # ./deploy-snapshots.sh nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots
-#
+# or simply
+# ./deploy-snapshots.sh
+# to deploy on jboss nexus server
 #
 # For local deployment, verify that you have added within your maven settings.xml file a server id for
 # <id>jboss-releases-repository</id> and <id>jboss-snapshots-repository</id> containing the username/password
 #
 
-: ${1:?"Must specify Alternate Maven Repo to publish. Ex: nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots"}
-
 ORG="obsidian-toaster-quickstarts"
-MAVEN_REPO=$1
+MAVEN_REPO=${1:-http://repository.jboss.org/nexus/content/repositories/snapshots}
 
 CURRENT=$(pwd)
 
