@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 
 # Example :
-# Openshift Online (Token)      --> ./deploy-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx
-# CI Server (User/password)     --> ./deploy-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin
-# Local vagrant                 --> ./deploy-openshift.sh  -a 172.28.128.4:8443 -u admin -p admin \
-#                                                          -v 1.0.0-SNAPSHOT \
-#                                                          -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
-#                                                          -c 'http://nexus-infra.172.28.128.4.xip.io/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
-#                                                          -n http://nexus-infra.172.28.128.4.xip.io
+# Openshift Online (Token)  --> ./deploy-snapshots-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx
+# CI Server (User/password) --> ./deploy-snapshots-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin
+# Local vagrant             --> ./deploy-snapshots-openshift.sh \
+#           -a 172.28.128.4:8443 -u admin -p admin \
+#           -v 1.0.0-SNAPSHOT \
+#           -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
+#           -c 'http://nexus-infra.172.28.128.4.xip.io/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
+#           -n http://nexus-infra.172.28.128.4.xip.io
 # Using JBoss Nexus Server
-# ./deploy-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
-#                       -v 1.0.0-SNAPSHOT \
-#                       -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
-#                       -c 'http://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
-#                       -n http://repository.jboss.org/nexus
+# ./deploy-snapshots-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
+#                                 -v 1.0.0-SNAPSHOT \
+#                                 -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
+#                                 -c 'http://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
+#                                 -n http://repository.jboss.org/nexus
 #
 
 while getopts a:t:u:p:v:b:c:n: option
