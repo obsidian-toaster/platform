@@ -36,8 +36,7 @@ function mvnDeploy {
 # Generate from the QuickStarts the Maven corresponding archetypes
 # Generate a Maven POM file containing the different archetypes to be used
 #
-echo Press any key to deploy the Platform...
-read junk
+echo Deploying Platform...
 git clone https://github.com/obsidian-toaster/platform platform
 cd platform/archetype-builder
 mvn clean compile exec:java -Dgithub.organisation=$ORG
@@ -50,8 +49,7 @@ cd ..
 #
 # Step 2. : Deploy Obsidian Forge addon
 #
-echo Press any key to deploy the Obsidian addon...
-read junk
+echo Deploying Obsidian addon...
 mvnDeploy https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
 #
@@ -59,8 +57,7 @@ mvnDeploy https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 #
 # CATALOG_URL : List of the Archetypes that we will use to generate the code (zip file downloaded by the user)
 #
-echo Press any key to deploy the Backend...
-read junk
+echo Deploying Backend...
 mvnDeploy https://github.com/obsidian-toaster/generator-backend.git generator-backend
 
 #
@@ -69,8 +66,7 @@ mvnDeploy https://github.com/obsidian-toaster/generator-backend.git generator-ba
 # It uses REST Api exposed by the backend to access the services
 # FORGE_URL : REST endpoint
 #
-echo Press any key to deploy the Frontend...
-read junk
+echo Deploying Frontend...
 git clone https://github.com/obsidian-toaster/generator-frontend.git
 cd generator-frontend
 npm install package-json-io
