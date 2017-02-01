@@ -84,7 +84,7 @@ npm run build:prod
 cp -r dist/* build
 cd build
 git add .
-git commit -a -m "Released snapshot of generator-frontend on master branche"
+git commit -a -m "Released snapshot of generator-frontend on master branch"
 git push origin master
 cd -
 
