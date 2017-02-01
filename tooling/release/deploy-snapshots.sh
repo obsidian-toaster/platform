@@ -1,15 +1,15 @@
 #!/bin/bash
 
 #
-# Script responsible to build & publish the snapshots of the Obsidian Project
+# Script responsible to build & publish the snapshots of the Obsidian Project on JBoss Nexus Server or any Nexus Server
 #
-# Example :
+# Example to deploy on a local Nexus Server
 # ./deploy-snapshots.sh nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots
-# or simply
-# ./deploy-snapshots.sh
-# to deploy on jboss nexus server
 #
-# For local deployment, verify that you have added within your maven settings.xml file a server id for
+# To deploy on JBoss nexus server
+# ./deploy-snapshots.sh
+#
+# Remark : For local deployment, verify that you have added within your maven settings.xml file a server id for
 # <id>jboss-releases-repository</id> and <id>jboss-snapshots-repository</id> containing the username/password
 #
 
@@ -55,7 +55,7 @@ read junk
 mvnDeploy https://github.com/obsidian-toaster/obsidian-addon.git obsidian-addon
 
 #
-# Step 3. : Release Backend (PROD is not required)
+# Step 3. : Deploy Backend
 #
 # CATALOG_URL : List of the Archetypes that we will use to generate the code (zip file downloaded by the user)
 #
@@ -74,7 +74,6 @@ read junk
 git clone https://github.com/obsidian-toaster/generator-frontend.git
 cd generator-frontend
 npm install package-json-io
-#node -e "var pkg = require('package-json-io'); pkg.read(function(err, data) { data.version = '$REL'.replace(/(?:[^\.]*\.){3}/, function(x){return x.substring(0, x.length - 1) + '-'}); pkg.update(data, function(){}); })"
 
 git clone https://github.com/obsidian-toaster/obsidian-toaster.github.io.git build
 cd build
@@ -89,6 +88,8 @@ git commit -a -m "Released snapshot of generator-frontend on master branche"
 git push origin master
 cd -
 
-# clean up
+#
+# Step 5. clean up
+#
 echo "Cleaning up temp directory $WORK_DIR"
 rm -rf $WORK_DIR
