@@ -14,7 +14,7 @@
 #
 
 ORG="obsidian-toaster-quickstarts"
-MAVEN_REPO=${1:-http://repository.jboss.org/nexus/content/repositories/snapshots}
+MAVEN_REPO=${1:-repository.jboss.org/nexus/content/repositories/snapshots}
 
 CURRENT=$(pwd)
 
