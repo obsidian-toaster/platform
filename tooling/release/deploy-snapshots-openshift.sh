@@ -44,7 +44,9 @@ done
 
 current=$PWD
 
-echo "Deploy Front & Backend to OpenShift"
+echo "============================="
+echo "Log on to the OpenShift server"
+echo "============================="
 if [ "$token" != "" ]; then
    oc login $api --token=$token
 else
@@ -56,12 +58,14 @@ REL=$version
 githuborg="obsidian-toaster"
 mavenmirrorurl=$mavenserver/content/repositories/snapshots
 
+echo "============================="
 echo "Version for the front : $REL"
 echo "Backend : $backendurl"
 echo "Github Org : $githuborg"
 echo "Catalog URL : $archetypecatalog"
 echo "Maven Server : $mavenserver"
 echo "Maven Mirror URL : $mavenmirrorurl"
+echo "============================="
 
 # Change version
 sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g"  -e "s|ARCHETYPECATALOG|$archetypecatalog|" ./templates/backend-deploy.yml > ./templates/backend-$REL.yml
@@ -74,10 +78,12 @@ suffix=${REL:6}
 suffix_lower=$(echo $suffix | tr '[:upper:]' '[:lower:]')
 echo "Project to be created : obsidian-$suffix_lower"
 
-echo Press any key to create OpenShift Project and deploy ...
-read junk
 
 # Create project
+echo "============================="
+echo "Create Openshift namespace : obsidian-$suffix_lower"
+echo "============================="
+
 oc new-project obsidian-$suffix_lower
 sleep 5
 
