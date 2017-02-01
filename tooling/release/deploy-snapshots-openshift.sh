@@ -82,13 +82,17 @@ oc new-project obsidian-$suffix_lower
 sleep 5
 
 # Deploy the backend
-echo "Deploy the backend ..."
+echo "============================="
+echo "Deploy the backend template"
+echo "============================="
 oc create -f ./templates/backend-$REL.yml
 oc process backend-generator-s2i | oc create -f -
 oc start-build backend-generator-s2i
 
 # Deploy the Front
+echo "============================="
 echo "Deploy the frontend ..."
+echo "============================="
 oc create -f templates/front-$REL.yml
 oc process front-generator-s2i | oc create -f -
 oc start-build front-generator-s2i
