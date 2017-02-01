@@ -13,7 +13,7 @@
 # ./deploy-snapshots-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
 #                                 -v 1.0.0-SNAPSHOT \
 #                                 -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
-#                                 -c 'http://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
+#                                 -c 'http://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml\&c=archetype-catalog' \
 #                                 -n http://repository.jboss.org/nexus
 #
 
