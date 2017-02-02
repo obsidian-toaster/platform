@@ -40,6 +40,7 @@
     <!-- Secured with SSO -->
     <module>secured_rest-springboot-archetype</module>
     <module>secured_rest-vertx-archetype</module>
+    <module>secured_rest_swarm-archetype</module>
 
     <!-- Config Map -->
     <module>rest_configmap_springboot-tomcat-archetype</module>
