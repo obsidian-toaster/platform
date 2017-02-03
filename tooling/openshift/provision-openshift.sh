@@ -17,11 +17,16 @@ echo "Setup variables"
 echo "===================================================="
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 OPENSHIFT=/opt/openshift-origin-v1.4
-OPENSHIFT_VERSION=v1.4.0-rc1
 
-OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
-OC_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
-OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+# OPENSHIFT_VERSION=v1.4.0-rc1
+# OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
+# OC_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+# OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
+
+OPENSHIFT_VERSION=v1.4.1
+OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.1
+OC_URL=https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz
+OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-server-v1.4.1-3f9807a-linux-64bit.tar.gz
 
 TEMP_DIR=/home/tmp
 REGISTRY_DIR=/opt/openshift-registry
