@@ -27,7 +27,8 @@ GITHUB_ORG=http://github.com/obsidian-toaster-quickstarts
 
 echo "Log on to OpenShift Machine"
 if [ "$token" != "" ]; then
-   oc login $api:8443 --token=$token
+   # echo "oc login https://$api --token=$token"
+   oc login https://$api --token=$token
 else
    echo "oc login $api -u $user -p $password"
    oc login $api:8443 -u $user -p $password
