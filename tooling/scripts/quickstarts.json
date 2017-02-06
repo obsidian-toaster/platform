@@ -13,7 +13,7 @@
   },
   {
     "name": "rest_configmap_springboot-tomcat",
-    "service": "springboot-rest-configmap"
+    "service": "sb-rest-configmap"
   },
   {
     "name": "rest_configmap_vertx",
