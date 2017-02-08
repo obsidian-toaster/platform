@@ -24,7 +24,7 @@
 #                                -b http://backend-generator-obsidian-snapshot.e8ca.engint.openshiftapps.com/ \
 #                                -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&\c=archetype-catalog' \
 #                                -n http://repository.jboss.org/nexus
-#
+# Remark : If the namespace obsidian-snapshot already exists, delete the objects using this "oc delete all --all" command.
 
 while getopts a:t:u:p:v:b:c:n: option
 do
