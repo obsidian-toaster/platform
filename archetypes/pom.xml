@@ -48,6 +48,6 @@
     <module>rest_configmap_swarm-archetype</module>
 
     <!-- JDBC -->
-    <module>rest_jdbc_swarm-archetype</module>
+    <!--<module>rest_jdbc_swarm-archetype</module>-->
 </modules>
 </project>
