@@ -1,18 +1,10 @@
 #!/usr/bin/env bash
 
-# Example :
-# Openshift Online (Token)  --> ./deploy-snapshots-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx
-# CI Server (User/password) --> ./deploy-snapshots-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin
-# Local vagrant             --> ./deploy-snapshots-openshift.sh \
-#           -a 172.28.128.4:8443 -u admin -p admin \
-#           -v 1.0.0-SNAPSHOT \
-#           -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
-#           -c 'http://nexus-infra.172.28.128.4.xip.io/service/local/artifact/maven/redirect?r=public\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml&c=archetype-catalog' \
-#           -n http://nexus-infra.172.28.128.4.xip.io
+# Example
 #
 # Using JBoss Nexus Server
 # 1) Local deployment
-# ./deploy-snapshots-openshift.sh -a 172.28.128.4:8443 -u admin -p admin \
+# ./deploy-snapshots-openshift.sh -a 172.28.128.4 -u admin -p admin \
 #                                 -v 1.0.0-SNAPSHOT \
 #                                 -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
 #                                 -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml\&c=archetype-catalog' \
@@ -50,8 +42,8 @@ echo "============================="
 if [ "$token" != "" ]; then
    oc login $api --token=$token
 else
-   echo "oc login $api -u $user -p $password"
-   oc login $api -u $user -p $password
+   echo "oc login https://$api:8443 -u $user -p $password"
+   oc login https://$api:8443 -u $user -p $password
 fi
 
 REL=$version
@@ -72,12 +64,11 @@ sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavense
 sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front-deploy.yml > ./templates/front-$REL.yml
 
 #
-# Remove first 6 chars otherwise OpenShift will complaints --> metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')
+# Remove first 6 chars otherwise OpenShift will complaint --> metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')
 #
 suffix=${REL:6}
 suffix_lower=$(echo $suffix | tr '[:upper:]' '[:lower:]')
 echo "Project to be created : obsidian-$suffix_lower"
-
 
 # Create project
 echo "============================="
