@@ -81,9 +81,44 @@ Next, Configure your maven settings.xml file to have a profile & server definiti
 
 ## Snapshot release
 
-### Build & publish maven snapshot artefacts
+### Build & publish maven snapshot artifacts
 
+In order to test latest code of Obsidian Quickstarts, Generator, Forge Addon, ... snapshots maven artifacts could be generated and published on a Nexus Maven Server using the following script `deploy-snapshots.sh`.
+It accepts a parameter which is the address of the Nexus server where you target to deploy/publish the artifacts
 
+Usage:
+
+1) Example to deploy on a local Nexus Server
+
+```./deploy-snapshots.sh nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots```
+
+2) When you omit the parameter, then the artefacts will be published on the JBoss nexus server
+
+```./deploy-snapshots.sh```
+
+Remark : For local deployment, verify that you have added within your maven `settings.xml` file a server id for
+ `<id>jboss-releases-repository</id>` and `<id>jboss-snapshots-repository</id>` containing the username/password
+ 
+The script will execute the following tasks :
+ 
+A) Step 1
+
+- Generate from the QuickStarts the Maven corresponding archetypes
+- Generate a Maven XML file containing the maven archetypes generated
+- Publish the maven archetypes and XML Archetypes Catalog
+
+B) Step 2
+
+- Build and publish Obsidian Forge addon
+
+C) Step 3
+
+- Build and publish the Obsidian Backend
+
+D) Step 4
+
+- Using npm, build the obsidian front project
+- Generate the static content and publish it on `https://github.com/obsidian-toaster/obsidian-toaster.github.io` within the master branch
 
 ### Deploy on OpenShift
 
