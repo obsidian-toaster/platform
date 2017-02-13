@@ -89,12 +89,14 @@ It accepts a parameter which is the address of the Nexus server where you target
 Usage:
 
 1) Example to deploy on a local Nexus Server
+```
+./deploy-snapshots.sh nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots
+```
 
-```./deploy-snapshots.sh nexus-infra.172.28.128.4.xip.io/content/repositories/snapshots```
-
-2) When you omit the parameter, then the artefacts will be published on the JBoss nexus server
-
-```./deploy-snapshots.sh```
+2) When you omit the parameter, then the artifacts will be published on the JBoss nexus server
+```
+./deploy-snapshots.sh
+```
 
 Remark : For local deployment, verify that you have added within your maven `settings.xml` file a server id for
  `<id>jboss-releases-repository</id>` and `<id>jboss-snapshots-repository</id>` containing the username/password
@@ -132,10 +134,10 @@ During the execution of the script, different variables will be replaced within 
 
 **Front**
 
-- The VERSION is replaced with the value passed as parameter -v and corresponds to the snapshot version `e.g. 1.0.0-SNAPSHOT`. This version will be used to name the yml file, to tag the label of the pod
-- The GENERATOR_URL is replaced by the value passed as parameter with -b and will be used to define an ENV variable `backend_url` used during S2I build to specify the address of the backend used by the front.
-  This ENV var will be used to replace the value defined within file `settings.json` according to the assemble file `front-generator` [project](https://github.com/obsidian-toaster/obsidian-toaster.github.io/blob/master/.s2i/bin/assemble#L8). 
-- The ORG variable (which is not defined as bash parameter) could be changed to change the location of the github organisation containg the projects to be processed
+- The `VERSION` is replaced with the value passed as parameter -v and corresponds to the snapshot version `e.g. 1.0.0-SNAPSHOT`. This version will be used to name the yml file, to tag the label of the pod
+- The `GENERATOR_URL` is replaced by the value passed as parameter with -b and will be used to define an ENV variable `backend_url` used during S2I build to specify the address of the backend used by the front.
+  This `ENV` var will be used to replace the value defined within file `settings.json` according to the assemble file `front-generator` [project](https://github.com/obsidian-toaster/obsidian-toaster.github.io/blob/master/.s2i/bin/assemble#L8). 
+- The `ORG` variable (which is not defined as bash parameter) could be changed to change the location of the github organisation containg the projects to be processed
 
 **Backend**
 
