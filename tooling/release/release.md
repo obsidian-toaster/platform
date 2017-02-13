@@ -167,7 +167,7 @@ From this template, the different objects will be created as BuildConfig, Servic
 Alternatively, we can also deploy the project using an Openshift Online instance where the username/password is replaced by the user token.
 
 ```
-./deploy-snapshots-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxx \
+./deploy-snapshots-openshift.sh -a api.engint.openshift.com -t xxxxxxxxx \
                                -v 1.0.0-SNAPSHOT \
                                -b http://backend-generator-obsidian-snapshot.e8ca.engint.openshiftapps.com/ \
                                -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml\&c=archetype-catalog' \
@@ -404,85 +404,5 @@ The `next development version` corresponds to the version number to be changed w
 
 ```
 ./release-dummy.sh 1.0.0.Alpha2 1.0.1-SNAPSHOT http://generator-backend.myhost.io/forge
-```
-
-# Front Generator
-
-[TO BE REVIEWED]
-
-## OpenShift
-
-To deploy this project on OpenShift, verify that an OpenShift instance is available or setup one locally
-using minishift
-
-```
-minishift delete
-minishift start --deploy-router=true --openshift-version=v1.3.1
-oc login --username=admin --password=admin
-eval $(minishift docker-env)
-```
-
-To create our Obsidian Front UI OpenShift application, we will deploy an OpenShift template which
-contains the required objects; service, route, BuildConfig & Deployment config. The docker image
-used is registry.access.redhat.com/rhscl/nginx-18-rhel7 which exposes a HTTP Server.
-
-To install the template and create a new application, use these commands
-
-```
-oc new-project front
-oc create -f templates/template_s2i.yml
-oc process front-generator-s2i | oc create -f -
-oc start-build front-generator
-```
-
-Remark: In order to change the address of the backend that you will use on OpenShift, change the `BACKEND_URL` value defined within the file src/assets/settings.json and commit the change.
-
-You can now access the backend using its route
-
-```
-curl http://$(oc get routes | grep front-generator | awk '{print $2}')/index.html
-```
-
-Remarks:
-
-* For every new commit about this project `front-generator` that you want to test after the initial installation of the template, launching a new build
-  on OpenShift is just required `oc start-build front-generator`
-
-* If for any reasons, you would like to redeploy a new template, then you should first delete the template and the corresponding objects
-
-```
-oc delete is/front-generator
-oc delete bc/front-generator
-oc delete dc/front-generator
-oc delete svc/front-generator
-oc delete route/front-generator
-oc delete template/front-generator
-oc create -f templates/template_s2i.yml
-oc process front-generator-s2i | oc create -f -
-oc start-build front-generator
-```
-
-# Backend
-
-To deploy the backend generator on OpenShift, run this command within the terminal
-
-```
-oc new-project backend
-oc create -f templates/backend-template.yml
-oc process backend-generator-s2i | oc create -f -
-oc start-build generator-backend-s2i
-```
-
-Redeploy the application with:
-
-```
-mvn fabric8:deploy -Popenshift
-```
-
-You can verify now that the service replies
-
-```
-http $(minishift service generator-backend --url=true)/forge/version
-curl $(minishift service generator-backend --url=true)/forge/version
 ```
 
