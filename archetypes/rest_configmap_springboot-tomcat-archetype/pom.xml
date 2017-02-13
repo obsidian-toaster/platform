@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.obsidiantoaster.quickstarts</groupId>
     <artifactId>archetypes</artifactId>
-    <version>1.0.0.Alpha2</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>rest_configmap_springboot-tomcat-archetype</artifactId>
