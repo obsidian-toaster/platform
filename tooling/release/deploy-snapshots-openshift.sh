@@ -64,7 +64,7 @@ sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavense
 sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front-deploy.yml > ./templates/front-$REL.yml
 
 #
-# Remove first 6 chars otherwise OpenShift will complaint --> metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')
+# Remove first 6 chars otherwise OpenShift will complain --> metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')
 #
 suffix=${REL:6}
 suffix_lower=$(echo $suffix | tr '[:upper:]' '[:lower:]')
