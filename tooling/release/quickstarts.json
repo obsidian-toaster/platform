@@ -7,5 +7,5 @@
   {"name": "rest_configmap_swarm"},
   {"name": "secured_rest-springboot"},
   {"name": "secured_rest-vertx"},
-  {"name": "secured_rest-swarm"}
+  {"name": "secured_rest_swarm"}
 ]
