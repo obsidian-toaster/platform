@@ -2,7 +2,6 @@
 
 # Example
 #
-# Using JBoss Nexus Server
 # 1) Local deployment
 # ./deploy-snapshots-openshift.sh -a 172.28.128.4 -u admin -p admin \
 #                                 -v 1.0.0-SNAPSHOT \
@@ -60,8 +59,8 @@ echo "Maven Mirror URL : $mavenmirrorurl"
 echo "============================="
 
 # Change version
-sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g"  -e "s|ARCHETYPECATALOG|$archetypecatalog|" ./templates/backend-deploy.yml > ./templates/backend-$REL.yml
-sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front-deploy.yml > ./templates/front-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g"  -e "s|ARCHETYPECATALOG|$archetypecatalog|" ./templates/backend-snapshot.yml > ./templates/backend-$REL.yml
+sed -e "s/VERSION/$REL/g" -e "s|GENERATOR_URL|$backendurl|g" -e "s/ORG\//$githuborg\//g" ./templates/front-snapshot.yml > ./templates/front-$REL.yml
 
 #
 # Remove first 6 chars otherwise OpenShift will complain --> metadata.name: must match the regex [a-z0-9]([-a-z0-9]*[a-z0-9])? (e.g. 'my-name' or '123-abc')

@@ -79,6 +79,67 @@ Next, Configure your maven settings.xml file to have a profile & server definiti
 </profile>
 ```
 
+## Snapshot release
+
+### Build & publish maven snapshot artefacts
+
+
+
+### Deploy on OpenShift
+
+The `deploy-snapshots-openshift.sh` script simplifies the deployment of the Front/Backend application on OpenShift as it will use the front-snapshot.yml and backend-snapshot.yml template files
+to create the OpenShift Templates to be used in order to deploy the Front & Backend Pod in an OpenShift project/namespace.
+
+- The Front S2I build process will git clone the repo `https://github.com/obsidian-toaster/obsidian-toaster.github.io`, replace the `backend_url` value within the `settings.json` file and create a pod from the S2I Build image - rhscl/nginx-18-rhel7
+- The Backend S2I build process will use as binary file the `generator-swarm` as defined [here](https://github.com/obsidian-toaster/generator-backend/blob/master/.s2i/bin/assemble#L43) during the Java S2I build, replace the variables as defined hereafter and run a Java Pod.
+
+During the execution of the script, different variables will be replaced within the file as summarized hereafter:
+
+**Front**
+
+- The VERSION is replaced with the value passed as parameter -v and corresponds to the snapshot version `e.g. 1.0.0-SNAPSHOT`. This version will be used to name the yml file, to tag the label of the pod
+- The GENERATOR_URL is replaced by the value passed as parameter with -b and will be used to define an ENV variable `backend_url` used during S2I build to specify the address of the backend used by the front.
+  This ENV var will be used to replace the value defined within file `settings.json` according to the assemble file `front-generator` [project](https://github.com/obsidian-toaster/obsidian-toaster.github.io/blob/master/.s2i/bin/assemble#L8). 
+- The ORG variable (which is not defined as bash parameter) could be changed to change the location of the github organisation containg the projects to be processed
+
+**Backend**
+
+- The `VERSION` is replaced with the value passed as parameter -v and corresponds to the snapshot version `e.g. 1.0.0-SNAPSHOT`. This version will be used to name the yml file, to tag the label of the pod
+- The `ORG` variable (which is not defined as bash parameter) could be changed to change the location of the github organisation containg the projects to be processed
+- The `MANSERVER` variable is replaced using the bash parameter -n. It points to the nexus jboss server (but could also point to your own Nexus server).
+- The `MAVENMIRRORURL` variable is derived from the path of the MAVENSERVER and will point to the address `$mavenserver/content/repositories/snapshots`
+- The `ARCHETYPECATALOG` variable is replaced using the bash parameter -c. It will allow to set an ENV var used by the WildFly Swarm / Forge Addon when the POD will be created from the
+  DeploymentConfig to fetch the XML Maven Archetypes catalog to be used.
+
+1) Local deployment
+
+The script can be used to deploy the Front/Backend using a local instance of OpenShift where you pass the username and password as parameters. When the script will be executed
+the templates yaml files will be created within the `templates` directory, a project `obsidian-snapshot` created and the template uploaded.
+From this template, the different objects will be created as BuildConfig, Service, Route, DeploymentConfig and the front / backend s2i build started.
+
+```
+./deploy-snapshots-openshift.sh -a 172.28.128.4 -u admin -p admin \
+                                -v 1.0.0-SNAPSHOT \
+                                -b http://backend-generator-obsidian-snapshot.172.28.128.4.xip.io/ \
+                                -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml\&c=archetype-catalog' \
+                                -n http://repository.jboss.org/nexus
+```
+
+2) OpenShift Online
+
+Alternatively, we can also deploy the project using an Openshift Online instance where the username/password is replaced by the user token.
+
+```
+./deploy-snapshots-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxx \
+                               -v 1.0.0-SNAPSHOT \
+                               -b http://backend-generator-obsidian-snapshot.e8ca.engint.openshiftapps.com/ \
+                               -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml\&c=archetype-catalog' \
+                               -n http://repository.jboss.org/nexus
+
+```
+
+Remark : If the namespace obsidian-snapshot already exists, delete the objects using this `oc delete all --all` command.
+
 ## Dummy Release
 
 In order to validate locally without the need to have the artifacts published on a snapshot maven server, you can build the Obsidian project and deploy the Front/backend within an Openshift Server.
