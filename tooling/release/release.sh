@@ -1,8 +1,14 @@
 #!/bin/bash
 
+#
+# Example to release Alpha2
+#
+# ./release.sh 1.0.0.Alpha2 1.0.0-SNAPSHOT http://backend-generator-obsidian-alpha2.e8ca.engint.openshiftapps.com/
+#
+
 : ${1:?"Must specify release version. Ex: 2.0.1.Final"}
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
-: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io"}
+: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/"}
 
 REL=$1
 DEV=$2
