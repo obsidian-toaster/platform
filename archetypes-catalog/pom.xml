@@ -21,7 +21,7 @@
   <parent>
     <groupId>org.obsidiantoaster</groupId>
     <artifactId>platform</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0.Alpha2</version>
   </parent>
 
   <artifactId>archetypes-catalog</artifactId>
