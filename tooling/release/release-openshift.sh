@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Example :
-# Token                         --> ./release-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxxxxx -v 1.0.0.Alpha1 -g obsidian-toaster
-# User/password (CI Server)     --> ./release-openshift.sh -a https://172.16.50.40:8443 -u admin -p admin  -v 1.0.0.Alpha1 -g obsidian-toaster
+# Token                         --> ./release-openshift.sh -a api.engint.openshift.com -t xxxxxxxxxxxx -v 1.0.0.Alpha1 -g obsidian-toaster
+# User/password (CI Server)     --> ./release-openshift.sh -a 172.16.50.40:8443 -u admin -p admin  -v 1.0.0.Alpha1 -g obsidian-toaster
 # User/password (local vagrant) --> ./release-openshift.sh -a 172.28.128.4:8443 -u admin -p admin -v 1.0.0.Dummy \
 #                                                          -b http://backend-generator-obsidian-dummy.172.28.128.4.xip.io/ \
 #                                                          -o obsidian-tester \
@@ -28,12 +28,14 @@ done
 
 current=$PWD
 
-echo "Deploy Front & Backend to OpenShift"
+echo "============================="
+echo "Log on to the OpenShift server"
+echo "============================="
 if [ "$token" != "" ]; then
    oc login $api --token=$token
 else
-   echo "oc login $api -u $user -p $password"
-   oc login $api -u $user -p $password
+   echo "oc login https://$api:8443 -u $user -p $password"
+   oc login https://$api:8443 -u $user -p $password
 fi
 
 REL=$version
@@ -44,6 +46,7 @@ echo "Github Org : $githuborg"
 echo "Catalog URL : $archetypecatalog"
 echo "Maven Server : $mavenserver"
 echo "Maven Mirror URL : $mavenmirrorurl"
+echo "============================="
 
 # Change version
 sed -e "s/VERSION/$REL/g" -e "s/ORG\//$githuborg\//g" -e "s|MAVENSERVER|$mavenserver|g" -e "s|MAVENMIRRORURL|$mavenmirrorurl|g" -e "s|ARCHETYPECATALOG|$archetypecatalog|g" ./templates/backend.yml > ./templates/backend-$REL.yml
@@ -59,17 +62,25 @@ echo Press any key to create OpenShift Project and deploy ...
 read junk
 
 # Create project
+echo "============================="
+echo "Create Openshift namespace : obsidian-$suffix_lower"
+echo "============================="
+
 oc new-project obsidian-$suffix_lower
 sleep 5
 
 # Deploy the backend
-echo "Deploy the backend ..."
+echo "============================="
+echo "Deploy the backend template"
+echo "============================="
 oc create -f ./templates/backend-$REL.yml
 oc process backend-generator-s2i | oc create -f -
 oc start-build backend-generator-s2i
 
 # Deploy the Front
+echo "============================="
 echo "Deploy the frontend ..."
+echo "============================="
 oc create -f templates/front-$REL.yml
 oc process front-generator-s2i | oc create -f -
 oc start-build front-generator-s2i

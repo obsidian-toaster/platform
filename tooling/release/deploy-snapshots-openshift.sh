@@ -10,7 +10,7 @@
 #                                 -n http://repository.jboss.org/nexus
 #
 # 2) Using OpenShift Online
-#./deploy-snapshots-openshift.sh -a https://api.engint.openshift.com -t xxxxxxxxx \
+#./deploy-snapshots-openshift.sh -a api.engint.openshift.com -t xxxxxxxxx \
 #                                -v 1.0.0-SNAPSHOT \
 #                                -b http://backend-generator-obsidian-snapshot.e8ca.engint.openshiftapps.com/ \
 #                                -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0-SNAPSHOT\&e=xml\&c=archetype-catalog' \
