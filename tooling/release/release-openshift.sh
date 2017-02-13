@@ -13,7 +13,7 @@
 #
 # ./release-openshift.sh -a api.engint.openshift.com -t xxxxxxxxxxxxxxxxxxxxxx \
 #                        -v 1.0.0.Alpha2 \
-#                        -b http://backend-generator-obsidian-snapshot.e8ca.engint.openshiftapps.com/ \
+#                        -b http://backend-generator-obsidian-alpha2.e8ca.engint.openshiftapps.com/ \
 #                        -o obsidian-toaster \
 #                        -c 'https://repository.jboss.org/nexus/service/local/artifact/maven/redirect?r=releases\&g=org.obsidiantoaster\&a=archetypes-catalog\&v=1.0.0.Alpha2\&e=xml\&c=archetype-catalog' \
 #                        -n http://repository.jboss.org/nexus
