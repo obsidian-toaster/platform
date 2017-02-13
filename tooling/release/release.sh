@@ -54,7 +54,7 @@ END=$(jq '. | length' $JSONFILE)
 for ((c=$START;c<=$END-1; c++ ))
 do
   name=$(jq -r '.['$c'].name' $JSONFILE)
-  tagAndBump https://github.com/$ORG/$name.git $name
+  tagAndBump https://github.com/obsidian-toaster-quickstarts/$name.git $name
 done
 
 #
