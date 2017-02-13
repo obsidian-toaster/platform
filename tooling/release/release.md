@@ -396,11 +396,14 @@ Access your front server at this address : http://front-generator-obsidian-dummy
 
 ## Releasing
 
-When a new release of Obsidian is ready to be tagged within the Github repo, artefacts published within the JBoss Nexus Server, then you will use the `./release.sh` script which is equivalent to the previous script except
-that it will only require a few parameters
+When a new release of Obsidian is ready to be tagged within the Github repo, artifacts published within the JBoss Nexus Server, then you will use the `./release.sh` script which is equivalent to the previous script except
+that it will only require 3 parameters; `release version`, `next development version` and `backend url`.
+
+The `release version` will be used to tag the github repos and to change the version of the pom.xml file
+The `next development version` corresponds to the version number to be changed within the different pom.xml file
 
 ```
-./release-dummy.sh 1.0.0.Alpha2 1.0.1-SNAPSHOT
+./release-dummy.sh 1.0.0.Alpha2 1.0.1-SNAPSHOT http://generator-backend.myhost.io/forge
 ```
 
 # Front Generator
