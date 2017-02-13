@@ -403,6 +403,6 @@ The `release version` will be used to tag the github repos and to change the ver
 The `next development version` corresponds to the version number to be changed within the different pom.xml file
 
 ```
-./release-dummy.sh 1.0.0.Alpha2 1.0.1-SNAPSHOT http://generator-backend.myhost.io/forge
+./release-dummy.sh 1.0.0.Alpha2 1.0.1-SNAPSHOT http://generator-backend.myhost.io
 ```
 

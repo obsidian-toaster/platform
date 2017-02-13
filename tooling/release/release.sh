@@ -2,7 +2,7 @@
 
 : ${1:?"Must specify release version. Ex: 2.0.1.Final"}
 : ${2:?"Must specify next development version. Ex: 2.0.2-SNAPSHOT"}
-: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io/forge"}
+: ${3:?"Must specify backend url. Ex: http://generator-backend.myhost.io"}
 
 REL=$1
 DEV=$2
