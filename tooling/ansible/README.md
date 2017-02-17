@@ -53,8 +53,13 @@ vagrant up --provider virtualbox
 ```
 
 ## Install Ansible 2.2.0
+
+- Use `pip` to install ansible on your machine & these libs
+
 ```
 pip install ansible==2.2.0
+pip install urlparse2
+pip install pyopenssl
 ```
 
 ## Clone OpenShift Ansible's Sally repo
