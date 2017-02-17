@@ -76,8 +76,8 @@ curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/
 ```
 # Change IP address
 
-- Edit `inventory/noaws/static_inv` and change `ip_address`
-- Edit `vars/deploy_vars.yml` and change `vm_ip`
+- Edit `inventory/noaws/static_inv` and change `ip_address` to use the private IP address `172.28.128.4`
+- Edit `vars/deploy_vars.yml` and change `vm_ip` to use the private IP address `172.28.128.4`
 - Edit `vars/deploy_vars.yml` and change `your_local_name_setup` to use `xip.io`
 
 # Run script
