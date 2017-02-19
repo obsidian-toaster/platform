@@ -10,7 +10,6 @@ mkdir -p ~/Temp/_rhel7
 cd ~/Temp/_rhel7
 
 cat << 'EOF' > Vagrantfile 
-
 # for running the CD Pipeline we recommend at least 400 for memory!
 $vmMemory = Integer(ENV['VM_MEMORY'] || 4000)
 
@@ -19,11 +18,30 @@ $vmName = ENV['VM_NAME'] || "rhel7-openshift"
 
 $script = <<SCRIPT
 yum -y install net-tools subscription-manager 
+
+# Register user and add the required repos
 subscription-manager register --username=qa@redhat.com --password=EC3YWpKxSe524GCK --force
 subscription-manager subscribe --pool=8a85f9823e3d5e43013e3ddd4e2a0977
 subscription-manager repos --enable rhel-7-server-extras-rpms 
 subscription-manager repos --enable rhel-7-server-optional-rpms   
 subscription-manager repos --enable rhel-7-server-ose-3.4-rpms
+
+# Add user_key to authorized key file to allow to ssh using root 
+mkdir -p /root/.ssh
+cat /home/vagrant/user_key.pub > /root/.ssh/authorized_keys
+
+# Authorize root access without password
+cat << 'EOF' >> /etc/ssh/sshd_config
+PermitRootLogin without-password  
+RSAAuthentication yes
+PubkeyAuthentication yes
+EOF
+
+chmod 700 /root/.ssh
+chmod 600 /root/.ssh/authorized_keys
+
+service sshd restart
+
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -47,6 +65,7 @@ Vagrant.configure("2") do |config|
     v.name = $vmName
   end
 
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/home/vagrant/user_key.pub"
   config.vm.provision "shell", inline: $script, keep_color: true
 
 end
@@ -78,8 +97,10 @@ sudo su -
 ```
 
 - Add the public key of the user machine that you will use to access the VM and copy it within the `/root/.ssh/authorized_keys` of the VM
+```
 mkdir /root/.ssh/
 touch /root/.ssh/authorized_keys
+```
 
 - Update the /etc/ssh/sshd_config file of the VM.
 ```
@@ -112,7 +133,6 @@ git checkout remotes/origin/no_aws
 cd ansible; git submodule init; git submodule update;
 ```
 
-
 # Curl the rpm files
 ```
 #curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-dedicated-3.4.1.8-1.el7.x86_64.rpm
@@ -125,18 +145,6 @@ curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/
 - Edit `vars/deploy_vars.yml` and change `vm_ip` to use the private IP address `172.28.128.4`
 - Edit `vars/deploy_vars.yml` and change `your_local_name_setup` to use `vagrant.ocp`
 
-# Add Host
-
-- Add these lines to ssh_config file
-
-```
-Host 172.28.128.4
-  User vagrant
-  StrictHostKeyChecking no
-  PasswordAuthentication no
-  UserKnownHostsFile /dev/null
-  IdentityFile /Users/chmoulli/Temp/_centos7/vagrant-openshift/.vagrant/machines/default/virtualbox/private_key
-  ```
 
 # Run script
 ```
