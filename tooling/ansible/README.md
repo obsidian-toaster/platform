@@ -224,6 +224,14 @@ The hostname "vagrant.ocp" for "vagrant.ocp" doesn't resolve to an ip address ow
 
 - This problem occurs [randomly](https://github.com/openshift/openshift-ansible/issues/3433) and the workaround is to relaunch the ansible script
 
+- Ansible will also complain that a project template has already been installed
+```
+TASK [online_project_request : create Online default/project-request] **********
+Tuesday 21 February 2017  14:18:44 +0100 (0:00:00.516)       0:11:07.960 ******
+changed: [my.vagrant.ocp]
+fatal: [172.28.128.4]: FAILED! => {"changed": true, "cmd": "oc create -f project-request.json -n default", "delta": "0:00:00.265071", "end": "2017-02-21 13:18:45.305071", "failed": true, "rc": 1, "start": "2017-02-21 13:18:45.040000", "stderr": "Error from server: error when creating \"project-request.json\": templates \"project-request\" already exists", "stdout": "", "stdout_lines": [], "warnings": []}
+```
+
 # To remove
 
 ```
