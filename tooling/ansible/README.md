@@ -222,7 +222,8 @@ Remarks:
 The hostname "vagrant.ocp" for "vagrant.ocp" doesn't resolve to an ip address owned by this host. Please set openshift_hostname variable to a hostname that when resolved on the host in question resolves to an IP address matching an interface on this host
 ```
 
-- This problem occurs [randomly](https://github.com/openshift/openshift-ansible/issues/3433) and the workaround is to relaunch the ansible script
+- This problem occurs [randomly](https://github.com/openshift/openshift-ansible/issues/3433) and the workaround is to relaunch the ansible script. the workaround (till the project is rebased) is to apply this change
+https://github.com/openshift/openshift-ansible/pull/3152/commits/86d10d306967922be894ddd19fcf49382a522b75
 
 - Ansible will also complain that a project template has already been installed
 ```
