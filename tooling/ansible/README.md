@@ -119,7 +119,7 @@ curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/
 # Change some vars
  
 - Edit the file `vars/deploy_vars.yml` and change `vm_ip` to use the private IP address `172.28.128.4`
-- Edit the file `vars/deploy_vars.yml` and change `your_local_name_setup` to use `vagrant.ocp`
+- Edit the file `vars/deploy_vars.yml` and change `your_local_name_setup` to use `xip.io`
 
 # Modify some files
 
@@ -158,6 +158,17 @@ curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/
     dest: "{{ etcd_ca_dir }}"
   when: etcd_server_certs_missing | bool
 
+```
+
+
+- Add these lines within this file `ansible/openshift-ansible/roles/os_firewall/library/os_firewall_manage_iptables.py` in order to avoid the [issue](https://github.com/openshift/openshift-ansible/issues/3433) 
+
+```
+    def gen_cmd(self):
+        cmd = 'iptables' if self.ip_version == 'ipv4' else 'ip6tables'
+        # Include -w (wait for xtables lock) in default arguments.
+        default_args = ['-w']
+        return ["/usr/sbin/%s" % cmd] + default_args
 ```
 
 # Change RPM name 
