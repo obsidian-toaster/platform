@@ -100,7 +100,7 @@ pip install urlparse2
 pip install pyopenssl
 ```
 
-## Clone OpenShift Ansible's Sally repo
+# Clone OpenShift Ansible's Sally repo
 
 ```
 git clone git@github.com:sallyom/online.git
@@ -110,18 +110,19 @@ git checkout remotes/origin/no_aws
 cd ansible; git submodule init; git submodule update;
 ```
 
-# Curl the rpm files
+## Curl the rpm files
 ```
 #curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-dedicated-3.4.1.8-1.el7.x86_64.rpm
 #curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-devpreview-3.4.1.8-1.el7.x86_64.rpm
 curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-paid-3.4.1.8-1.el7.x86_64.rpm
 ```
-# Change some vars
+
+## Change some vars
  
 - Edit the file `vars/deploy_vars.yml` and change `vm_ip` to use the private IP address `172.28.128.4`
 - Edit the file `vars/deploy_vars.yml` and change `your_local_name_setup` to use `xip.io`
 
-# Modify some files
+## Modify some files
 
 - Add these lines at line 145 within the file `ansible/openshift-ansible/roles/etcd_server_certificates/tasks/main.yml` till Sally's project is updated
 
@@ -171,7 +172,7 @@ curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/
         return ["/usr/sbin/%s" % cmd] + default_args
 ```
 
-# Change RPM name 
+## Change RPM name 
 
 Edit the file `ansible/roles/install_online_scripts_rpm/tasks/main.yml` and change the name of file accordign to the RPM downloaded
 
@@ -184,7 +185,7 @@ Edit the file `ansible/roles/install_online_scripts_rpm/tasks/main.yml` and chan
      dest: /opt/openshift-scripts-paid-3.4.1.8-1.el7.x86_64.rpm
 ```
 
-# Edit hostname on the VM
+## Edit hostname on the VM
 
 - Edit the `/etc/hosts` file of the VM in order to add the IP Address and to comment the line containing the ipv6 entries
 
@@ -244,7 +245,7 @@ my.vagrant.ocp
 my.vagrant.ocp openshift_schedulable=true openshift_node_labels="{'region': 'infra'}"
 ```
 
-# Run script
+## Run script
 
 ```
 ansible-playbook devenv-launch.yml -i inventory/all/static      
@@ -268,7 +269,7 @@ changed: [my.vagrant.ocp]
 fatal: [172.28.128.4]: FAILED! => {"changed": true, "cmd": "oc create -f project-request.json -n default", "delta": "0:00:00.265071", "end": "2017-02-21 13:18:45.305071", "failed": true, "rc": 1, "start": "2017-02-21 13:18:45.040000", "stderr": "Error from server: error when creating \"project-request.json\": templates \"project-request\" already exists", "stdout": "", "stdout_lines": [], "warnings": []}
 ```
 
-# To remove
+## To uninstall
 
 ```
 ansible-playbook openshift-ansible/playbooks/adhoc/uninstall.yml -i inventory/all/static
