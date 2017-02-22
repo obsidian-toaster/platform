@@ -184,6 +184,18 @@ Edit the file `ansible/roles/install_online_scripts_rpm/tasks/main.yml` and chan
      dest: /opt/openshift-scripts-paid-3.4.1.8-1.el7.x86_64.rpm
 ```
 
+# Edit hostname on the VM
+
+- Edit the `/etc/hosts` file of the VM in order to add the IP Address and to comment the line containing the ipv6 entries
+
+```
+172.28.128.4	my.vagrant.ocp	my
+127.0.0.1	my.vagrant.ocp	my
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+```
+
+
+
 # Setup a all-in-one inventory file
 
 Don't add under the `[OSEv3:children]` a `lb` block or `etcd.` 
@@ -202,11 +214,25 @@ ansible_ssh_user=root
 ansible_become=no
 debug_level=2
 deployment_type=openshift-enterprise
-# TODO - Check with ansible guys if we can't avoid to hard code the url
+
+# TODO : Should not be hard coded
 openshift_master_etcd_urls=['https://10.0.2.15:2379']
+
+openshift_common_hostname=my.vagrant.ocp
 openshift_hostname=my.vagrant.ocp
+
+# TODO : Maybe a workaround to avoid the hostname error
+# Line "172.28.128.4    my.vagrant.ocp" has been added to the /etc/hosts file of the VM
+# and lines starting with ::1 removed as they correspond to ipv6 entries
+openshift_set_hostname=True
+
 openshift_master_master_count=1
-#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+# Enable to avoid ca cart copy issue
+openshift_use_flannel=false
+
+# TODO : Error reported - https://github.com/openshift/openshift-ansible/issues/3450
+# openshift_hosted_metrics_deploy=true
 
 [masters]
 my.vagrant.ocp
@@ -233,8 +259,8 @@ Remarks:
 The hostname "vagrant.ocp" for "vagrant.ocp" doesn't resolve to an ip address owned by this host. Please set openshift_hostname variable to a hostname that when resolved on the host in question resolves to an IP address matching an interface on this host
 ```
 
-- This problem occurs [randomly](https://github.com/openshift/openshift-ansible/issues/3433) and the workaround is to relaunch the ansible script. the workaround (till the project is rebased) is to apply this change
-https://github.com/openshift/openshift-ansible/pull/3152/commits/86d10d306967922be894ddd19fcf49382a522b75
+- This problem occurs [randomly](https://github.com/openshift/openshift-ansible/issues/3433).
+  The workaround (till the project is rebased) is to apply this [change](ttps://github.com/openshift/openshift-ansible/pull/3152/commits/86d10d306967922be894ddd19fcf49382a522b75)
 
 - Ansible will also complain that a project template has already been installed
 ```

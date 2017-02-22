@@ -30,13 +30,43 @@ Minishift is a Go Application which has been created from Minikube project of Ku
 OpenShift within a VM machine. Different hypervisors are supported as Virtualbox, xhyve & VMWare. You can find more information about Minishift like also how to intall from the project:
 https://github.com/minishift/minishift
 
-To install the required environment which support the Obsidian quickstarts, it is recommended to pass the following parameters when you will request to minishift to start a new VM.
+To install the required environment which support the Obsidian QuickStarts, it is recommended to pass the following parameters when you will request to minishift to start a VM.
 
 ```
-minishift start --memory=4000 --vm-driver=virtualbox --iso-url=https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.1/minishift-centos7.iso --docker-env=[storage-driver=devicemapper]
+minishift start --memory=4000 --vm-driver=virtualbox --iso-url=https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.2/minishift-centos7.iso --docker-env=[storage-driver=devicemapper]
 ```
 
-Version of Minishift to be used is **>= 1.0.0.Beta3**
+Version of MiniShift to be used is **>= 1.0.0.Beta4**
+
+You can download the iso file on your machine and reuse it
+
+```
+mkdir -p $HOME/iso
+curl -L -o $HOME/iso/minishift-centos7.iso http://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.2/minishift-centos7.iso 
+export ISO_URL=file://$HOME/iso/minishift-centos7.iso
+minishift start --memory=1500 --vm-driver=virtualbox --iso-url $ISO_URL --docker-env=[storage-driver=devicemapper]
+```
+
+Grant more access to your default user
+
+```
+oc login -u system:admin
+oc adm policy add-cluster-role-to-user cluster-admin admin
+```
+
+In order to configure OpenShift with the limitations that an end user will be faced using OpenShift Online, then the following steps are required. They will modify the Openshift
+Master Configuration file to include a [Project Request Template]() which is used every time a new namespace is created. The template defines different roles and contains these limitations :
+- cpu
+- memory,
+- storage & 
+- roles : project-owner, system:image-puller, system:deployer & system:image-builder 
+
+```
+minishift openshift config set --patch '{"projectRequestTemplate": "default/project-request"}'
+oc login https://$(minishift ip):8443 -u admin -p admin -n default
+oc create -f minishift/project-request.yml
+oc create -f minishift/project-owner.json
+```
 
 # Steps required to install & configure OpenShift manually
 

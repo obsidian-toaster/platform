@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: project-request
+objects:
+- apiVersion: v1
+  kind: Project
+  metadata:
+    annotations:
+      openshift.io/description: ${PROJECT_DESCRIPTION}
+      openshift.io/display-name: ${PROJECT_DISPLAYNAME}
+      openshift.io/requester: ${PROJECT_REQUESTING_USER}
+    creationTimestamp: null
+    name: ${PROJECT_NAME}
+  spec: {}
+  status: {}
+- apiVersion: v1
+  kind: LimitRange
+  metadata:
+    creationTimestamp: null
+    name: resource-limits
+  spec:
+    limits:
+    - max:
+        cpu: "4"
+        memory: 2Gi
+      min:
+        cpu: 39m
+        memory: 204Mi
+      type: Pod
+    - default:
+        cpu: "1"
+        memory: 512Mi
+      defaultRequest:
+        cpu: 80m
+        memory: 409Mi
+      max:
+        cpu: "4"
+        memory: 2Gi
+      min:
+        cpu: 39m
+        memory: 204Mi
+      type: Container
+    - max:
+        storage: 250Gi
+      min:
+        storage: 1Gi
+      type: PersistentVolumeClaim
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: admin
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: admin
+  subjects:
+  - kind: User
+    name: ${PROJECT_ADMIN_USER}
+  userNames:
+  - ${PROJECT_ADMIN_USER}
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: project-owner
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: project-owner
+  subjects:
+  - kind: User
+    name: ${PROJECT_REQUESTING_USER}
+  userNames:
+  - ${PROJECT_REQUESTING_USER}
+- apiVersion: v1
+  groupNames:
+  - system:serviceaccounts:${PROJECT_NAME}
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:image-pullers
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:image-puller
+  subjects:
+  - kind: SystemGroup
+    name: system:serviceaccounts:${PROJECT_NAME}
+  userNames: null
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:image-builders
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:image-builder
+  subjects:
+  - kind: ServiceAccount
+    name: builder
+  userNames:
+  - system:serviceaccount:${PROJECT_NAME}:builder
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:deployers
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:deployer
+  subjects:
+  - kind: ServiceAccount
+    name: deployer
+  userNames:
+  - system:serviceaccount:${PROJECT_NAME}:deployer
+parameters:
+- name: PROJECT_NAME
+- name: PROJECT_DISPLAYNAME
+- name: PROJECT_DESCRIPTION
+- name: PROJECT_ADMIN_USER
+- name: PROJECT_REQUESTING_USER

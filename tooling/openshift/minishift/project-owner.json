@@ -1,0 +1,26 @@
+
+{
+  "kind": "ClusterRole",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "project-owner"
+  },
+  "rules": [
+    {
+      "verbs": [
+        "create",
+        "delete",
+        "get",
+        "list",
+        "patch",
+        "update",
+        "watch"
+      ],
+      "attributeRestrictions": null,
+      "apiGroups": [""],
+      "resources": [
+        "resourcequotas"
+      ]
+    }
+  ]
+}
