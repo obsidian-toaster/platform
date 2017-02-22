@@ -1,4 +1,4 @@
-# Deploy locally OpenShift using Vagrant & Virtualbox
+# Setup OpenShift using Vagrant & Virtualbox
 
 The procedure described within this document can also be used to setup on MacOS a VM using Virtualbox & Vagrant. The following steps describe how to
 to create a new VM running Centos 7.1, provision the machine with OpenShift.
@@ -24,7 +24,7 @@ cd obsidian-toaster/platform/tooling/openshift
 vagrant up --provider virtualbox
 ```
 
-# Deploy OpenShift using Minishift
+# Setup OpenShift using Minishift
 
 Minishift is a Go Application which has been created from Minikube project of Kubernetes. It extends the features proposed by the Kubernetes client to package/Deploy
 OpenShift within a VM machine. Different hypervisors are supported as Virtualbox, xhyve & VMWare. You can find more information about Minishift like also how to intall from the project:
