@@ -103,7 +103,7 @@ pip install pyopenssl
 ## Clone OpenShift Ansible's Sally repo
 
 ```
-git clone  git@github.com:sallyom/online.git
+git clone git@github.com:sallyom/online.git
 mv online/ sally-online
 cd sally-online
 git checkout remotes/origin/no_aws
@@ -193,8 +193,6 @@ Edit the file `ansible/roles/install_online_scripts_rpm/tasks/main.yml` and chan
 127.0.0.1	my.vagrant.ocp	my
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ```
-
-
 
 # Setup a all-in-one inventory file
 
