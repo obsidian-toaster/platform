@@ -198,9 +198,11 @@ Edit the file `ansible/roles/install_online_scripts_rpm/tasks/main.yml` and chan
 # Setup a all-in-one inventory file
 
 Don't add under the `[OSEv3:children]` a `lb` block or `etcd.` 
+
 As `lb` will install an external load balancer which is not the HA Proxy and not required, we can remove it. Moreover it will conflict with
 OpenShift HTTP Server as they both use the same port number `8443`. 
-If you add `etcd`, then the ansible script will add within the config file of the etcd daemon a cluster section which is nto well configured 
+
+If you add `etcd`, then the ansible script will add within the config file of the etcd daemon a cluster section which is not well configured 
 and responsible to crash the OpenShift Server.
 
 ```
