@@ -98,6 +98,16 @@ or patching again openshift
 minishift openshift config set --patch '{"pluginConfig":{"ProjectRequestLimit":{"configuration":{"apiVersion":"v1","kind":"ProjectRequestLimitConfig","limits":[{"selector":{"level":"platinum"}},{"selector":{"level":"gold"},"maxProjects":10},{"selector":{"level":"silver"},"maxProjects":7},{"selector":{"level":"bronze"},"maxProjects":5},{"maxProjects":2}]}}}}'
 ```
 
+## New CDK
+
+The new CDK is available [here](https://dev-platform-jenkins.rhev-ci-vms.eng.rdu2.redhat.com/view/CDK/job/cdk_build/ws/) for daily build
+or using candidate [release](http://cdk-builds.usersys.redhat.com/builds/weekly/)
+
+These binaries will have RHEL ISO bundled and you will need to run `minishift setup-cdk` before `minishift start` --username <> --password <> to start with.
+
+- CDK information : see https://mojo.redhat.com/docs/DOC-1125257
+- Gitlab : https://mojo.redhat.com/docs/DOC-1125259
+
 # Steps required to install & configure OpenShift manually
 
 ##  Install Yum packages
