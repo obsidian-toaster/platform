@@ -3,18 +3,18 @@
 ## Create a RHEL7 VM
 
 - Open a terminal on your laptop (MacBook Pro, ...) 
-- Execute these lines to setup a RHEL 7 VM machine accessible at this private IP Address `172.28.128.4`
+- Execute these lines to setup a RHEL 7 VM machine accessible at this private IP Address `172.28.128.4` with Vagrant (version used : 1.8.7)
 
-Remarks:
-- Change the username/password a poolid according to your account.
+Remark:
+- Change the `username/password` an `poolid` according to your account within the `Vagrantfile`
 
 ```
 mkdir -p ~/Temp/_rhel7
 cd ~/Temp/_rhel7
 
 cat << 'EOF' > Vagrantfile 
-# for running the CD Pipeline we recommend at least 400 for memory!
-$vmMemory = Integer(ENV['VM_MEMORY'] || 4000)
+# for running the CD Pipeline we recommend at least 3000 for memory!
+$vmMemory = Integer(ENV['VM_MEMORY'] || 3000)
 
 # Override the default VM name appearing within VirtualBox
 $vmName = ENV['VM_NAME'] || "rhel7-oll-penshift"
@@ -23,8 +23,8 @@ $script = <<SCRIPT
 yum -y install net-tools subscription-manager 
 
 # Register user and add the required repos
-subscription-manager register --username=USERNAME --password=PASSWORD --force
-subscription-manager subscribe --pool=POOLID
+subscription-manager register --username=qa@redhat.com --password=EC3YWpKxSe524GCK --force
+subscription-manager subscribe --pool=8a85f9823e3d5e43013e3ddd4e2a0977
 subscription-manager repos --enable rhel-7-server-extras-rpms 
 subscription-manager repos --enable rhel-7-server-optional-rpms   
 subscription-manager repos --enable rhel-7-server-ose-3.4-rpms
