@@ -55,17 +55,47 @@ oc adm policy add-cluster-role-to-user cluster-admin admin
 ```
 
 In order to configure OpenShift with the limitations that an end user will be faced using OpenShift Online, then the following steps are required. They will modify the Openshift
-Master Configuration file to include a [Project Request Template]() which is used every time a new namespace is created. The template defines different roles and contains these limitations :
-- cpu
-- memory,
-- storage & 
-- roles : project-owner, system:image-puller, system:deployer & system:image-builder 
+Master Configuration file to include a [Project Request Template](https://docs.openshift.com/enterprise/3.1/admin_guide/managing_projects.html#modifying-the-template-for-new-projects) which is used every time
+a new namespace/project is created. The template defines different roles (project-owner, system:image-puller, system:deployer & system:image-builder) and contains these limitations
+
+![restrictions](./limitations.png?raw=true)
 
 ```
-minishift openshift config set --patch '{"projectRequestTemplate": "default/project-request"}'
+minishift openshift config set --patch '{"projectConfig": {"projectRequestTemplate": "default/project-request"}}'
 oc login https://$(minishift ip):8443 -u admin -p admin -n default
 oc create -f minishift/project-request.yml
-oc create -f minishift/project-owner.json
+oc create -f minishift/project-owner.yml
+```
+
+No limit will be applied to create several [projects](https://docs.openshift.com/enterprise/3.2/admin_guide/managing_projects.html#limit-projects-per-user) but
+you can nevertheless configure it by editing the master-config.yml file to add a pluginConfig
+
+```
+admissionConfig:
+  pluginConfig:
+    ProjectRequestLimit:
+      configuration:
+        apiVersion: v1
+        kind: ProjectRequestLimitConfig
+        limits:
+        - selector:
+            level: platinum
+        - selector:
+            level: gold
+          maxProjects: 10
+        - selector:
+            level: silver
+          maxProjects: 7
+        - selector:
+            level: bronze
+          maxProjects: 5
+        - maxProjects: 2
+```
+
+or patching again openshift
+
+```
+minishift openshift config set --patch '{"pluginConfig":{"ProjectRequestLimit":{"configuration":{"apiVersion":"v1","kind":"ProjectRequestLimitConfig","limits":[{"selector":{"level":"platinum"}},{"selector":{"level":"gold"},"maxProjects":10},{"selector":{"level":"silver"},"maxProjects":7},{"selector":{"level":"bronze"},"maxProjects":5},{"maxProjects":2}]}}}}'
 ```
 
 # Steps required to install & configure OpenShift manually

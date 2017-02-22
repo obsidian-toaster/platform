@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ProjectRequestLimitConfig
+limits:
+- selector:
+    level: admin
+- selector:
+    level: advanced
+  maxProjects: 10
+- maxProjects: 2
