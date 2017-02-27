@@ -40,7 +40,7 @@ In order to configure OpenShift with the limitations that an end user will be fa
 Master Configuration file to include a https://docs.openshift.com/enterprise/3.1/admin_guide/managing_projects.html=modifying-the-template-for-new-projects[Project Request Template] which is used every time
 a new namespace/project is created. The template defines different roles (project-owner, system:image-puller, system:deployer & system:image-builder) and contains these limitations
 
-![restrictions](./limitations.png?raw=true)
+image::./limitations.png?raw=true[alt="restrictions"]
 
 ----
 minishift openshift config set --patch '{"projectConfig": {"projectRequestTemplate": "default/project-request"}}'
