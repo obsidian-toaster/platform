@@ -29,7 +29,7 @@ export ISO_URL=file://$HOME/iso/minishift-centos7.iso
 minishift start --memory=1500 --vm-driver=virtualbox --iso-url $ISO_URL --docker-env=[storage-driver=devicemapper]
 ----
 
-Grant more access to your default user
+Grant more access to your default user by giving it the `cluster-to-admin` role
 
 ----
 oc login -u system:admin
