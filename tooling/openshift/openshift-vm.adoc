@@ -1,4 +1,10 @@
-# Setup OpenShift using Minishift
+:doctype: book
+:toc: left
+:toclevels: 3
+:toc-position: left
+:numbered:
+
+= Setup OpenShift using Minishift
 
 Minishift is a Go Application which has been created from Minikube project of Kubernetes. It extends the features proposed by the Kubernetes client to package/Deploy
 OpenShift within a VM machine. Different hypervisors are supported as Virtualbox, xhyve & VMWare. You can find more information about Minishift like also how to intall from the project:
@@ -6,45 +12,45 @@ https://github.com/minishift/minishift
 
 To install the required environment which support the Obsidian QuickStarts, it is recommended to pass the following parameters when you will request to minishift to start a VM.
 
-```
+----
 minishift start --memory=4000 --vm-driver=virtualbox --iso-url=https://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.2/minishift-centos7.iso --docker-env=[storage-driver=devicemapper]
-```
+----
 
 Version of MiniShift to be used is **>= 1.0.0.Beta4**
 
 You can download the iso file on your machine and reuse it
 
-```
+----
 mkdir -p $HOME/iso
 curl -L -o $HOME/iso/minishift-centos7.iso http://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.2/minishift-centos7.iso 
 export ISO_URL=file://$HOME/iso/minishift-centos7.iso
 minishift start --memory=1500 --vm-driver=virtualbox --iso-url $ISO_URL --docker-env=[storage-driver=devicemapper]
-```
+----
 
 Grant more access to your default user
 
-```
+----
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
-```
+----
 
 In order to configure OpenShift with the limitations that an end user will be faced using OpenShift Online, then the following steps are required. They will modify the Openshift
-Master Configuration file to include a [Project Request Template](https://docs.openshift.com/enterprise/3.1/admin_guide/managing_projects.html#modifying-the-template-for-new-projects) which is used every time
+Master Configuration file to include a [Project Request Template](https://docs.openshift.com/enterprise/3.1/admin_guide/managing_projects.html=modifying-the-template-for-new-projects) which is used every time
 a new namespace/project is created. The template defines different roles (project-owner, system:image-puller, system:deployer & system:image-builder) and contains these limitations
 
 ![restrictions](./limitations.png?raw=true)
 
-```
+----
 minishift openshift config set --patch '{"projectConfig": {"projectRequestTemplate": "default/project-request"}}'
 oc login https://$(minishift ip):8443 -u admin -p admin -n default
 oc create -f minishift/project-request.yml
 oc create -f minishift/project-owner.yml
-```
+----
 
-No limit will be applied to create several [projects](https://docs.openshift.com/enterprise/3.2/admin_guide/managing_projects.html#limit-projects-per-user) but
+No limit will be applied to create several [projects](https://docs.openshift.com/enterprise/3.2/admin_guide/managing_projects.html=limit-projects-per-user) but
 you can nevertheless configure it by editing the master-config.yml file to add a pluginConfig
 
-```
+----
 admissionConfig:
   pluginConfig:
     ProjectRequestLimit:
@@ -64,15 +70,15 @@ admissionConfig:
             level: bronze
           maxProjects: 5
         - maxProjects: 2
-```
+----
 
 or patching again openshift
 
-```
+----
 minishift openshift config set --patch '{"pluginConfig":{"ProjectRequestLimit":{"configuration":{"apiVersion":"v1","kind":"ProjectRequestLimitConfig","limits":[{"selector":{"level":"platinum"}},{"selector":{"level":"gold"},"maxProjects":10},{"selector":{"level":"silver"},"maxProjects":7},{"selector":{"level":"bronze"},"maxProjects":5},{"maxProjects":2}]}}}}'
-```
+----
 
-## New CDK
+== New CDK
 
 The new CDK - version3 is available [here](https://dev-platform-jenkins.rhev-ci-vms.eng.rdu2.redhat.com/view/CDK/job/cdk_build/ws/) for daily build
 or using candidate [release](http://cdk-builds.usersys.redhat.com/builds/weekly/)
@@ -82,7 +88,7 @@ These binaries will have RHEL ISO bundled and you will need to run `minishift se
 - CDK information : see https://mojo.redhat.com/docs/DOC-1125257
 - Gitlab : https://mojo.redhat.com/docs/DOC-1125259
 
-# Setup OpenShift using Vagrant & Virtualbox
+= Setup OpenShift using Vagrant & Virtualbox
 
 The procedure described within this document can also be used to setup on MacOS a VM using Virtualbox & Vagrant. The following steps describe how to
 to create a new VM running Centos 7.1, provision the machine with OpenShift.
@@ -96,22 +102,22 @@ to continue to use this older version
 
 Next, install vagrant landrush plugin
 
-```
+----
 vagrant plugin install landrush
-```
+----
 
 and the project
 
-```
+----
 git clone https://github.com/obsidian-toaster/platform.git
 cd obsidian-toaster/platform/tooling/openshift
 vagrant up --provider virtualbox
-```
+----
 
-# Steps required to install & configure OpenShift manually
+= Steps required to install & configure OpenShift manually
 
-##  Install Yum packages
-```
+==  Install Yum packages
+----
 cat > /etc/yum.repos.d/docker.repo << '__EOF__'
 [docker]
 name=Docker Repository
@@ -123,20 +129,20 @@ __EOF__
  
 yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion docker-engine
 yum -y update
-```
+----
 
-##  Install OpenShift oc client
-```
+==  Install OpenShift oc client
+----
 URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-client-tools-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 OC_CLIENT_FILE=openshift-origin-client-tools-v1.4.0-rc1
 cd $HOME && mkdir $OC_CLIENT_FILE && cd $OC_CLIENT_FILE 
 wget -q $URL
 tar -zxf openshift-origin-client-*.tar.gz --strip-components=1 && cp oc /usr/local/bin
-```
+----
 
-##  Register Docker Service
+==  Register Docker Service
 
-```
+----
 mkdir -p /etc/systemd/system/docker.service.d 
  
 cat > /etc/systemd/system/docker.service.d/override.conf << '__EOF__'
@@ -149,22 +155,22 @@ systemctl daemon-reload
 systemctl enable docker
  
 systemctl restart docker
-```
+----
 
-##  Get OpenShift Binaries
+==  Get OpenShift Binaries
 
-```
+----
 OPENSHIFT_DIR=/opt/openshift-origin-v1.4
 OPENSHIFT_URL=https://github.com/openshift/origin/releases/download/v1.4.0-rc1/openshift-origin-server-v1.4.0-rc1.b4e0954-linux-64bit.tar.gz
 mkdir $OPENSHIFT_DIR && chmod 755 /opt $OPENSHIFT_DIR && cd $OPENSHIFT_DIR
 wget -q $OPENSHIFT_URL
 tar -zxvf openshift-origin-server-*.tar.gz --strip-components 1
 rm -f openshift-origin-server-*.tar.gz
-```
+----
 
-##  Set and load environments
+==  Set and load environments
 
-```
+----
 cat > /etc/profile.d/openshift.sh << '__EOF__'
 export OPENSHIFT=/opt/openshift-origin-v1.4
 export OPENSHIFT_VERSION=v1.4.0-rc1
@@ -174,37 +180,37 @@ export CURL_CA_BUNDLE=$OPENSHIFT/openshift.local.config/master/ca.crt
 __EOF__
 chmod 755 /etc/profile.d/openshift.sh
 . /etc/profile.d/openshift.sh
-```
+----
 
-##  Prefetch Docker images
+==  Prefetch Docker images
 
-```
+----
 docker pull openshift/origin-pod:$OPENSHIFT_VERSION
 docker pull openshift/origin-sti-builder:$OPENSHIFT_VERSION
 docker pull openshift/origin-docker-builder:$OPENSHIFT_VERSION
 docker pull openshift/origin-deployer:$OPENSHIFT_VERSION
 docker pull openshift/origin-docker-registry:$OPENSHIFT_VERSION
 docker pull openshift/origin-haproxy-router:$OPENSHIFT_VERSION
-```
+----
 
-##  Generate OpenShift V3 configuration files
+==  Generate OpenShift V3 configuration files
 
-```
+----
 ./openshift start --master=172.16.50.40 --cors-allowed-origins=.* --hostname=172.16.50.40 --write-config=openshift.local.config
 chmod +r $OPENSHIFT/openshift.local.config/master/admin.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-registry.kubeconfig
 chmod +r $OPENSHIFT/openshift.local.config/master/openshift-router.kubeconfig
-```
+----
 
-##  Change the default router subdomain in master-config.yaml
+==  Change the default router subdomain in master-config.yaml
 
-```
+----
 sed -i 's|router.default.svc.cluster.local|172.16.50.40.xip.io|' $OPENSHIFT/openshift.local.config/master/master-config.yaml
-```
+----
 
-##  Define OpenShift Service & launch it
+==  Define OpenShift Service & launch it
 
-```
+----
 cat > /etc/systemd/system/openshift-origin.service << '__EOF__'
 [Unit]
 Description=Origin Service
@@ -223,42 +229,42 @@ WantedBy=multi-user.target
 systemctl daemon-reload
 systemctl enable openshift-origin
 systemctl start openshift-origin
-```
+----
 
-##  Create admin account
+==  Create admin account
 
-```
+----
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 oc login -u admin -p admin
-```
+----
 
-##  Create Registry
+==  Create Registry
 
-```
+----
 mkdir /opt/openshift-registry
 chcon -Rt svirt_sandbox_file_t /opt/openshift-registry
 chown 1001.root /opt/openshift-registry
 oc adm policy add-scc-to-user privileged system:serviceaccount:default:registry
 oc adm registry --service-account=registry --config=/opt/openshift-origin-v1.4/openshift.local.config/master/admin.kubeconfig --mount-host=/opt/openshift-registry
-```
+----
 
-##  Create Router
-```
+==  Create Router
+----
 oc adm policy add-scc-to-user hostnetwork -z router
 oc adm policy add-scc-to-user hostnetwork system:serviceaccount:default:router
 oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:default:router
 oc adm router router --replicas=1 --service-account=router
-```
+----
 
-##  Install Default images
+==  Install Default images
 
-```
+----
 cd ~
 git clone https://github.com/openshift/openshift-ansible.git
 cd openshift-ansible/roles/openshift_examples/files/examples/latest/
 for f in image-streams/image-streams-centos7.json; do cat $f | oc create -n openshift -f -; done
 for f in db-templates/*.json; do cat $f | oc create -n openshift -f -; done
 for f in quickstart-templates/*.json; do cat $f | oc create -n openshift -f -; done
-```
+----
 
