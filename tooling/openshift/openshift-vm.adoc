@@ -36,11 +36,7 @@ oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 ----
 
-In order to configure OpenShift with the limitations that an end user will be faced using OpenShift Online, then the following steps are required. They will modify the Openshift
-Master Configuration file to include a https://docs.openshift.com/enterprise/3.1/admin_guide/managing_projects.html=modifying-the-template-for-new-projects[Project Request Template] which is used every time
-a new namespace/project is created. The template defines different roles (project-owner, system:image-puller, system:deployer & system:image-builder) and contains these limitations
-
-image::./limitations.png?raw=true[alt="restrictions"]
+In order to configure OpenShift with the limitations that an end user will be faced using OpenShift Online, then the following steps are required.
 
 ----
 minishift openshift config set --patch '{"projectConfig": {"projectRequestTemplate": "default/project-request"}}'
@@ -48,6 +44,11 @@ oc login https://$(minishift ip):8443 -u admin -p admin -n default
 oc create -f minishift/project-request.yml
 oc create -f minishift/project-owner.yml
 ----
+
+They will modify the Openshift Master Configuration file to include a https://docs.openshift.com/enterprise/3.1/admin_guide/managing_projects.html=modifying-the-template-for-new-projects[Project Request Template] which is used every time
+a new namespace/project is created. The template `project-request.yml` defines different roles (project-owner, system:image-puller, system:deployer & system:image-builder) and contains these limitations
+
+image::./limitations.png?raw=true[alt="restrictions"]
 
 No limit will be applied to create several https://docs.openshift.com/enterprise/3.2/admin_guide/managing_projects.html=limit-projects-per-user[projects] but
 you can nevertheless configure it by editing the master-config.yml file to add a pluginConfig
