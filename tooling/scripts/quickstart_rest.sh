@@ -47,21 +47,8 @@ do
 	name=$(jq -r '.['$c'].name' ./$JSONFILE)
 	service=$(jq -r '.['$c'].service' ./$JSONFILE)
 
-	#
-  # If the Server is an openshift online/dedicated machine, then the address of the SSO & APP should be reformated
-  #
-	if [[ -n $domain ]]; then
-	  CONTENT=(${api//./ })
-	  INSTANCE=${CONTENT[1]}
-	  SUFFIX=openshiftapps
-	  APP=http://$service-$project.$domain.$INSTANCE.$SUFFIX.com
-	else
-    APP=http://$service-$project.$api.xip.io
-	fi
-
 	echo "==============================="
 	echo "Git repo Name : $name to be created within the namespace/project $project"
-	echo "App endpoint : $APP"
 	echo "==============================="
 
 	#
@@ -100,11 +87,16 @@ do
   echo "==============================="
   mvn clean package fabric8:deploy -DskipTests -Popenshift
 
+
+  # Obtain app endpoint from an OpenShift route
+  APP=$(oc get route $service -o json | jq '.spec.host' | tr -d \"\")
+
   #
   # Wait till the Service replies
   #
   echo "==============================="
   echo "Call service"
+  echo "App endpoint : $APP"
   echo "==============================="
 
   while [ $(curl --write-out %{http_code} --silent --output /dev/null $APP/greeting) != 200 ]
