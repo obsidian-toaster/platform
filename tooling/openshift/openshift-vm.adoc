@@ -26,7 +26,7 @@ You can download the iso file on your machine and reuse it
 mkdir -p $HOME/iso
 curl -L -o $HOME/iso/minishift-centos7.iso http://github.com/minishift/minishift-centos-iso/releases/download/v1.0.0-rc.2/minishift-centos7.iso 
 export ISO_URL=file://$HOME/iso/minishift-centos7.iso
-minishift start --memory=1500 --vm-driver=virtualbox --iso-url $ISO_URL --docker-env=[storage-driver=devicemapper]
+minishift start --memory=4000 --vm-driver=virtualbox --iso-url $ISO_URL --docker-env=[storage-driver=devicemapper]
 ----
 
 === Admin Role
