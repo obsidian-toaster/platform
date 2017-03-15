@@ -29,12 +29,16 @@ export ISO_URL=file://$HOME/iso/minishift-centos7.iso
 minishift start --memory=1500 --vm-driver=virtualbox --iso-url $ISO_URL --docker-env=[storage-driver=devicemapper]
 ----
 
-Grant more access to your default user by giving it the `cluster-to-admin` role
+=== Admin Role
+
+To Grant more access to your default user, give him/her the `cluster-to-admin` role
 
 ----
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin admin
 ----
+
+=== Limitation setup
 
 In order to configure OpenShift with the limitations that an end user will be faced using OpenShift Online, then the following steps are required.
 
