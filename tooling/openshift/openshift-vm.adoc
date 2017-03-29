@@ -92,8 +92,8 @@ or using candidate http://cdk-builds.usersys.redhat.com/builds/weekly/[release]
 
 These binaries will have RHEL ISO bundled and you will need to run `minishift setup-cdk` before `minishift start --username <> --password <>` to start with.
 
-- CDK Mojo information[https://mojo.redhat.com/docs/DOC-1125257]
-- Gitlab repository[https://mojo.redhat.com/docs/DOC-1125259]
+- https://mojo.redhat.com/docs/DOC-1125257[CDK Mojo information]
+- https://mojo.redhat.com/docs/DOC-1125259[Gitlab repository]
 
 == Using Vagrant & Virtualbox
 
