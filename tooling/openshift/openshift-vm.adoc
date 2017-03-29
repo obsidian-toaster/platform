@@ -93,7 +93,7 @@ or using candidate http://cdk-builds.usersys.redhat.com/builds/weekly/[release]
 The Container Development Kit contains as binary the RHEL7 ISO image to be used and propose 2 additional options which allow you 
 to setup the project locally `minishift setup-cdk` and to select the OpenShift container Platform `--ocp-tag` to be deployed as defined within https://access.redhat.com/containers/#/registry.access.redhat.com/openshift3/ose/images[the redhat registry]
 
-Next, you can launch the CDK as you did for Minishift but where you will pass yur Red Hat Customer username and password
+Next, you can launch the CDK as you did for Minishift but where you will pass your Red Hat Customer username and password
 
 `minishift start --ocp-tag v3.2.1.28-3  --username <> --password <>`
 
