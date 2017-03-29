@@ -87,7 +87,7 @@ minishift openshift config set --patch '{"pluginConfig":{"ProjectRequestLimit":{
 
 == New CDK
 
-The new CDK - version3 which is based on latest coee of Minishift is available https://dev-platform-jenkins.rhev-ci-vms.eng.rdu2.redhat.com/view/CDK/job/cdk_build/ws/[here] for daily build
+The new CDK - version3 which is based on latest code of Minishift is available https://dev-platform-jenkins.rhev-ci-vms.eng.rdu2.redhat.com/view/CDK/job/cdk_build/ws/[here] for daily build
 or using candidate http://cdk-builds.usersys.redhat.com/builds/weekly/[release]
 
 These binaries will have RHEL ISO bundled and you will need to run `minishift setup-cdk` before `minishift start --username <> --password <>` to start with.
