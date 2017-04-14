@@ -1,9 +1,9 @@
 #!/bin/sh 
 
-$HOSTNAMEORIP=192.168.64.25
+$HOSTNAMEORIP=$1
 $PROJECTNAME=myproject
-$GITHUB_USER=
-$GITHUB_TOKEN=
+$GITHUB_USER=$2
+$GITHUB_TOKEN=$3
 
 # Log on to the platform using system:admin user
 oc login -u system:admin
