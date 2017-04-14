@@ -20,7 +20,7 @@ echo "Github user: $GITHUB_USER"
 echo "Identity: ${IDENTITY[0]}, ${IDENTITY[1]}"
 
 oc login -u ${IDENTITY[0]} -p ${IDENTITY[1]}
-oc project $PROJECTNAME
+oc new-project $PROJECTNAME
 
 # Install the launchpad-missioncontrol template
 oc create -n $PROJECTNAME -f https://raw.githubusercontent.com/openshiftio/launchpad-templates/v2/openshift/launchpad-template.yaml
