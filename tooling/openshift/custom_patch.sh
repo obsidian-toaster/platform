@@ -6,4 +6,5 @@ GITHUB_USER=$3
 GITHUB_TOKEN=$4
 CONSOLE_URL=$(minishift console --url)
 
-echo "Project : $PROJECTNAME"
+echo "Project: $PROJECTNAME"
+echo "Console: $CONSOLE_URL"
