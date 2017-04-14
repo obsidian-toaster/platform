@@ -6,5 +6,7 @@ GITHUB_USER=$3
 GITHUB_TOKEN=$4
 CONSOLE_URL=$(minishift console --url)
 
+echo "Host: $HOSTNAMEORIP"
 echo "Project: $PROJECTNAME"
 echo "Console: $CONSOLE_URL"
+echo "Github user: $GITHUB_USER"
