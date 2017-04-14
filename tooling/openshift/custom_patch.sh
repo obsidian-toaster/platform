@@ -1,9 +1,9 @@
 #!/bin/sh 
 
 $HOSTNAMEORIP=$1
-$PROJECTNAME=myproject
-$GITHUB_USER=$2
-$GITHUB_TOKEN=$3
+$PROJECTNAME=${$2:-myproject}
+$GITHUB_USER=$3
+$GITHUB_TOKEN=$4
 $CONSOLE_URL=$(minishift console --url)
 
 # Log on to the platform using system:admin user
