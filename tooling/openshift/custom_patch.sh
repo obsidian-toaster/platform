@@ -1,10 +1,10 @@
 #!/bin/sh 
 
-$HOSTNAMEORIP=$1
-$PROJECTNAME=${$2:-myproject}
-$GITHUB_USER=$3
-$GITHUB_TOKEN=$4
-$CONSOLE_URL=$(minishift console --url)
+HOSTNAMEORIP=$1
+PROJECTNAME=${$2:-myproject}
+GITHUB_USER=$3
+GITHUB_TOKEN=$4
+CONSOLE_URL=$(minishift console --url)
 
 # Log on to the platform using system:admin user
 oc login -u system:admin
