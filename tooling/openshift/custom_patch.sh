@@ -3,7 +3,7 @@
 #
 # Install Launchpad mission control within an openshift template using the parameters passed
 # Patch jenkins to use admin as role
-# bash <(curl -sL https://goo.gl/1XEYNb) hostIP projectName myGithubToken username:password 
+# bash <(curl -sL https://goo.gl/1XEYNb) hostIP projectName myGithubUser myGithubToken username:password 
 # example : bash <(curl -sL https://goo.gl/1XEYNb) 192.168.64.25 test1 cmoulliard mygithubtoken developer:developer
 #
 HOSTNAMEORIP=$1
