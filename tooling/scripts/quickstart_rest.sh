@@ -23,7 +23,7 @@ do
 done
 
 CURRENT=$PWD
-GITHUB_ORG=http://github.com/obsidian-toaster-quickstarts
+GITHUB_ORG=https://github.com/obsidian-toaster-quickstarts
 
 echo "Log on to OpenShift Machine"
 if [ "$token" != "" ]; then
