@@ -23,7 +23,7 @@ $script = <<SCRIPT
 yum -y install net-tools subscription-manager 
 
 # Register user and add the required repos
-subscription-manager register --username=qa@redhat.com --password=EC3YWpKxSe524GCK --force
+subscription-manager register --username=<username> --password=<password> --force
 subscription-manager subscribe --pool=8a85f9823e3d5e43013e3ddd4e2a0977
 subscription-manager repos --enable rhel-7-server-extras-rpms 
 subscription-manager repos --enable rhel-7-server-optional-rpms   
@@ -108,13 +108,6 @@ mv online/ sally-online
 cd sally-online
 git checkout remotes/origin/no_aws
 cd ansible; git submodule init; git submodule update;
-```
-
-## Curl the rpm files
-```
-#curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-dedicated-3.4.1.8-1.el7.x86_64.rpm
-#curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-devpreview-3.4.1.8-1.el7.x86_64.rpm
-curl -OL http://download.eng.bos.redhat.com/brewroot/packages/openshift-scripts/3.4.1.8/1.el7/x86_64/openshift-scripts-paid-3.4.1.8-1.el7.x86_64.rpm
 ```
 
 ## Change some vars
